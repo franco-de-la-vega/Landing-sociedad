@@ -117,7 +117,6 @@ export default function MultiStepForm() {
             <StepWrap key="s0" direction={direction}>
               <Field label="¿Cuál es tu situación actual?">
                 <textarea
-                  autoFocus
                   className="form-input"
                   placeholder="Contanos en qué estás hoy: trabajando, buscando un cambio, estudiando..."
                   value={data.situacion}
