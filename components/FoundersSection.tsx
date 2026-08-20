@@ -44,7 +44,7 @@ export default function FoundersSection() {
                   alt={f.name}
                   fill
                   sizes="(min-width: 768px) 33vw, 100vw"
-                  className="object-cover object-top grayscale contrast-[1.05] transition-all duration-700 ease-out group-hover:grayscale-0"
+                  className="team-photo object-cover object-top transition-all duration-700 ease-out"
                 />
               ) : (
                 <div

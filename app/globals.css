@@ -101,3 +101,14 @@ textarea.form-input {
   resize: vertical;
   min-height: 90px;
 }
+
+/* Retrato del equipo: en blanco y negro solo en dispositivos con hover real (mouse).
+   En touch (mobile) se muestra a color directamente, sin efecto que nunca se dispara. */
+@media (hover: hover) and (pointer: fine) {
+  .team-photo {
+    filter: grayscale(1) contrast(1.05);
+  }
+  .group:hover .team-photo {
+    filter: grayscale(0) contrast(1);
+  }
+}
