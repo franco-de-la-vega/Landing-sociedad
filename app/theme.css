@@ -1,0 +1,40 @@
+/*
+  ÚNICA FUENTE DE VERDAD DEL DISEÑO.
+  Cambiá colores, tipografía, radios o velocidades de animación
+  acá y se propaga a todo el sitio (clases Tailwind + gradientes inline).
+  No hardcodear hex ni valores sueltos en los componentes.
+*/
+@theme inline {
+  --font-sans: var(--font-inter);
+  --font-serif-display: var(--font-serif);
+
+  /* Base: titanio carbón profundo, no negro puro */
+  --color-bg-canvas: #0b0c0e;
+  --color-bg-base: #0b0c0e;
+  --color-bg-elevated: #121418;
+  --color-bg-elevated-2: #171a1f;
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-border-strong: rgba(255, 255, 255, 0.18);
+
+  /* Texto */
+  --color-text-primary: #f4f4f5;
+  --color-text-secondary: #a1a1aa;
+  --color-text-muted: #52525b;
+
+  /* Acento primario: emerald/cyan, energía de marca */
+  --color-accent: #2dd4bf;
+  --color-accent-hover: #5eead4;
+  --color-accent-muted: #0a2f2a;
+
+  /* Acento secundario: ámbar cálido, exclusivo para estados de diagnóstico y métricas */
+  --color-accent-secondary: #f59e0b;
+  --color-accent-secondary-muted: #2e1f05;
+
+  /* Radios */
+  --radius-control: 8px;
+  --radius-panel: 20px;
+}
+
+:root {
+  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+}

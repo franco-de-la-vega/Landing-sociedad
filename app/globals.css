@@ -1,0 +1,103 @@
+@import "tailwindcss";
+@import "./theme.css";
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg-base);
+  color: var(--color-text-primary);
+  position: relative;
+}
+
+/* Contraluz quirúrgica: única fuente de luz de fondo, sin grillas ni mesh-glow */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at top,
+    rgba(255, 255, 255, 0.03) 0%,
+    transparent 70%
+  );
+}
+
+/* Grano fílmico sutil sobre todo el sitio: le saca lo "plano" al negro liso */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-text-primary);
+}
+
+/* Degradado metálico blanco -> titanio, para headlines */
+.text-metal {
+  background: linear-gradient(180deg, var(--color-text-primary) 0%, var(--color-text-muted) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Degradado emerald -> cyan, para highlights de marca dentro de titulares */
+.text-accent-gradient {
+  background: linear-gradient(90deg, var(--color-accent) 0%, #4facfe 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Panel glassmorphism: borde semitransparente 1px, usado en cards/bento/form */
+.glass-panel {
+  background: color-mix(in srgb, var(--color-bg-elevated) 70%, transparent);
+  border: 1px solid var(--color-border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-base);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}
+
+.form-input {
+  width: 100%;
+  background-color: color-mix(in srgb, var(--color-bg-elevated-2) 80%, transparent);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  padding: 12px 16px;
+  font-size: 14px;
+  color: var(--color-text-primary);
+  transition: border-color 0.2s ease;
+  outline: none;
+}
+.form-input::placeholder {
+  color: var(--color-text-muted);
+}
+.form-input:focus {
+  border-color: var(--color-accent);
+}
+textarea.form-input {
+  resize: vertical;
+  min-height: 90px;
+}
