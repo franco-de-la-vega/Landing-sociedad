@@ -6,15 +6,15 @@ import TiltCard from "./TiltCard";
 const founders = [
   {
     name: "Natalia",
-    role: "Líder de Formación",
+    role: "Líder B2B",
     photo: "/team/natalia.jpg",
-    body: "Diseña la currícula por nivel y sostiene el estándar de evaluación objetiva que define el método, alumno por alumno.",
+    body: "Negocia y sostiene el vínculo con las empresas internacionales, el puente que conecta a cada closer evaluado con la oportunidad que le corresponde.",
   },
   {
     name: "Andrés",
-    role: "Líder de Red Comercial",
+    role: "Líder B2C",
     photo: "/team/andres.png",
-    body: "Construye y sostiene el vínculo con empresas internacionales, el puente real entre lo que se aprende acá y el mercado que lo necesita.",
+    body: "Lidera la relación comercial directa con los closers: acompañamiento, seguimiento y la experiencia de cada alumno dentro del sistema.",
   },
   {
     name: "Franco",
