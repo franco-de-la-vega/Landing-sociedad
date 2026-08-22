@@ -4,6 +4,7 @@ import ROISection from "@/components/presentation/ROISection";
 import MarketSection from "@/components/presentation/MarketSection";
 import SimulationSection from "@/components/presentation/SimulationSection";
 import SupportSection from "@/components/presentation/SupportSection";
+import TimelineSection from "@/components/presentation/TimelineSection";
 import ComparisonSection from "@/components/presentation/ComparisonSection";
 import PricingSection from "@/components/presentation/PricingSection";
 
@@ -21,6 +22,7 @@ export default function PresentacionPage() {
         <MarketSection />
         <SimulationSection />
         <SupportSection />
+        <TimelineSection />
         <ComparisonSection />
         <PricingSection />
       </main>
