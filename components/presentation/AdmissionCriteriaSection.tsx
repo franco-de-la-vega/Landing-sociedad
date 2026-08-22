@@ -67,8 +67,8 @@ export default function AdmissionCriteriaSection() {
                 {notEligible.map((item) => (
                   <RevealItem key={item.title}>
                     <div className="flex items-start gap-3">
-                      <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/5 text-zinc-500">
-                        <X size={13} strokeWidth={2.5} />
+                      <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/5">
+                        <X size={13} strokeWidth={3} className="text-red-500" />
                       </span>
                       <div>
                         <h3 className="text-[14.5px] font-semibold text-white">
