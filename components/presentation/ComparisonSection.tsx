@@ -1,15 +1,33 @@
-import { Check, X } from "lucide-react";
+import { Target, Users, PhoneCall, LineChart } from "lucide-react";
 import Reveal from "@/components/Reveal";
+import RevealGroup from "@/components/RevealGroup";
+import RevealItem from "@/components/RevealItem";
 
-const columns = ["Universidad", "Cursos Baratos", "Autodidacta", "Instituto"];
-
-const rows = [
-  { label: "Velocidad de inserción laboral", values: [false, false, false, true] },
-  { label: "Mentoría 1 a 1 con especialistas", values: [false, false, false, true] },
-  { label: "Simulación de llamadas reales", values: [false, false, false, true] },
-  { label: "Evaluación objetiva de desempeño", values: [true, false, false, true] },
-  { label: "Costo accesible", values: [false, true, true, true] },
-  { label: "Conexión directa con empresas", values: [false, false, false, true] },
+const pillars = [
+  {
+    icon: PhoneCall,
+    title: "Simulación de llamadas reales",
+    detail:
+      "No es teoría de ventas. Practicás objeciones y cierres en escenarios calcados a una llamada real, antes de tomar tu primer cliente.",
+  },
+  {
+    icon: Users,
+    title: "Mentoría 1 a 1 con especialistas",
+    detail:
+      "Acompañamiento personalizado de cerca, con feedback puntual sobre tu propia performance, no clases masivas genéricas.",
+  },
+  {
+    icon: LineChart,
+    title: "Evaluación objetiva de desempeño",
+    detail:
+      "Medimos con datos, no con impresiones. Sabés exactamente en qué nivel estás y qué te falta para el siguiente.",
+  },
+  {
+    icon: Target,
+    title: "Conexión directa con empresas",
+    detail:
+      "El objetivo final no es el certificado. Es la inserción laboral real en equipos comerciales del exterior.",
+  },
 ];
 
 export default function ComparisonSection() {
@@ -18,61 +36,35 @@ export default function ComparisonSection() {
       <div className="mx-auto max-w-6xl">
         <Reveal>
           <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-zinc-400">
-            Matriz comparativa de alternativas
+            Qué hace distinto al método
           </span>
         </Reveal>
         <Reveal delay={0.08} className="mt-5">
           <h2 className="max-w-2xl text-[2rem] font-bold leading-[1.15] tracking-tight text-white md:text-[2.8rem]">
-            Comparativa de Vías de Formación
+            Formación pensada para insertarte, no solo para certificarte
           </h2>
         </Reveal>
 
-        <Reveal delay={0.14} className="mt-16 overflow-x-auto">
-          <table className="w-full min-w-[560px] border-collapse overflow-hidden rounded-2xl border border-white/10 bg-[#121418]">
-            <thead>
-              <tr className="border-b border-white/10">
-                <th className="px-5 py-4 text-left text-[12px] font-medium uppercase tracking-widest text-zinc-500">
-                  Criterio
-                </th>
-                {columns.map((c) => (
-                  <th
-                    key={c}
-                    className={`px-5 py-4 text-center text-[13px] font-semibold ${
-                      c === "Instituto" ? "bg-accent/[0.06] text-accent" : "text-zinc-400"
-                    }`}
-                  >
-                    {c}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/10">
-              {rows.map((r) => (
-                <tr key={r.label}>
-                  <td className="px-5 py-4 text-[13.5px] text-zinc-300">{r.label}</td>
-                  {r.values.map((v, i) => (
-                    <td
-                      key={i}
-                      className={`px-5 py-4 text-center ${
-                        columns[i] === "Instituto" ? "bg-accent/[0.04]" : ""
-                      }`}
-                    >
-                      {v ? (
-                        <Check
-                          size={16}
-                          strokeWidth={2.5}
-                          className="mx-auto text-accent"
-                        />
-                      ) : (
-                        <X size={15} strokeWidth={2} className="mx-auto text-zinc-600" />
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </Reveal>
+        <RevealGroup
+          stagger={0.08}
+          className="mt-16 flex flex-col divide-y divide-white/10 border-t border-b border-white/10"
+        >
+          {pillars.map((p) => (
+            <RevealItem key={p.title}>
+              <div className="flex flex-col gap-4 py-8 sm:flex-row sm:items-start sm:gap-8">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-accent/[0.08]">
+                  <p.icon size={18} strokeWidth={2} className="text-accent" />
+                </div>
+                <div>
+                  <h3 className="text-[16px] font-semibold text-white">{p.title}</h3>
+                  <p className="mt-2 max-w-2xl text-[13.5px] leading-relaxed text-zinc-400">
+                    {p.detail}
+                  </p>
+                </div>
+              </div>
+            </RevealItem>
+          ))}
+        </RevealGroup>
       </div>
     </section>
   );

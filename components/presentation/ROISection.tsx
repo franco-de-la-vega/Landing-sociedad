@@ -8,19 +8,19 @@ const tiers = [
     stage: "Nivel Inicial",
     detail: "Operatoria base y prospección en proyectos remotos.",
     value: "$1,700",
-    height: 42,
+    height: 34,
   },
   {
     stage: "Especialista",
     detail: "Consolidador de cierres, autonomía técnica y gestión de pipeline.",
     value: "$2,500",
-    height: 66,
+    height: 54,
   },
   {
     stage: "Closing Lead",
     detail: "Liderazgo de equipo comercial y contratos high-ticket.",
     value: "$4,200+",
-    height: 100,
+    height: 80,
   },
 ];
 
