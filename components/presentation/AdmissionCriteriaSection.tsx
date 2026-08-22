@@ -58,8 +58,8 @@ export default function AdmissionCriteriaSection() {
 
         <div className="mt-16 grid grid-cols-1 gap-6 lg:grid-cols-2">
           <Reveal delay={0.1}>
-            <div className="h-full rounded-2xl border border-red-500/30 bg-[#121418] p-8">
-              <span className="inline-flex items-center gap-2 rounded border border-red-500/25 bg-red-500/[0.06] px-3 py-1.5 text-[10px] uppercase tracking-widest text-red-400">
+            <div className="h-full rounded-2xl border border-white/10 bg-[#121418] p-8">
+              <span className="inline-flex items-center gap-2 rounded border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[10px] uppercase tracking-widest text-zinc-400">
                 Perfil no elegible
               </span>
 
@@ -67,7 +67,7 @@ export default function AdmissionCriteriaSection() {
                 {notEligible.map((item) => (
                   <RevealItem key={item.title}>
                     <div className="flex items-start gap-3">
-                      <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-500/10 text-red-400">
+                      <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/5 text-zinc-500">
                         <X size={13} strokeWidth={2.5} />
                       </span>
                       <div>
