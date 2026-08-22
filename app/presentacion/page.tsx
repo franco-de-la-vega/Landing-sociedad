@@ -3,6 +3,7 @@ import PresentationHeader from "@/components/presentation/PresentationHeader";
 import ROISection from "@/components/presentation/ROISection";
 import MarketSection from "@/components/presentation/MarketSection";
 import SimulationSection from "@/components/presentation/SimulationSection";
+import SupportSection from "@/components/presentation/SupportSection";
 
 export const metadata: Metadata = {
   title: "VoraTrain — Presentación",
@@ -17,6 +18,7 @@ export default function PresentacionPage() {
         <ROISection />
         <MarketSection />
         <SimulationSection />
+        <SupportSection />
       </main>
     </div>
   );
