@@ -1,38 +1,38 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
-import RevealGroup from "@/components/RevealGroup";
-import RevealItem from "@/components/RevealItem";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import Reveal from "@/components/Reveal";
 
-const rows = [
+const tiers = [
   {
-    stage: "Nivel Inicial / Inserción",
+    stage: "Nivel Inicial",
     detail: "Operatoria base y prospección en proyectos remotos.",
     value: "$1,700",
-    pct: 40,
-    valueColor: "text-accent",
-    barColor: "bg-accent",
+    height: 42,
   },
   {
-    stage: "Especialista Medio Plazo",
+    stage: "Especialista",
     detail: "Consolidador de cierres, autonomía técnica y gestión de pipeline.",
     value: "$2,500",
-    pct: 62,
-    valueColor: "text-accent",
-    barColor: "bg-accent",
+    height: 66,
   },
   {
-    stage: "Senior / Closing Lead",
+    stage: "Closing Lead",
     detail: "Liderazgo de equipo comercial y contratos high-ticket.",
     value: "$4,200+",
-    pct: 100,
-    valueColor: "text-accent",
-    barColor: "bg-gradient-to-r from-accent to-accent",
+    height: 100,
   },
 ];
 
 export default function ROISection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start 0.85", "end 0.5"],
+  });
+  const lineDraw = useTransform(scrollYProgress, [0, 1], [0, 1]);
+
   return (
     <section className="relative px-6 py-24 md:px-10 md:py-32">
       <div className="mx-auto max-w-6xl">
@@ -58,42 +58,110 @@ export default function ROISection() {
         </Reveal>
 
         <Reveal delay={0.2} className="mt-16">
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#121418]">
-            <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
-              <span className="flex items-center gap-2 text-[12px] font-medium text-zinc-300">
-                <TrendingUp size={14} strokeWidth={2} className="text-accent" />
+          <div
+            ref={ref}
+            className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#121418] p-8 md:p-12"
+          >
+            {/* grilla de fondo, textura de dashboard */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 opacity-[0.05]"
+              style={{
+                backgroundImage:
+                  "linear-gradient(to top, white 1px, transparent 1px)",
+                backgroundSize: "100% 25%",
+              }}
+            />
+
+            <div className="relative flex items-center justify-between">
+              <span className="text-[12px] font-medium text-zinc-400">
                 Escalada de ingresos por etapa
               </span>
-              <span className="text-[11px] uppercase tracking-widest text-zinc-500">
+              <span className="text-[11px] uppercase tracking-widest text-zinc-600">
                 USD / mes
               </span>
             </div>
 
-            <RevealGroup stagger={0.12} className="divide-y divide-white/10">
-              {rows.map((r) => (
-                <RevealItem key={r.stage}>
-                  <div className="grid grid-cols-1 items-center gap-3 px-6 py-6 sm:grid-cols-[1fr_auto] sm:gap-6">
-                    <div>
-                      <h3 className="text-[15px] font-semibold text-white">
-                        {r.stage}
-                      </h3>
-                      <p className="mt-1 max-w-md text-[13px] leading-relaxed text-zinc-400">
-                        {r.detail}
-                      </p>
-                      <div className="mt-3 h-1.5 w-full max-w-xs overflow-hidden rounded-full bg-white/5">
-                        <div
-                          className={`h-full rounded-full ${r.barColor}`}
-                          style={{ width: `${r.pct}%` }}
-                        />
-                      </div>
-                    </div>
-                    <p className={`text-[2rem] font-bold leading-none tracking-tight sm:text-right ${r.valueColor}`}>
-                      {r.value}
-                    </p>
-                  </div>
-                </RevealItem>
+            {/* gráfico de barras ascendente */}
+            <div className="relative mt-14 flex h-[280px] items-end justify-between gap-6 sm:gap-10 md:px-4">
+              {/* línea de tendencia diagonal */}
+              <svg
+                className="pointer-events-none absolute inset-0 h-full w-full overflow-visible"
+                preserveAspectRatio="none"
+              >
+                <motion.line
+                  x1="14%"
+                  y1={`${100 - tiers[0].height}%`}
+                  x2="50%"
+                  y2={`${100 - tiers[1].height}%`}
+                  stroke="var(--color-accent)"
+                  strokeWidth="1.5"
+                  strokeDasharray="4 5"
+                  style={{ pathLength: lineDraw }}
+                  initial={{ pathLength: 0 }}
+                />
+                <motion.line
+                  x1="50%"
+                  y1={`${100 - tiers[1].height}%`}
+                  x2="86%"
+                  y2={`${100 - tiers[2].height}%`}
+                  stroke="var(--color-accent)"
+                  strokeWidth="1.5"
+                  strokeDasharray="4 5"
+                  style={{ pathLength: lineDraw }}
+                  initial={{ pathLength: 0 }}
+                />
+              </svg>
+
+              {tiers.map((t, i) => (
+                <div
+                  key={t.stage}
+                  className="relative flex h-full flex-1 flex-col items-center justify-end"
+                >
+                  <motion.p
+                    initial={{ opacity: 0, y: 8 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.6 }}
+                    transition={{ duration: 0.5, delay: 0.3 + i * 0.15 }}
+                    className={`mb-4 text-center text-[1.5rem] font-bold leading-none tracking-tight sm:text-[2.1rem] ${
+                      i === 2 ? "text-accent" : "text-white"
+                    }`}
+                  >
+                    {t.value}
+                  </motion.p>
+
+                  <motion.div
+                    initial={{ height: 0 }}
+                    whileInView={{ height: `${t.height}%` }}
+                    viewport={{ once: true, amount: 0.6 }}
+                    transition={{ duration: 1, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
+                    className="w-full max-w-[110px] rounded-t-lg"
+                    style={{
+                      background:
+                        i === 2
+                          ? "linear-gradient(180deg, var(--color-accent-hover) 0%, var(--color-accent) 100%)"
+                          : "color-mix(in srgb, var(--color-accent) 22%, transparent)",
+                    }}
+                  />
+                </div>
               ))}
-            </RevealGroup>
+            </div>
+
+            {/* eje base */}
+            <div className="relative mt-3 h-px w-full bg-white/10" />
+
+            <div className="relative mt-4 flex justify-between gap-6 sm:gap-10 md:px-4">
+              {tiers.map((t) => (
+                <div key={t.stage} className="flex-1 text-center">
+                  <h3 className="text-[13.5px] font-semibold text-white">
+                    {t.stage}
+                  </h3>
+                  <p className="mx-auto mt-1 max-w-[160px] text-[11.5px] leading-relaxed text-zinc-500">
+                    {t.detail}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </Reveal>
 
