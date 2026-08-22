@@ -119,7 +119,7 @@ export default function AdmissionCriteriaSection() {
             <p className="mx-auto max-w-2xl text-[15px] italic leading-relaxed text-zinc-300">
               &ldquo;Estudiar cualquier disciplina no te garantiza el
               éxito; lo que garantiza el resultado es cómo aplicas la
-              herramienta. En VoraTrain la infraestructura está lista,
+              herramienta. En el Instituto la infraestructura está lista,
               pero la ejecución depende 100% de vos.&rdquo;
             </p>
           </div>

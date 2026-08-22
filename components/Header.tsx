@@ -24,7 +24,7 @@ export default function Header() {
     >
       <div className="mx-auto flex max-w-5xl items-center px-5 py-4 sm:px-8">
         <span className="text-[15px] font-bold tracking-[-0.02em]">
-          VoraTrain
+          Instituto Latinoamericano
         </span>
       </div>
     </motion.header>

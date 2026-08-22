@@ -8,7 +8,7 @@ export default function Hero() {
   return (
     <section className="relative flex min-h-[90vh] w-full items-center overflow-hidden bg-bg-base">
       <span className="pointer-events-none absolute -left-6 -top-6 z-0 select-none text-[17vw] font-black uppercase leading-none tracking-tighter text-white/[0.03]">
-        VoraTrain
+        ILFC
       </span>
 
       <div className="relative z-10 flex w-full max-w-7xl flex-col items-start justify-center px-6 pb-20 pt-12 text-left mx-auto md:px-12">

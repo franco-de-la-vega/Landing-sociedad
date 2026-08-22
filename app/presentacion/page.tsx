@@ -12,7 +12,7 @@ import ComparisonSection from "@/components/presentation/ComparisonSection";
 import PricingSection from "@/components/presentation/PricingSection";
 
 export const metadata: Metadata = {
-  title: "VoraTrain — Presentación",
+  title: "Instituto Latinoamericano de Formación Comercial — Presentación",
   description: "Presentación técnica para llamadas de venta en vivo.",
 };
 

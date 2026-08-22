@@ -1,7 +1,7 @@
 import { Check, X } from "lucide-react";
 import Reveal from "@/components/Reveal";
 
-const columns = ["Universidad", "Cursos Baratos", "Autodidacta", "VoraTrain"];
+const columns = ["Universidad", "Cursos Baratos", "Autodidacta", "Instituto"];
 
 const rows = [
   { label: "Velocidad de inserción laboral", values: [false, false, false, true] },
@@ -38,7 +38,7 @@ export default function ComparisonSection() {
                   <th
                     key={c}
                     className={`px-5 py-4 text-center text-[13px] font-semibold ${
-                      c === "VoraTrain" ? "bg-cyan-400/[0.06] text-cyan-300" : "text-zinc-400"
+                      c === "Instituto" ? "bg-cyan-400/[0.06] text-cyan-300" : "text-zinc-400"
                     }`}
                   >
                     {c}
@@ -54,7 +54,7 @@ export default function ComparisonSection() {
                     <td
                       key={i}
                       className={`px-5 py-4 text-center ${
-                        columns[i] === "VoraTrain" ? "bg-cyan-400/[0.04]" : ""
+                        columns[i] === "Instituto" ? "bg-cyan-400/[0.04]" : ""
                       }`}
                     >
                       {v ? (

@@ -16,7 +16,7 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "VoraTrain: Formación de closers y setters B2B",
+  title: "Instituto Latinoamericano de Formación Comercial: Formación de closers y setters B2B",
   description:
     "Programa de formación y conexión laboral para closers y setters de ventas remotas B2B.",
 };
