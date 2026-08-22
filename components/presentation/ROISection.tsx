@@ -1,37 +1,34 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { TrendingUp } from "lucide-react";
 import RevealGroup from "@/components/RevealGroup";
 import RevealItem from "@/components/RevealItem";
 import Reveal from "@/components/Reveal";
 
-const tiers = [
+const rows = [
   {
     stage: "Nivel Inicial / Inserción",
+    detail: "Operatoria base y prospección en proyectos remotos.",
     value: "$1,700",
-    unit: "USD/mes",
-    body: "Operatoria base y prospección en proyectos remotos.",
-    topBorder: "before:bg-cyan-400/60",
-    glow: "shadow-[0_0_40px_-12px_rgba(0,242,254,0.25)]",
+    pct: 40,
     valueColor: "text-cyan-300",
+    barColor: "bg-cyan-400",
   },
   {
     stage: "Especialista Medio Plazo",
+    detail: "Consolidador de cierres, autonomía técnica y gestión de pipeline.",
     value: "$2,500",
-    unit: "USD/mes",
-    body: "Consolidador de cierres, autonomía técnica y gestión de pipeline.",
-    topBorder: "before:bg-emerald-400/60",
-    glow: "shadow-[0_0_40px_-12px_rgba(16,185,129,0.3)]",
+    pct: 62,
     valueColor: "text-emerald-300",
+    barColor: "bg-emerald-400",
   },
   {
     stage: "Senior / Closing Lead",
+    detail: "Liderazgo de equipo comercial y contratos high-ticket.",
     value: "$4,200+",
-    unit: "USD/mes",
-    body: "Liderazgo de equipo comercial y contratos high-ticket.",
-    topBorder: "before:bg-cyan-300/70",
-    glow: "shadow-[0_0_50px_-10px_rgba(0,242,254,0.35)]",
+    pct: 100,
     valueColor: "text-cyan-200",
+    barColor: "bg-gradient-to-r from-cyan-400 to-emerald-400",
   },
 ];
 
@@ -60,43 +57,45 @@ export default function ROISection() {
           </p>
         </Reveal>
 
-        <RevealGroup
-          stagger={0.14}
-          className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-3"
-        >
-          {tiers.map((t, i) => (
-            <RevealItem key={t.stage}>
-              <motion.div
-                whileHover={{ y: -4 }}
-                transition={{ duration: 0.25, ease: "easeOut" }}
-                className={`before:content-[''] before:absolute before:inset-x-0 before:top-0 before:h-px relative flex h-full flex-col justify-between rounded-2xl border border-white/10 bg-[#121418] p-8 ${t.topBorder} ${t.glow}`}
-              >
-                <div>
-                  <span className="text-[10px] uppercase tracking-widest text-zinc-500">
-                    Etapa {i + 1}
-                  </span>
-                  <h3 className="mt-3 text-[15px] font-semibold text-white">
-                    {t.stage}
-                  </h3>
-                </div>
-                <div className="mt-10">
-                  <span className="text-[10px] uppercase tracking-widest text-zinc-500">
-                    Sueldo de mercado
-                  </span>
-                  <p className={`mt-1 text-[2.5rem] font-bold leading-none tracking-tight ${t.valueColor}`}>
-                    {t.value}
-                    <span className="ml-2 text-[13px] font-medium text-zinc-500">
-                      {t.unit}
-                    </span>
-                  </p>
-                  <p className="mt-4 text-[13.5px] leading-relaxed text-zinc-400">
-                    {t.body}
-                  </p>
-                </div>
-              </motion.div>
-            </RevealItem>
-          ))}
-        </RevealGroup>
+        <Reveal delay={0.2} className="mt-16">
+          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#121418]">
+            <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
+              <span className="flex items-center gap-2 text-[12px] font-medium text-zinc-300">
+                <TrendingUp size={14} strokeWidth={2} className="text-cyan-300" />
+                Escalada de ingresos por etapa
+              </span>
+              <span className="text-[11px] uppercase tracking-widest text-zinc-500">
+                USD / mes
+              </span>
+            </div>
+
+            <RevealGroup stagger={0.12} className="divide-y divide-white/10">
+              {rows.map((r) => (
+                <RevealItem key={r.stage}>
+                  <div className="grid grid-cols-1 items-center gap-3 px-6 py-6 sm:grid-cols-[1fr_auto] sm:gap-6">
+                    <div>
+                      <h3 className="text-[15px] font-semibold text-white">
+                        {r.stage}
+                      </h3>
+                      <p className="mt-1 max-w-md text-[13px] leading-relaxed text-zinc-400">
+                        {r.detail}
+                      </p>
+                      <div className="mt-3 h-1.5 w-full max-w-xs overflow-hidden rounded-full bg-white/5">
+                        <div
+                          className={`h-full rounded-full ${r.barColor}`}
+                          style={{ width: `${r.pct}%` }}
+                        />
+                      </div>
+                    </div>
+                    <p className={`text-[2rem] font-bold leading-none tracking-tight sm:text-right ${r.valueColor}`}>
+                      {r.value}
+                    </p>
+                  </div>
+                </RevealItem>
+              ))}
+            </RevealGroup>
+          </div>
+        </Reveal>
 
         <Reveal delay={0.1} className="mt-8">
           <p className="text-[12px] italic leading-relaxed text-zinc-600">

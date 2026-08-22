@@ -1,8 +1,22 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Phone, User, Headset, ArrowRight } from "lucide-react";
+import { Mic, User, Headset, Circle } from "lucide-react";
 import Reveal from "@/components/Reveal";
+
+const bars = [8, 18, 30, 45, 60, 72, 55, 38, 62, 80, 48, 30, 55, 70, 42, 20, 34, 50, 65, 28];
+
+const feedbackTags = [
+  { text: "Objeción manejada", color: "emerald", delay: 0.4 },
+  { text: "Tono correcto", color: "cyan", delay: 1.4 },
+  { text: "Ajustá el cierre", color: "amber", delay: 2.4 },
+];
+
+const tagStyles: Record<string, string> = {
+  emerald: "border-emerald-400/30 bg-emerald-400/10 text-emerald-300",
+  cyan: "border-cyan-400/30 bg-cyan-400/10 text-cyan-300",
+  amber: "border-amber-400/30 bg-amber-400/10 text-amber-300",
+};
 
 export default function SimulationSection() {
   return (
@@ -27,60 +41,83 @@ export default function SimulationSection() {
         </Reveal>
 
         <Reveal delay={0.2} className="mt-16">
-          <div className="rounded-2xl border border-white/10 bg-[#121418] p-8 shadow-2xl md:p-10">
-            <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between sm:gap-4">
-              {/* Vos */}
-              <div className="flex flex-col items-center text-center">
+          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#0e0f11] shadow-2xl">
+            {/* barra de título tipo app */}
+            <div className="flex items-center justify-between border-b border-white/10 bg-[#121418] px-5 py-3">
+              <div className="flex items-center gap-1.5">
+                <Circle size={8} className="fill-red-500/60 text-red-500/60" />
+                <Circle size={8} className="fill-amber-500/60 text-amber-500/60" />
+                <Circle size={8} className="fill-emerald-500/60 text-emerald-500/60" />
+              </div>
+              <span className="flex items-center gap-2 text-[11px] uppercase tracking-widest text-zinc-500">
+                <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
+                Simulación en vivo
+              </span>
+            </div>
+
+            {/* tiles de video */}
+            <div className="grid grid-cols-1 gap-px bg-white/5 sm:grid-cols-2">
+              <div className="relative flex aspect-[4/3] flex-col items-center justify-center bg-[#0e0f11] p-6">
                 <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/5 ring-1 ring-white/10">
                   <User size={26} strokeWidth={1.75} className="text-white" />
                 </span>
-                <p className="mt-3 text-[14px] font-semibold text-white">
-                  Vos
-                </p>
-                <span className="mt-1 max-w-[160px] text-[12.5px] leading-relaxed text-zinc-400">
-                  Hacés la llamada como si fuera un cliente real.
+                <p className="mt-3 text-[13.5px] font-semibold text-white">Vos</p>
+                <span className="mt-1 flex items-center gap-1.5 text-[11px] text-zinc-500">
+                  <Mic size={11} strokeWidth={2} />
+                  Hablando
                 </span>
-              </div>
 
-              {/* Conector de llamada */}
-              <div className="flex flex-1 flex-col items-center gap-2 px-4">
-                <div className="relative flex w-full items-center">
-                  <span className="h-px flex-1 bg-white/10" />
-                  <motion.span
-                    animate={{ opacity: [0.4, 1, 0.4] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                    className="mx-3 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-cyan-400/10 text-cyan-300"
-                  >
-                    <Phone size={15} strokeWidth={2} />
-                  </motion.span>
-                  <span className="h-px flex-1 bg-white/10" />
+                {/* onda de audio */}
+                <div className="mt-4 flex h-8 items-end gap-[3px]">
+                  {bars.map((h, i) => (
+                    <motion.span
+                      key={i}
+                      animate={{ height: [`${h * 0.4}%`, `${h}%`, `${h * 0.4}%`] }}
+                      transition={{
+                        duration: 1.1,
+                        repeat: Infinity,
+                        delay: i * 0.05,
+                        ease: "easeInOut",
+                      }}
+                      className="w-[3px] rounded-full bg-cyan-400/70"
+                    />
+                  ))}
                 </div>
-                <span className="text-[10px] uppercase tracking-widest text-cyan-300">
-                  Llamada en vivo
-                </span>
               </div>
 
-              {/* Coach */}
-              <div className="flex flex-col items-center text-center">
+              <div className="relative flex aspect-[4/3] flex-col items-center justify-center bg-[#0e0f11] p-6">
                 <span className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-400/10 ring-1 ring-emerald-400/30">
                   <Headset size={26} strokeWidth={1.75} className="text-emerald-300" />
                 </span>
-                <p className="mt-3 text-[14px] font-semibold text-white">
-                  Coach
-                </p>
-                <span className="mt-1 max-w-[160px] text-[12.5px] leading-relaxed text-zinc-400">
-                  Pone objeciones difíciles y corrige tu técnica al toque.
+                <p className="mt-3 text-[13.5px] font-semibold text-white">Coach</p>
+                <span className="mt-1 text-[11px] text-zinc-500">
+                  Evaluando en tiempo real
                 </span>
+
+                {/* tags de feedback flotantes */}
+                <div className="mt-4 flex min-h-[30px] flex-wrap items-center justify-center gap-2">
+                  {feedbackTags.map((t) => (
+                    <motion.span
+                      key={t.text}
+                      initial={{ opacity: 0, y: 6 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.6 }}
+                      transition={{ duration: 0.4, delay: t.delay }}
+                      className={`rounded-full border px-2.5 py-1 text-[10.5px] font-medium ${tagStyles[t.color]}`}
+                    >
+                      {t.text}
+                    </motion.span>
+                  ))}
+                </div>
               </div>
             </div>
 
-            <div className="mt-10 flex items-center justify-center gap-2 border-t border-white/10 pt-6 text-center">
+            <div className="flex items-center justify-center gap-2 border-t border-white/10 px-5 py-4 text-center">
               <span className="text-[13px] text-zinc-400">
-                Después de cada llamada
+                Después de cada llamada recibís feedback puntual:
               </span>
-              <ArrowRight size={13} strokeWidth={2} className="text-zinc-600" />
               <span className="text-[13px] font-medium text-white">
-                recibís feedback puntual: qué funcionó y qué corregir.
+                qué funcionó y qué corregir.
               </span>
             </div>
           </div>

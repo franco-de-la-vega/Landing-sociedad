@@ -4,8 +4,10 @@ import ROISection from "@/components/presentation/ROISection";
 import AdmissionCriteriaSection from "@/components/presentation/AdmissionCriteriaSection";
 import MarketSection from "@/components/presentation/MarketSection";
 import SimulationSection from "@/components/presentation/SimulationSection";
+import CurriculumSection from "@/components/presentation/CurriculumSection";
 import SupportSection from "@/components/presentation/SupportSection";
 import TimelineSection from "@/components/presentation/TimelineSection";
+import ValuePauseBanner from "@/components/presentation/ValuePauseBanner";
 import ComparisonSection from "@/components/presentation/ComparisonSection";
 import PricingSection from "@/components/presentation/PricingSection";
 
@@ -23,8 +25,10 @@ export default function PresentacionPage() {
         <AdmissionCriteriaSection />
         <MarketSection />
         <SimulationSection />
+        <CurriculumSection />
         <SupportSection />
         <TimelineSection />
+        <ValuePauseBanner />
         <ComparisonSection />
         <PricingSection />
       </main>
