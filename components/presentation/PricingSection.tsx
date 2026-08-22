@@ -59,7 +59,7 @@ const tierStyles: Record<string, { card: string; badge: string; price: string; c
     cta: "bg-[#facc15] text-[#0B0C0E] hover:bg-[#fde047]",
   },
   vip: {
-    card: "border-accent/50 bg-[#161215] shadow-[0_0_60px_-14px_rgba(122,36,54,0.4)]",
+    card: "border-accent/50 bg-[#161215] shadow-[0_0_60px_-14px_rgba(184,147,90,0.4)]",
     badge: "bg-accent text-[#0B0C0E]",
     price: "text-accent",
     cta: "border border-accent/40 text-accent hover:bg-accent/10",

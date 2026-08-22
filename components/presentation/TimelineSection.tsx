@@ -92,9 +92,9 @@ export default function TimelineSection() {
                         s.featured
                           ? {
                               boxShadow: [
-                                "0 0 0px rgba(122,36,54,0)",
-                                "0 0 14px rgba(122,36,54,0.6)",
-                                "0 0 0px rgba(122,36,54,0)",
+                                "0 0 0px rgba(184,147,90,0)",
+                                "0 0 14px rgba(184,147,90,0.6)",
+                                "0 0 0px rgba(184,147,90,0)",
                               ],
                             }
                           : undefined
@@ -142,7 +142,7 @@ export default function TimelineSection() {
                         <div
                           className={`mt-3 rounded-2xl border p-5 text-center md:text-left ${
                             s.featured
-                              ? "border-accent/30 bg-[#141a1c] shadow-[0_0_40px_-14px_rgba(122,36,54,0.35)]"
+                              ? "border-accent/30 bg-[#141a1c] shadow-[0_0_40px_-14px_rgba(184,147,90,0.35)]"
                               : "border-white/10 bg-[#121418]"
                           }`}
                         >

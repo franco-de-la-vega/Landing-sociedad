@@ -21,14 +21,14 @@
   --color-text-secondary: #a1a1aa;
   --color-text-muted: #52525b;
 
-  /* Acento único: burdeos apagado, uso sobrio y controlado (nunca neon) */
-  --color-accent: #7a2436;
-  --color-accent-hover: #8f2c40;
-  --color-accent-muted: #2a0d13;
+  /* Acento único: dorado apagado, uso sobrio y controlado. Nada de rojo/burdeos ni neon. */
+  --color-accent: #b8935a;
+  --color-accent-hover: #cba873;
+  --color-accent-muted: #241c0e;
 
-  /* Acento secundario: dorado apagado, uso mínimo (estados puntuales) */
-  --color-accent-secondary: #a8823f;
-  --color-accent-secondary-muted: #241c0e;
+  /* Acento secundario: mismo tono dorado, un poco más oscuro (estados puntuales) */
+  --color-accent-secondary: #9c7c48;
+  --color-accent-secondary-muted: #1c160a;
 
   /* Radios */
   --radius-control: 8px;

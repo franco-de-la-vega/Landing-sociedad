@@ -59,7 +59,7 @@ export default function SupportSection() {
                     y1={nodes[a].y}
                     x2={nodes[b].x}
                     y2={nodes[b].y}
-                    stroke="rgba(122,36,54,0.3)"
+                    stroke="rgba(184,147,90,0.3)"
                     strokeWidth="1"
                     initial={{ pathLength: 0, opacity: 0 }}
                     whileInView={{ pathLength: 1, opacity: 1 }}
@@ -73,7 +73,7 @@ export default function SupportSection() {
                       cx={n.x}
                       cy={n.y}
                       r="10"
-                      fill="rgba(122,36,54,0.1)"
+                      fill="rgba(184,147,90,0.1)"
                       initial={{ scale: 0 }}
                       whileInView={{ scale: 1 }}
                       viewport={{ once: true, amount: 0.6 }}
@@ -83,7 +83,7 @@ export default function SupportSection() {
                       cx={n.x}
                       cy={n.y}
                       r="3.5"
-                      fill="#7A2436"
+                      fill="#B8935A"
                       animate={{ opacity: [0.5, 1, 0.5] }}
                       transition={{
                         duration: 2.5,

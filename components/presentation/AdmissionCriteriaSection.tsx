@@ -86,7 +86,7 @@ export default function AdmissionCriteriaSection() {
           </Reveal>
 
           <Reveal delay={0.16}>
-            <div className="h-full rounded-2xl border border-accent/40 bg-[#121418] p-8 shadow-[0_0_50px_-14px_rgba(122,36,54,0.3)]">
+            <div className="h-full rounded-2xl border border-accent/40 bg-[#121418] p-8 shadow-[0_0_50px_-14px_rgba(184,147,90,0.3)]">
               <span className="inline-flex items-center gap-2 rounded border border-accent/25 bg-accent/[0.06] px-3 py-1.5 text-[10px] uppercase tracking-widest text-accent">
                 Perfil admitido
               </span>
