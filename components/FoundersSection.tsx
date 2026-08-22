@@ -6,19 +6,19 @@ import TiltCard from "./TiltCard";
 const founders = [
   {
     name: "Natalia",
-    role: "Chief Business Officer (CBO)",
+    role: "CBO",
     photo: "/team/natalia.jpg",
     body: "Co-fundadora y directora de vinculación institucional (B2B). Gestora del canal corporativo y alianzas internacionales para conectar a los closers con las mejores vacantes del mercado.",
   },
   {
     name: "Andrés",
-    role: "Chief Revenue Officer (CRO)",
+    role: "CRO",
     photo: "/team/andres.png",
     body: "Co-fundador y director comercial (B2C). Lidera la estrategia de ventas directas, el acompañamiento continuo de los alumnos y la optimización del rendimiento en cada etapa del proceso.",
   },
   {
     name: "Franco",
-    role: "Chief Executive Officer (CEO) & Founder",
+    role: "CEO & Founder",
     photo: "/team/franco.jpeg",
     body: "Director general de visión y arquitectura de sistemas. Diseña la infraestructura operativa del programa, los estándares técnicos y la metodología de negociación que aplican los alumnos.",
   },
@@ -78,7 +78,7 @@ export default function FoundersSection() {
               <h3 className="text-2xl font-semibold leading-none tracking-tight text-white">
                 {f.name}
               </h3>
-              <span className="mt-3 block text-[11px] uppercase tracking-[0.18em] text-zinc-500">
+              <span className="text-accent mt-2 block text-[1.5rem] font-bold uppercase leading-none tracking-tight">
                 {f.role}
               </span>
             </div>
