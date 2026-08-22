@@ -59,7 +59,7 @@ export default function AdmissionCriteriaSection() {
         <div className="mt-16 grid grid-cols-1 gap-6 lg:grid-cols-2">
           <Reveal delay={0.1}>
             <div className="h-full rounded-2xl border border-red-500/30 bg-[#121418] p-8">
-              <span className="inline-flex items-center gap-2 rounded border border-red-500/25 bg-red-500/[0.06] px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-red-400">
+              <span className="inline-flex items-center gap-2 rounded border border-red-500/25 bg-red-500/[0.06] px-3 py-1.5 text-[10px] uppercase tracking-widest text-red-400">
                 [ Perfil no elegible ]
               </span>
 
@@ -87,7 +87,7 @@ export default function AdmissionCriteriaSection() {
 
           <Reveal delay={0.16}>
             <div className="h-full rounded-2xl border border-cyan-400/40 bg-[#121418] p-8 shadow-[0_0_50px_-14px_rgba(0,242,254,0.35)]">
-              <span className="inline-flex items-center gap-2 rounded border border-cyan-400/25 bg-cyan-400/[0.06] px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-cyan-300">
+              <span className="inline-flex items-center gap-2 rounded border border-cyan-400/25 bg-cyan-400/[0.06] px-3 py-1.5 text-[10px] uppercase tracking-widest text-cyan-300">
                 [ Perfil admitido ]
               </span>
 

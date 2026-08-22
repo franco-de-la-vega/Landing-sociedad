@@ -86,7 +86,7 @@ export default function TimelineSection() {
               >
                 <div>
                   <span
-                    className={`inline-block rounded border px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest ${
+                    className={`inline-block rounded border px-2.5 py-1 text-[10px] uppercase tracking-widest ${
                       s.featured
                         ? "border-cyan-400/30 bg-cyan-400/10 text-cyan-300"
                         : "border-white/10 bg-white/5 text-zinc-500"

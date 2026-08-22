@@ -134,7 +134,7 @@ export default function PricingSection() {
                   </ul>
 
                   <button
-                    className={`mt-8 rounded-full px-5 py-3 font-mono text-[11px] uppercase tracking-widest transition-colors duration-300 ${s.cta}`}
+                    className={`mt-8 rounded-full px-5 py-3 text-[11px] uppercase tracking-widest transition-colors duration-300 ${s.cta}`}
                   >
                     {p.cta}
                   </button>

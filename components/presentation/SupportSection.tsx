@@ -97,10 +97,10 @@ export default function SupportSection() {
               </svg>
 
               <div className="mt-4 flex flex-wrap gap-2">
-                <span className="rounded-full border border-cyan-400/20 bg-cyan-400/5 px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-cyan-300">
+                <span className="rounded-full border border-cyan-400/20 bg-cyan-400/5 px-3 py-1.5 text-[10px] uppercase tracking-widest text-cyan-300">
                   [ Global Remote Network ]
                 </span>
-                <span className="rounded-full border border-emerald-400/20 bg-emerald-400/5 px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-emerald-300">
+                <span className="rounded-full border border-emerald-400/20 bg-emerald-400/5 px-3 py-1.5 text-[10px] uppercase tracking-widest text-emerald-300">
                   [ Direct Industry Pipeline ]
                 </span>
               </div>

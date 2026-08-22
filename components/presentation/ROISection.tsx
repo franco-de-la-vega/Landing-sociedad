@@ -52,7 +52,11 @@ export default function ROISection() {
         <Reveal delay={0.14} className="mt-4">
           <p className="max-w-xl text-[15px] leading-relaxed text-zinc-400">
             Proyección de ingresos al operar bajo estándares comerciales
-            internacionales en moneda dura.
+            internacionales en moneda dura.{" "}
+            <span className="text-zinc-500">
+              Esto es lo que podés llegar a ganar trabajando, no el costo
+              del programa.
+            </span>
           </p>
         </Reveal>
 
@@ -76,7 +80,10 @@ export default function ROISection() {
                   </h3>
                 </div>
                 <div className="mt-10">
-                  <p className={`text-[2.5rem] font-bold leading-none tracking-tight ${t.valueColor}`}>
+                  <span className="text-[10px] uppercase tracking-widest text-zinc-500">
+                    Sueldo de mercado
+                  </span>
+                  <p className={`mt-1 text-[2.5rem] font-bold leading-none tracking-tight ${t.valueColor}`}>
                     {t.value}
                     <span className="ml-2 text-[13px] font-medium text-zinc-500">
                       {t.unit}
