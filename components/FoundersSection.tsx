@@ -5,22 +5,22 @@ import TiltCard from "./TiltCard";
 
 const founders = [
   {
-    name: "Natalia",
-    role: "Líder B2B",
-    photo: "/team/natalia.jpg",
-    body: "Negocia y sostiene el vínculo con las empresas internacionales, el puente que conecta a cada closer evaluado con la oportunidad que le corresponde.",
+    name: "Franco",
+    role: "Chief Executive Officer (CEO) & Founder",
+    photo: "/team/franco.jpeg",
+    body: "Director general de visión y arquitectura de sistemas. Diseña la infraestructura operativa del programa, los estándares técnicos y la metodología de negociación que aplican los alumnos.",
   },
   {
     name: "Andrés",
-    role: "Líder B2C",
+    role: "Chief Revenue Officer (CRO)",
     photo: "/team/andres.png",
-    body: "Lidera la relación comercial directa con los closers: acompañamiento, seguimiento y la experiencia de cada alumno dentro del sistema.",
+    body: "Co-fundador y director comercial (B2C). Lidera la estrategia de ventas directas, el acompañamiento continuo de los alumnos y la optimización del rendimiento en cada etapa del proceso.",
   },
   {
-    name: "Franco",
-    role: "Líder de Estrategia",
-    photo: "/team/franco.jpeg",
-    body: "Lidera la visión y la construcción del sistema completo, con años de experiencia diseñando procesos comerciales que funcionan en el mundo real.",
+    name: "Natalia",
+    role: "Chief Business Officer (CBO)",
+    photo: "/team/natalia.jpg",
+    body: "Co-fundadora y directora de vinculación institucional (B2B). Gestora del canal corporativo y alianzas internacionales para conectar a los closers con las mejores vacantes del mercado.",
   },
 ];
 
