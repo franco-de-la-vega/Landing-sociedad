@@ -11,24 +11,24 @@ const rows = [
     detail: "Operatoria base y prospección en proyectos remotos.",
     value: "$1,700",
     pct: 40,
-    valueColor: "text-cyan-300",
-    barColor: "bg-cyan-400",
+    valueColor: "text-accent",
+    barColor: "bg-accent",
   },
   {
     stage: "Especialista Medio Plazo",
     detail: "Consolidador de cierres, autonomía técnica y gestión de pipeline.",
     value: "$2,500",
     pct: 62,
-    valueColor: "text-emerald-300",
-    barColor: "bg-emerald-400",
+    valueColor: "text-accent",
+    barColor: "bg-accent",
   },
   {
     stage: "Senior / Closing Lead",
     detail: "Liderazgo de equipo comercial y contratos high-ticket.",
     value: "$4,200+",
     pct: 100,
-    valueColor: "text-cyan-200",
-    barColor: "bg-gradient-to-r from-cyan-400 to-emerald-400",
+    valueColor: "text-accent",
+    barColor: "bg-gradient-to-r from-accent to-accent",
   },
 ];
 
@@ -37,7 +37,7 @@ export default function ROISection() {
     <section className="relative px-6 py-24 md:px-10 md:py-32">
       <div className="mx-auto max-w-6xl">
         <Reveal>
-          <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-500">
+          <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-zinc-400">
             Proyección económica y arbitraje de ingresos
           </span>
         </Reveal>
@@ -61,7 +61,7 @@ export default function ROISection() {
           <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#121418]">
             <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
               <span className="flex items-center gap-2 text-[12px] font-medium text-zinc-300">
-                <TrendingUp size={14} strokeWidth={2} className="text-cyan-300" />
+                <TrendingUp size={14} strokeWidth={2} className="text-accent" />
                 Escalada de ingresos por etapa
               </span>
               <span className="text-[11px] uppercase tracking-widest text-zinc-500">

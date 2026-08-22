@@ -27,7 +27,7 @@ export default function SupportSection() {
     <section className="relative border-t border-white/10 px-6 py-24 md:px-10 md:py-32">
       <div className="mx-auto max-w-6xl">
         <Reveal>
-          <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-500">
+          <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-zinc-400">
             Acompañamiento y prueba social en tiempo real
           </span>
         </Reveal>
@@ -59,7 +59,7 @@ export default function SupportSection() {
                     y1={nodes[a].y}
                     x2={nodes[b].x}
                     y2={nodes[b].y}
-                    stroke="rgba(0,242,254,0.35)"
+                    stroke="rgba(122,36,54,0.3)"
                     strokeWidth="1"
                     initial={{ pathLength: 0, opacity: 0 }}
                     whileInView={{ pathLength: 1, opacity: 1 }}
@@ -73,7 +73,7 @@ export default function SupportSection() {
                       cx={n.x}
                       cy={n.y}
                       r="10"
-                      fill="rgba(0,242,254,0.08)"
+                      fill="rgba(122,36,54,0.1)"
                       initial={{ scale: 0 }}
                       whileInView={{ scale: 1 }}
                       viewport={{ once: true, amount: 0.6 }}
@@ -83,7 +83,7 @@ export default function SupportSection() {
                       cx={n.x}
                       cy={n.y}
                       r="3.5"
-                      fill="#00F2FE"
+                      fill="#7A2436"
                       animate={{ opacity: [0.5, 1, 0.5] }}
                       transition={{
                         duration: 2.5,
@@ -97,10 +97,10 @@ export default function SupportSection() {
               </svg>
 
               <div className="mt-4 flex flex-wrap gap-2">
-                <span className="rounded-full border border-cyan-400/20 bg-cyan-400/5 px-3 py-1.5 text-[10px] uppercase tracking-widest text-cyan-300">
+                <span className="rounded-full border border-accent/20 bg-accent/5 px-3 py-1.5 text-[10px] uppercase tracking-widest text-accent">
                   Global Remote Network
                 </span>
-                <span className="rounded-full border border-emerald-400/20 bg-emerald-400/5 px-3 py-1.5 text-[10px] uppercase tracking-widest text-emerald-300">
+                <span className="rounded-full border border-accent/20 bg-accent/5 px-3 py-1.5 text-[10px] uppercase tracking-widest text-accent">
                   Direct Industry Pipeline
                 </span>
               </div>
@@ -112,7 +112,7 @@ export default function SupportSection() {
             <Reveal delay={0.16}>
               <div className="rounded-2xl border border-white/10 bg-[#121418] p-5 shadow-2xl">
                 <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                  <span className="h-2 w-2 rounded-full bg-accent" />
                   <span className="text-[11px] uppercase tracking-widest text-zinc-500">
                     Oferta confirmada
                   </span>
@@ -125,8 +125,8 @@ export default function SupportSection() {
             </Reveal>
 
             <Reveal delay={0.24}>
-              <div className="flex items-center gap-3 rounded-2xl border border-cyan-400/15 bg-[#121418] p-5 shadow-2xl">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-cyan-400/10 text-cyan-300">
+              <div className="flex items-center gap-3 rounded-2xl border border-accent/15 bg-[#121418] p-5 shadow-2xl">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent">
                   <Rocket size={16} strokeWidth={2} />
                 </span>
                 <p className="text-[14.5px] font-medium text-zinc-200">

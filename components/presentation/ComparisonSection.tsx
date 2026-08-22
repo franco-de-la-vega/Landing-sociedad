@@ -17,7 +17,7 @@ export default function ComparisonSection() {
     <section className="relative border-t border-white/10 px-6 py-24 md:px-10 md:py-32">
       <div className="mx-auto max-w-6xl">
         <Reveal>
-          <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-500">
+          <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-zinc-400">
             Matriz comparativa de alternativas
           </span>
         </Reveal>
@@ -38,7 +38,7 @@ export default function ComparisonSection() {
                   <th
                     key={c}
                     className={`px-5 py-4 text-center text-[13px] font-semibold ${
-                      c === "Instituto" ? "bg-cyan-400/[0.06] text-cyan-300" : "text-zinc-400"
+                      c === "Instituto" ? "bg-accent/[0.06] text-accent" : "text-zinc-400"
                     }`}
                   >
                     {c}
@@ -54,14 +54,14 @@ export default function ComparisonSection() {
                     <td
                       key={i}
                       className={`px-5 py-4 text-center ${
-                        columns[i] === "Instituto" ? "bg-cyan-400/[0.04]" : ""
+                        columns[i] === "Instituto" ? "bg-accent/[0.04]" : ""
                       }`}
                     >
                       {v ? (
                         <Check
                           size={16}
                           strokeWidth={2.5}
-                          className="mx-auto text-emerald-400"
+                          className="mx-auto text-accent"
                         />
                       ) : (
                         <X size={15} strokeWidth={2} className="mx-auto text-zinc-600" />

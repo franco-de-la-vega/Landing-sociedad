@@ -7,15 +7,14 @@ import Reveal from "@/components/Reveal";
 const bars = [8, 18, 30, 45, 60, 72, 55, 38, 62, 80, 48, 30, 55, 70, 42, 20, 34, 50, 65, 28];
 
 const feedbackTags = [
-  { text: "Objeción manejada", color: "emerald", delay: 0.4 },
-  { text: "Tono correcto", color: "cyan", delay: 1.4 },
-  { text: "Ajustá el cierre", color: "amber", delay: 2.4 },
+  { text: "Objeción manejada", color: "neutral", delay: 0.4 },
+  { text: "Tono correcto", color: "neutral", delay: 1.4 },
+  { text: "Ajustá el cierre", color: "accent", delay: 2.4 },
 ];
 
 const tagStyles: Record<string, string> = {
-  emerald: "border-emerald-400/30 bg-emerald-400/10 text-emerald-300",
-  cyan: "border-cyan-400/30 bg-cyan-400/10 text-cyan-300",
-  amber: "border-amber-400/30 bg-amber-400/10 text-amber-300",
+  neutral: "border-white/15 bg-white/5 text-zinc-300",
+  accent: "border-accent/30 bg-accent/10 text-accent",
 };
 
 export default function SimulationSection() {
@@ -23,7 +22,7 @@ export default function SimulationSection() {
     <section className="relative border-t border-white/10 px-6 py-24 md:px-10 md:py-32">
       <div className="mx-auto max-w-6xl">
         <Reveal>
-          <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-500">
+          <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-zinc-400">
             Así se entrena de verdad
           </span>
         </Reveal>
@@ -79,15 +78,15 @@ export default function SimulationSection() {
                         delay: i * 0.05,
                         ease: "easeInOut",
                       }}
-                      className="w-[3px] rounded-full bg-cyan-400/70"
+                      className="w-[3px] rounded-full bg-accent/70"
                     />
                   ))}
                 </div>
               </div>
 
               <div className="relative flex aspect-[4/3] flex-col items-center justify-center bg-[#0e0f11] p-6">
-                <span className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-400/10 ring-1 ring-emerald-400/30">
-                  <Headset size={26} strokeWidth={1.75} className="text-emerald-300" />
+                <span className="flex h-16 w-16 items-center justify-center rounded-full bg-accent/10 ring-1 ring-accent/30">
+                  <Headset size={26} strokeWidth={1.75} className="text-accent" />
                 </span>
                 <p className="mt-3 text-[13.5px] font-semibold text-white">Coach</p>
                 <span className="mt-1 text-[11px] text-zinc-500">

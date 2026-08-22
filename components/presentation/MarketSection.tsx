@@ -23,7 +23,7 @@ export default function MarketSection() {
       <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-16 lg:grid-cols-2 lg:gap-20">
         <Reveal>
           <div>
-            <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-500">
+            <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-zinc-400">
               La inevitabilidad del mercado
             </span>
             <h2 className="mt-6 text-[1.9rem] font-bold leading-[1.15] tracking-tight text-white md:text-[2.6rem]">
@@ -33,7 +33,7 @@ export default function MarketSection() {
               El trabajo remoto comercial no es una tendencia: es el
               estándar de eficiencia. Mantenerse en estructuras locales
               tradicionales genera una brecha de ingresos e{" "}
-              <span className="font-semibold text-cyan-300">
+              <span className="font-semibold text-accent">
                 irreversibilidad profesional en menos de 36 meses
               </span>
               .
@@ -48,7 +48,7 @@ export default function MarketSection() {
           {features.map((f) => (
             <RevealItem key={f.tag}>
               <div className="p-7">
-                <span className="inline-block rounded border border-emerald-400/20 bg-emerald-400/5 px-2.5 py-1 text-[10px] uppercase tracking-widest text-emerald-300">
+                <span className="inline-block rounded border border-accent/20 bg-accent/5 px-2.5 py-1 text-[10px] uppercase tracking-widest text-accent">
                   {f.tag}
                 </span>
                 <p className="mt-4 text-[14.5px] leading-relaxed text-zinc-300">

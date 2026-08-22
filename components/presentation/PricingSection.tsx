@@ -59,10 +59,10 @@ const tierStyles: Record<string, { card: string; badge: string; price: string; c
     cta: "bg-[#facc15] text-[#0B0C0E] hover:bg-[#fde047]",
   },
   vip: {
-    card: "border-emerald-400/50 bg-[#0f1714] shadow-[0_0_60px_-14px_rgba(16,185,129,0.4)]",
-    badge: "bg-emerald-400 text-[#0B0C0E]",
-    price: "text-emerald-300",
-    cta: "border border-emerald-400/40 text-emerald-300 hover:bg-emerald-400/10",
+    card: "border-accent/50 bg-[#161215] shadow-[0_0_60px_-14px_rgba(122,36,54,0.4)]",
+    badge: "bg-accent text-[#0B0C0E]",
+    price: "text-accent",
+    cta: "border border-accent/40 text-accent hover:bg-accent/10",
   },
 };
 
@@ -71,7 +71,7 @@ export default function PricingSection() {
     <section className="relative border-t border-white/10 px-6 py-24 md:px-10 md:py-32">
       <div className="mx-auto max-w-6xl">
         <Reveal>
-          <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-500">
+          <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-zinc-400">
             Planes e inversión
           </span>
         </Reveal>

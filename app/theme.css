@@ -21,14 +21,14 @@
   --color-text-secondary: #a1a1aa;
   --color-text-muted: #52525b;
 
-  /* Acento primario: emerald/cyan, energía de marca */
-  --color-accent: #2dd4bf;
-  --color-accent-hover: #5eead4;
-  --color-accent-muted: #0a2f2a;
+  /* Acento único: burdeos apagado, uso sobrio y controlado (nunca neon) */
+  --color-accent: #7a2436;
+  --color-accent-hover: #8f2c40;
+  --color-accent-muted: #2a0d13;
 
-  /* Acento secundario: ámbar cálido, exclusivo para estados de diagnóstico y métricas */
-  --color-accent-secondary: #f59e0b;
-  --color-accent-secondary-muted: #2e1f05;
+  /* Acento secundario: dorado apagado, uso mínimo (estados puntuales) */
+  --color-accent-secondary: #a8823f;
+  --color-accent-secondary-muted: #241c0e;
 
   /* Radios */
   --radius-control: 8px;

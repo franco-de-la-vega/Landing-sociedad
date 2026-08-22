@@ -40,7 +40,7 @@ export default function AdmissionCriteriaSection() {
     <section className="relative border-t border-white/10 px-6 py-24 md:px-10 md:py-32">
       <div className="mx-auto max-w-6xl">
         <Reveal>
-          <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-500">
+          <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-zinc-400">
             Criterio de admisión
           </span>
         </Reveal>
@@ -86,8 +86,8 @@ export default function AdmissionCriteriaSection() {
           </Reveal>
 
           <Reveal delay={0.16}>
-            <div className="h-full rounded-2xl border border-cyan-400/40 bg-[#121418] p-8 shadow-[0_0_50px_-14px_rgba(0,242,254,0.35)]">
-              <span className="inline-flex items-center gap-2 rounded border border-cyan-400/25 bg-cyan-400/[0.06] px-3 py-1.5 text-[10px] uppercase tracking-widest text-cyan-300">
+            <div className="h-full rounded-2xl border border-accent/40 bg-[#121418] p-8 shadow-[0_0_50px_-14px_rgba(122,36,54,0.3)]">
+              <span className="inline-flex items-center gap-2 rounded border border-accent/25 bg-accent/[0.06] px-3 py-1.5 text-[10px] uppercase tracking-widest text-accent">
                 Perfil admitido
               </span>
 
@@ -95,7 +95,7 @@ export default function AdmissionCriteriaSection() {
                 {eligible.map((item) => (
                   <RevealItem key={item.title}>
                     <div className="flex items-start gap-3">
-                      <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-400/10 text-emerald-300">
+                      <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent">
                         <Check size={13} strokeWidth={2.5} />
                       </span>
                       <div>

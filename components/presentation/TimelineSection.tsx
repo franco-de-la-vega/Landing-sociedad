@@ -55,7 +55,7 @@ export default function TimelineSection() {
     <section className="relative border-t border-white/10 px-6 py-24 md:px-10 md:py-32">
       <div className="mx-auto max-w-6xl">
         <Reveal>
-          <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-500">
+          <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-zinc-400">
             Hoja de ruta
           </span>
         </Reveal>
@@ -77,7 +77,7 @@ export default function TimelineSection() {
           <div className="absolute inset-x-2 top-0 hidden h-px bg-white/10 md:block" />
           <motion.div
             style={{ scaleX: lineScale }}
-            className="absolute inset-x-2 top-0 hidden h-px origin-left bg-gradient-to-r from-cyan-400 via-emerald-400 to-cyan-300 md:block"
+            className="absolute inset-x-2 top-0 hidden h-px origin-left bg-gradient-to-r from-accent via-accent to-accent md:block"
           />
 
           <div className="grid grid-cols-1 gap-x-4 gap-y-10 md:grid-cols-5">
@@ -92,16 +92,16 @@ export default function TimelineSection() {
                         s.featured
                           ? {
                               boxShadow: [
-                                "0 0 0px rgba(0,242,254,0)",
-                                "0 0 14px rgba(0,242,254,0.7)",
-                                "0 0 0px rgba(0,242,254,0)",
+                                "0 0 0px rgba(122,36,54,0)",
+                                "0 0 14px rgba(122,36,54,0.6)",
+                                "0 0 0px rgba(122,36,54,0)",
                               ],
                             }
                           : undefined
                       }
                       transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
                       className={`h-3 w-3 rounded-full ${
-                        s.featured ? "bg-cyan-300" : "bg-zinc-600"
+                        s.featured ? "bg-accent" : "bg-zinc-600"
                       }`}
                     />
                     <span className="absolute top-3 h-5 w-px bg-white/10" />
@@ -113,14 +113,14 @@ export default function TimelineSection() {
                     className={`group w-full rounded-full border px-4 py-2.5 text-left transition-colors duration-300 md:text-center ${
                       isOpen
                         ? s.featured
-                          ? "border-cyan-400/50 bg-cyan-400/[0.06]"
+                          ? "border-accent/50 bg-accent/[0.06]"
                           : "border-white/20 bg-white/[0.04]"
                         : "border-white/10 bg-[#121418] hover:border-white/25"
                     }`}
                   >
                     <span
                       className={`block text-[10px] uppercase tracking-widest ${
-                        s.featured ? "text-cyan-300" : "text-zinc-500"
+                        s.featured ? "text-accent" : "text-zinc-500"
                       }`}
                     >
                       {s.tag}
@@ -142,14 +142,14 @@ export default function TimelineSection() {
                         <div
                           className={`mt-3 rounded-2xl border p-5 text-center md:text-left ${
                             s.featured
-                              ? "border-cyan-400/30 bg-[#141a1c] shadow-[0_0_40px_-14px_rgba(0,242,254,0.4)]"
+                              ? "border-accent/30 bg-[#141a1c] shadow-[0_0_40px_-14px_rgba(122,36,54,0.35)]"
                               : "border-white/10 bg-[#121418]"
                           }`}
                         >
                           {s.income && (
                             <p
                               className={`text-[15px] font-bold tracking-tight ${
-                                s.featured ? "text-cyan-200" : "text-emerald-300"
+                                s.featured ? "text-accent" : "text-accent"
                               }`}
                             >
                               {s.income}
