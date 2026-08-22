@@ -5,10 +5,10 @@ import TiltCard from "./TiltCard";
 
 const founders = [
   {
-    name: "Franco",
-    role: "Chief Executive Officer (CEO) & Founder",
-    photo: "/team/franco.jpeg",
-    body: "Director general de visión y arquitectura de sistemas. Diseña la infraestructura operativa del programa, los estándares técnicos y la metodología de negociación que aplican los alumnos.",
+    name: "Natalia",
+    role: "Chief Business Officer (CBO)",
+    photo: "/team/natalia.jpg",
+    body: "Co-fundadora y directora de vinculación institucional (B2B). Gestora del canal corporativo y alianzas internacionales para conectar a los closers con las mejores vacantes del mercado.",
   },
   {
     name: "Andrés",
@@ -17,10 +17,10 @@ const founders = [
     body: "Co-fundador y director comercial (B2C). Lidera la estrategia de ventas directas, el acompañamiento continuo de los alumnos y la optimización del rendimiento en cada etapa del proceso.",
   },
   {
-    name: "Natalia",
-    role: "Chief Business Officer (CBO)",
-    photo: "/team/natalia.jpg",
-    body: "Co-fundadora y directora de vinculación institucional (B2B). Gestora del canal corporativo y alianzas internacionales para conectar a los closers con las mejores vacantes del mercado.",
+    name: "Franco",
+    role: "Chief Executive Officer (CEO) & Founder",
+    photo: "/team/franco.jpeg",
+    body: "Director general de visión y arquitectura de sistemas. Diseña la infraestructura operativa del programa, los estándares técnicos y la metodología de negociación que aplican los alumnos.",
   },
 ];
 
