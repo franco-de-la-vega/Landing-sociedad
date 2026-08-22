@@ -7,18 +7,21 @@ const founders = [
   {
     name: "Natalia",
     role: "CBO",
+    fullTitle: "Chief Business Officer",
     photo: "/team/natalia.jpg",
     body: "Co-fundadora y directora de vinculación institucional (B2B). Gestora del canal corporativo y alianzas internacionales para conectar a los closers con las mejores vacantes del mercado.",
   },
   {
     name: "Andrés",
     role: "CRO",
+    fullTitle: "Chief Revenue Officer",
     photo: "/team/andres.png",
     body: "Co-fundador y director comercial (B2C). Lidera la estrategia de ventas directas, el acompañamiento continuo de los alumnos y la optimización del rendimiento en cada etapa del proceso.",
   },
   {
     name: "Franco",
     role: "CEO & Founder",
+    fullTitle: "Chief Executive Officer",
     photo: "/team/franco.jpeg",
     body: "Director general de visión y arquitectura de sistemas. Diseña la infraestructura operativa del programa, los estándares técnicos y la metodología de negociación que aplican los alumnos.",
   },
@@ -80,6 +83,9 @@ export default function FoundersSection() {
               </h3>
               <span className="text-accent mt-2 block text-[1.5rem] font-bold uppercase leading-none tracking-tight">
                 {f.role}
+              </span>
+              <span className="mt-1.5 block text-[11px] tracking-tight text-zinc-500">
+                ({f.fullTitle})
               </span>
             </div>
 
