@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import PresentationHeader from "@/components/presentation/PresentationHeader";
 import ROISection from "@/components/presentation/ROISection";
+import AdmissionCriteriaSection from "@/components/presentation/AdmissionCriteriaSection";
 import MarketSection from "@/components/presentation/MarketSection";
 import SimulationSection from "@/components/presentation/SimulationSection";
 import SupportSection from "@/components/presentation/SupportSection";
@@ -19,6 +20,7 @@ export default function PresentacionPage() {
       <PresentationHeader />
       <main>
         <ROISection />
+        <AdmissionCriteriaSection />
         <MarketSection />
         <SimulationSection />
         <SupportSection />
