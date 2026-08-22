@@ -118,9 +118,8 @@ export default function SupportSection() {
                   </span>
                 </div>
                 <p className="mt-3 text-[14.5px] leading-relaxed text-zinc-200">
-                  &ldquo;Me hicieron la oferta directa. Arranco como
-                  Business Analyst / Automation Lead el próximo mes. La
-                  preparación de la entrevista fue clave.&rdquo;
+                  &ldquo;Me hicieron la oferta directa como Closer de
+                  Ventas. La simulación de llamadas fue determinante.&rdquo;
                 </p>
               </div>
             </Reveal>
@@ -131,7 +130,8 @@ export default function SupportSection() {
                   <Rocket size={16} strokeWidth={2} />
                 </span>
                 <p className="text-[14.5px] font-medium text-zinc-200">
-                  ¡Contrato firmado en USD! Lo logramos.
+                  ¡Contrato cerrado en USD! Incorporado al equipo
+                  comercial hoy mismo.
                 </p>
               </div>
             </Reveal>

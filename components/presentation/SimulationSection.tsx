@@ -7,7 +7,7 @@ const panelists = [
   {
     name: "Valentina",
     role: "Coach Técnico",
-    body: "Evaluación de habilidades duras y resolución de arquitectura en vivo.",
+    body: "Evaluación de habilidades duras y resolución de objeciones en vivo.",
     gradient: "from-cyan-400/30 via-cyan-500/10 to-transparent",
     ring: "ring-cyan-400/30",
     monogram: "V",
@@ -15,7 +15,7 @@ const panelists = [
   {
     name: "Julio",
     role: "Evaluador de Criterio",
-    body: "Simulación de entrevista técnica, método STAR y narrativa de autoridad.",
+    body: "Simulación de llamadas de alta presión y estructura narrativa de venta.",
     gradient: "from-emerald-400/30 via-emerald-500/10 to-transparent",
     ring: "ring-emerald-400/30",
     monogram: "J",
@@ -33,7 +33,7 @@ export default function SimulationSection() {
         </Reveal>
         <Reveal delay={0.08} className="mt-5">
           <h2 className="max-w-2xl text-[2rem] font-bold leading-[1.15] tracking-tight text-white md:text-[2.8rem]">
-            Entorno de Entrenamiento y Simulación Técnica
+            Entorno de Entrenamiento y Simulación Comercial
           </h2>
         </Reveal>
         <Reveal delay={0.14} className="mt-4">

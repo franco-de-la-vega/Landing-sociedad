@@ -5,15 +5,15 @@ import RevealItem from "@/components/RevealItem";
 const features = [
   {
     tag: "Arbitraje Geográfico",
-    body: "Facturación directa en USD sin depender de la economía local.",
+    body: "Facturación directa en USD sin límites de economía local.",
   },
   {
     tag: "Blindaje Profesional",
-    body: "Habilidades duras alineadas a demanda global de alta intensidad.",
+    body: "Dominio de habilidades comerciales duras alineadas a demanda global.",
   },
   {
     tag: "Posicionamiento Temprano",
-    body: "Acceso a la cima de la curva de adopción antes de la saturación del mercado.",
+    body: "Entrada prioritaria a la cima de la curva de adopción.",
   },
 ];
 
@@ -30,12 +30,11 @@ export default function MarketSection() {
               El mercado no espera a la adaptación tardía.
             </h2>
             <p className="mt-7 max-w-md text-[15px] leading-relaxed text-zinc-400">
-              El trabajo remoto y la automatización no son una tendencia:
-              son el estándar de eficiencia actual. Mantenerse en
-              estructuras locales tradicionales genera una brecha
-              competitiva{" "}
+              El trabajo remoto comercial no es una tendencia: es el
+              estándar de eficiencia. Mantenerse en estructuras locales
+              tradicionales genera una brecha de ingresos e{" "}
               <span className="font-semibold text-cyan-300">
-                irreversible en menos de 36 meses
+                irreversibilidad profesional en menos de 36 meses
               </span>
               .
             </p>

@@ -10,7 +10,8 @@ const tiers = [
     stage: "Nivel Inicial / Inserción",
     value: "$1,700",
     unit: "USD/mes",
-    body: "Operatoria base en proyectos remotos.",
+    body: "Operatoria base y prospección en proyectos remotos.",
+    topBorder: "before:bg-cyan-400/60",
     glow: "shadow-[0_0_40px_-12px_rgba(0,242,254,0.25)]",
     valueColor: "text-cyan-300",
   },
@@ -18,15 +19,17 @@ const tiers = [
     stage: "Especialista Medio Plazo",
     value: "$2,500",
     unit: "USD/mes",
-    body: "Consolidación de autonomía técnica y resolución de sistemas.",
+    body: "Consolidador de cierres, autonomía técnica y gestión de pipeline.",
+    topBorder: "before:bg-emerald-400/60",
     glow: "shadow-[0_0_40px_-12px_rgba(16,185,129,0.3)]",
     valueColor: "text-emerald-300",
   },
   {
-    stage: "Senior / Arquitecto de Sistemas",
+    stage: "Senior / Closing Lead",
     value: "$4,200+",
     unit: "USD/mes",
-    body: "Dirección de infraestructura y liderazgo operativo.",
+    body: "Liderazgo de equipo comercial y contratos high-ticket.",
+    topBorder: "before:bg-cyan-300/70",
     glow: "shadow-[0_0_50px_-10px_rgba(0,242,254,0.35)]",
     valueColor: "text-cyan-200",
   },
@@ -38,18 +41,18 @@ export default function ROISection() {
       <div className="mx-auto max-w-6xl">
         <Reveal>
           <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-500">
-            Proyección económica y retorno de inversión
+            Proyección económica y arbitraje de ingresos
           </span>
         </Reveal>
         <Reveal delay={0.08} className="mt-5">
           <h2 className="max-w-3xl text-[2rem] font-bold leading-[1.1] tracking-tight text-white md:text-[2.8rem]">
-            Valor de Mercado de la Competencia Técnica
+            Valor de Mercado &amp; Escalabilidad Financiera
           </h2>
         </Reveal>
         <Reveal delay={0.14} className="mt-4">
           <p className="max-w-xl text-[15px] leading-relaxed text-zinc-400">
-            El diferencial de ingresos al operar bajo estándares
-            internacionales en USD.
+            Proyección de ingresos al operar bajo estándares comerciales
+            internacionales en moneda dura.
           </p>
         </Reveal>
 
@@ -62,7 +65,7 @@ export default function ROISection() {
               <motion.div
                 whileHover={{ y: -4 }}
                 transition={{ duration: 0.25, ease: "easeOut" }}
-                className={`relative flex h-full flex-col justify-between rounded-2xl border border-white/10 bg-[#121418] p-8 ${t.glow}`}
+                className={`before:content-[''] before:absolute before:inset-x-0 before:top-0 before:h-px relative flex h-full flex-col justify-between rounded-2xl border border-white/10 bg-[#121418] p-8 ${t.topBorder} ${t.glow}`}
               >
                 <div>
                   <span className="text-[10px] uppercase tracking-widest text-zinc-500">
