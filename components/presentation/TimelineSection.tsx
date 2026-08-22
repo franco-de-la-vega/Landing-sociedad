@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import Reveal from "@/components/Reveal";
 
 const steps = [
@@ -44,12 +44,6 @@ const steps = [
 
 export default function TimelineSection() {
   const [open, setOpen] = useState(2);
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start 0.8", "end 0.5"],
-  });
-  const lineScale = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   return (
     <section className="relative border-t border-white/10 px-6 py-24 md:px-10 md:py-32">
@@ -72,12 +66,19 @@ export default function TimelineSection() {
           </p>
         </Reveal>
 
-        <div ref={ref} className="relative mt-24">
-          {/* riel horizontal */}
+        <div className="relative mt-24">
+          {/* riel horizontal: línea estática + pulso de energía viajando en loop */}
           <div className="absolute inset-x-2 top-0 hidden h-px bg-white/10 md:block" />
           <motion.div
-            style={{ scaleX: lineScale }}
-            className="absolute inset-x-2 top-0 hidden h-px origin-left bg-gradient-to-r from-accent via-accent to-accent md:block"
+            aria-hidden
+            animate={{ left: ["0%", "100%"] }}
+            transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", repeatDelay: 0.6 }}
+            className="absolute top-0 hidden h-px w-1/4 -translate-x-1/2 md:block"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent, var(--color-accent) 50%, transparent)",
+              filter: "drop-shadow(0 0 6px var(--color-accent))",
+            }}
           />
 
           <div className="grid grid-cols-1 gap-x-4 gap-y-10 md:grid-cols-5">

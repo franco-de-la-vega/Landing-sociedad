@@ -40,7 +40,7 @@ export default function CurriculumSection() {
 
   return (
     <section className="relative border-t border-white/10 px-6 py-24 md:px-10 md:py-32">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-5xl">
         <Reveal>
           <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-zinc-400">
             Programa de estudio
@@ -60,7 +60,7 @@ export default function CurriculumSection() {
 
         <RevealGroup
           stagger={0.08}
-          className="mt-16 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5"
+          className="mt-16 flex flex-col divide-y divide-white/10 border-t border-b border-white/10"
         >
           {units.map((u, i) => {
             const isOpen = open === i;
@@ -68,48 +68,46 @@ export default function CurriculumSection() {
               <RevealItem key={u.n}>
                 <button
                   onClick={() => setOpen(isOpen ? -1 : i)}
-                  className={`w-full rounded-2xl border p-6 text-left transition-colors duration-300 ${
-                    isOpen
-                      ? "border-accent/30 bg-[#141a1c]"
-                      : "border-white/10 bg-[#121418] hover:border-white/20"
-                  }`}
+                  className="group flex w-full items-center gap-6 py-6 text-left"
                 >
-                  <div className="flex items-start justify-between gap-3">
-                    <span
-                      className={`text-[13px] font-semibold ${
-                        isOpen ? "text-accent" : "text-zinc-600"
-                      }`}
-                    >
-                      {u.n}
-                    </span>
-                    <motion.span
-                      animate={{ rotate: isOpen ? 45 : 0 }}
-                      transition={{ duration: 0.25 }}
-                      className={isOpen ? "text-accent" : "text-zinc-600"}
-                    >
-                      <Plus size={16} strokeWidth={2} />
-                    </motion.span>
-                  </div>
-                  <h3 className="mt-3 text-[15px] font-semibold leading-snug text-white">
+                  <span
+                    className={`w-8 shrink-0 text-[13px] font-semibold transition-colors duration-300 ${
+                      isOpen ? "text-accent" : "text-zinc-600"
+                    }`}
+                  >
+                    {u.n}
+                  </span>
+                  <h3
+                    className={`flex-1 text-[16px] font-semibold transition-colors duration-300 sm:text-[18px] ${
+                      isOpen ? "text-white" : "text-zinc-300 group-hover:text-white"
+                    }`}
+                  >
                     {u.title}
                   </h3>
-
-                  <AnimatePresence initial={false}>
-                    {isOpen && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                        className="overflow-hidden"
-                      >
-                        <p className="mt-3 text-[13.5px] leading-relaxed text-zinc-400">
-                          {u.body}
-                        </p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  <motion.span
+                    animate={{ rotate: isOpen ? 45 : 0 }}
+                    transition={{ duration: 0.25 }}
+                    className={`shrink-0 ${isOpen ? "text-accent" : "text-zinc-600"}`}
+                  >
+                    <Plus size={16} strokeWidth={2} />
+                  </motion.span>
                 </button>
+
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                      className="overflow-hidden"
+                    >
+                      <p className="max-w-2xl pb-6 pl-14 text-[14px] leading-relaxed text-zinc-400">
+                        {u.body}
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </RevealItem>
             );
           })}
