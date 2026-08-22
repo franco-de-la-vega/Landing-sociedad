@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Info } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import RevealGroup from "@/components/RevealGroup";
 import RevealItem from "@/components/RevealItem";
@@ -61,6 +61,9 @@ export default function MarketSection() {
                     className="text-accent/60"
                   />
                 </div>
+                <span className="mt-2 inline-block w-fit rounded border border-white/10 bg-white/5 px-2 py-0.5 text-[9.5px] uppercase tracking-widest text-zinc-500">
+                  Estimación
+                </span>
                 <p className="mt-4 text-[13.5px] leading-relaxed text-zinc-400">
                   {s.label}
                 </p>
@@ -72,11 +75,15 @@ export default function MarketSection() {
           ))}
         </RevealGroup>
 
-        <Reveal delay={0.1} className="mt-6">
-          <p className="text-[11.5px] italic leading-relaxed text-zinc-600">
-            Señales ilustrativas de mercado, usadas como referencia de
-            contexto durante la conversación comercial.
-          </p>
+        <Reveal delay={0.1} className="mt-8">
+          <div className="flex items-start gap-2.5 rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3">
+            <Info size={15} strokeWidth={2} className="mt-0.5 shrink-0 text-zinc-500" />
+            <p className="text-[12.5px] leading-relaxed text-zinc-400">
+              Estos números son estimaciones ilustrativas para dar
+              contexto en la conversación, no datos verificados de una
+              fuente oficial o estudio publicado.
+            </p>
+          </div>
         </Reveal>
       </div>
     </section>
