@@ -3,12 +3,15 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   background-color: var(--color-bg-base);
   color: var(--color-text-primary);
   position: relative;
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 /* Contraluz quirúrgica: única fuente de luz de fondo, sin grillas ni mesh-glow */

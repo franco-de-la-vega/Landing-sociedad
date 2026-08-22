@@ -23,7 +23,7 @@ export default function Header() {
       }`}
     >
       <div className="mx-auto flex max-w-5xl items-center px-5 py-4 sm:px-8">
-        <span className="text-[13px] font-bold tracking-[-0.01em] sm:text-[15px]">
+        <span className="min-w-0 text-[11px] font-bold leading-tight tracking-[-0.01em] sm:text-[15px]">
           Instituto Latinoamericano de Formación Comercial
         </span>
       </div>

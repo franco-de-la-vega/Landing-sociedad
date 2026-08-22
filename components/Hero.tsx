@@ -7,7 +7,7 @@ import Magnetic from "./Magnetic";
 export default function Hero() {
   return (
     <section className="relative flex min-h-[90vh] w-full items-center overflow-hidden bg-bg-base">
-      <span className="pointer-events-none absolute -left-6 -top-6 z-0 select-none text-[17vw] font-black uppercase leading-none tracking-tighter text-white/[0.03]">
+      <span className="pointer-events-none absolute -left-6 top-16 z-0 hidden select-none text-[17vw] font-black uppercase leading-none tracking-tighter text-white/[0.03] sm:block md:top-6">
         ILFC
       </span>
 
