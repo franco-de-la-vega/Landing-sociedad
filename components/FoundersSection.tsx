@@ -20,8 +20,8 @@ const founders = [
   },
   {
     name: "Franco",
-    role: "CEO & Founder",
-    fullTitle: "Chief Executive Officer",
+    role: "CEO",
+    fullTitle: "Chief Executive Officer & Founder",
     photo: "/team/franco.jpeg",
     body: "Director general de visión y arquitectura de sistemas. Diseña la infraestructura operativa del programa, los estándares técnicos y la metodología de negociación que aplican los alumnos.",
   },
@@ -81,12 +81,11 @@ export default function FoundersSection() {
               <h3 className="text-2xl font-semibold leading-none tracking-tight text-white">
                 {f.name}
               </h3>
-              <span className="text-accent mt-2 block text-[1.5rem] font-bold uppercase leading-none tracking-tight">
-                {f.role}
-              </span>
-              <span className="mt-1.5 block text-[11px] tracking-tight text-zinc-500">
-                ({f.fullTitle})
-              </span>
+              <p className="mt-2 text-[13px] leading-relaxed text-zinc-400">
+                <span className="font-semibold text-white">{f.role}</span>
+                {" — "}
+                {f.fullTitle}
+              </p>
             </div>
 
             <p className="mt-5 pl-2 text-sm leading-relaxed text-zinc-400">
