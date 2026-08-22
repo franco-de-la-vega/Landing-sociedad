@@ -49,7 +49,7 @@ export default function MarketSection() {
             <RevealItem key={f.tag}>
               <div className="p-7">
                 <span className="inline-block rounded border border-emerald-400/20 bg-emerald-400/5 px-2.5 py-1 text-[10px] uppercase tracking-widest text-emerald-300">
-                  {`[ ${f.tag} ]`}
+                  {f.tag}
                 </span>
                 <p className="mt-4 text-[14.5px] leading-relaxed text-zinc-300">
                   {f.body}

@@ -92,7 +92,7 @@ export default function TimelineSection() {
                         : "border-white/10 bg-white/5 text-zinc-500"
                     }`}
                   >
-                    {`[ ${s.tag} ]`}
+                    {s.tag}
                   </span>
                   <h3
                     className={`mt-4 text-[15px] font-bold ${

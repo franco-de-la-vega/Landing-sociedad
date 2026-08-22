@@ -17,7 +17,7 @@ const plans = [
       "Dominio de la técnica comercial aplicable a tu propio negocio o proyectos autónomos",
       "2 Mentorías 1 a 1 + Sesiones grupales de feedback",
     ],
-    cta: "[ Seleccionar acceso base ]",
+    cta: "Seleccionar acceso base",
   },
   {
     name: "Plan Intermedio",
@@ -29,7 +29,7 @@ const plans = [
       "Certificación oficial con historial de desempeño operativo",
       "Acceso directo a la bolsa de empresas para vinculación comercial",
     ],
-    cta: "[ Más elegido · Reservar cupo ]",
+    cta: "Más elegido · Reservar cupo",
   },
   {
     name: "Plan VIP",
@@ -41,7 +41,7 @@ const plans = [
       "Evaluación de especialización comercial (High-Ticket, Software B2B, Evergreen, Launching)",
       "Tutor dedicado exclusivo durante todo el proceso de aceleración",
     ],
-    cta: "[ Alto rendimiento · Solicitar admisión ]",
+    cta: "Alto rendimiento · Solicitar admisión",
   },
 ];
 
