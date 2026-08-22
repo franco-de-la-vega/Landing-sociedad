@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import Reveal from "@/components/Reveal";
 
 const tiers = [
@@ -26,13 +25,6 @@ const tiers = [
 ];
 
 export default function ROISection() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start 0.85", "end 0.5"],
-  });
-  const lineDraw = useTransform(scrollYProgress, [0, 1], [0, 1]);
-
   return (
     <section className="relative px-6 py-24 md:px-10 md:py-32">
       <div className="mx-auto max-w-6xl">
@@ -58,10 +50,7 @@ export default function ROISection() {
         </Reveal>
 
         <Reveal delay={0.2} className="mt-16">
-          <div
-            ref={ref}
-            className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#121418] p-8 md:p-12"
-          >
+          <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#121418] p-8 md:p-12">
             {/* grilla de fondo, textura de dashboard */}
             <div
               aria-hidden
@@ -97,8 +86,10 @@ export default function ROISection() {
                   stroke="var(--color-accent)"
                   strokeWidth="1.5"
                   strokeDasharray="4 5"
-                  style={{ pathLength: lineDraw }}
                   initial={{ pathLength: 0 }}
+                  whileInView={{ pathLength: 1 }}
+                  viewport={{ once: true, amount: 0.6 }}
+                  transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
                 />
                 <motion.line
                   x1="50%"
@@ -108,8 +99,10 @@ export default function ROISection() {
                   stroke="var(--color-accent)"
                   strokeWidth="1.5"
                   strokeDasharray="4 5"
-                  style={{ pathLength: lineDraw }}
                   initial={{ pathLength: 0 }}
+                  whileInView={{ pathLength: 1 }}
+                  viewport={{ once: true, amount: 0.6 }}
+                  transition={{ duration: 0.8, delay: 0.8, ease: "easeOut" }}
                 />
               </svg>
 
