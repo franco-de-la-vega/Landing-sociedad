@@ -1,25 +1,28 @@
 "use client";
 
-import { ArrowUpRight, Info } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import RevealGroup from "@/components/RevealGroup";
 import RevealItem from "@/components/RevealItem";
 
 const signals = [
   {
-    stat: "+340%",
-    label: "Crecimiento en contrataciones remotas comerciales LATAM → USD, últimos 3 años.",
+    stat: "+161%",
+    label: "Crecimiento en contratación remota de empresas de EE.UU. hacia Latinoamérica en 2023.",
     insight: "La demanda no bajó nunca. Se aceleró.",
+    source: "Nearshore Americas",
   },
   {
-    stat: "68%",
-    label: "De las empresas remotas exige CRM y manejo de objeciones como estándar mínimo, no como plus.",
-    insight: "El listón subió. Ya no alcanza con \"tener ganas\".",
+    stat: "45%",
+    label: "De los puestos de ventas B2B hoy son 100% remotos, sin oficina.",
+    insight: "Ya no es la excepción. Es la norma del sector.",
+    source: "AccountMakers, 2026",
   },
   {
-    stat: "~9 meses",
-    label: "Ventana promedio antes de que un mercado se sature de talento sin especialización real.",
-    insight: "Entrar formado ahora vale más que entrar rápido y sin preparación.",
+    stat: "#1",
+    label: "Account Executive es el puesto remoto más buscado en 2026, superando a software engineer.",
+    insight: "Ventas remotas dejó de ser un nicho.",
+    source: "DailyRemote, 2026",
   },
 ];
 
@@ -61,30 +64,19 @@ export default function MarketSection() {
                     className="text-accent/60"
                   />
                 </div>
-                <span className="mt-2 inline-block w-fit rounded border border-white/10 bg-white/5 px-2 py-0.5 text-[9.5px] uppercase tracking-widest text-zinc-500">
-                  Estimación
-                </span>
                 <p className="mt-4 text-[13.5px] leading-relaxed text-zinc-400">
                   {s.label}
                 </p>
                 <p className="mt-5 border-t border-white/10 pt-4 text-[13px] font-medium leading-relaxed text-white">
                   {s.insight}
                 </p>
+                <span className="mt-4 text-[10.5px] uppercase tracking-widest text-zinc-600">
+                  Fuente: {s.source}
+                </span>
               </div>
             </RevealItem>
           ))}
         </RevealGroup>
-
-        <Reveal delay={0.1} className="mt-8">
-          <div className="flex items-start gap-2.5 rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3">
-            <Info size={15} strokeWidth={2} className="mt-0.5 shrink-0 text-zinc-500" />
-            <p className="text-[12.5px] leading-relaxed text-zinc-400">
-              Estos números son estimaciones ilustrativas para dar
-              contexto en la conversación, no datos verificados de una
-              fuente oficial o estudio publicado.
-            </p>
-          </div>
-        </Reveal>
       </div>
     </section>
   );
