@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Check, X, Users } from "lucide-react";
+import { Check, X, Users, Star } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import RevealGroup from "@/components/RevealGroup";
 import RevealItem from "@/components/RevealItem";
@@ -16,16 +16,17 @@ const plans = [
     duration: "8 semanas",
     price: "$397",
     originalPrice: null,
+    installments: null,
     tier: "base",
     features: [
       { text: "Sesiones grupales, 2 por semana", included: true },
       { text: "4 sesiones 1 a 1 por mes", included: true },
       { text: "Acceso a la plataforma completa", included: true },
-      { text: "Conexión directa con empresas", included: false },
+      { text: "Acceso a la bolsa de trabajo independiente", included: true },
+      { text: "Conexión con empresas — sujeta a aprobar el examen de nivel", included: "conditional" },
       { text: "Certificación oficial con historial de desempeño", included: false },
       { text: "Especializaciones comerciales (High-Ticket, Software B2B, etc.)", included: false },
       { text: "Tutor dedicado exclusivo", included: false },
-      { text: "Acceso a la bolsa de trabajo independiente", included: true },
       { text: "Preparación de perfil de LinkedIn", included: true },
       { text: "Creación y armado de CV profesional", included: true },
     ],
@@ -37,6 +38,7 @@ const plans = [
     duration: "9 meses",
     price: "$1,429",
     originalPrice: "$1,786",
+    installments: "o 3 cuotas de $476 USD",
     tier: "vip",
     features: [
       { text: "Acceso completo a la plataforma de formación", included: true },
@@ -158,15 +160,26 @@ export default function PricingSection() {
                       USD
                     </span>
                   </p>
+                  {p.installments && (
+                    <span className="mt-1.5 block text-[12.5px] text-zinc-500">
+                      {p.installments}
+                    </span>
+                  )}
 
                   <ul className="mt-8 flex flex-1 flex-col gap-3">
                     {p.features.map((f) => (
                       <li key={f.text} className="flex items-start gap-2.5">
-                        {f.included ? (
+                        {f.included === true ? (
                           <Check
                             size={14}
                             strokeWidth={2.5}
                             className="mt-0.5 shrink-0 text-accent"
+                          />
+                        ) : f.included === "conditional" ? (
+                          <Star
+                            size={14}
+                            strokeWidth={2.5}
+                            className="mt-0.5 shrink-0 text-amber-400"
                           />
                         ) : (
                           <X
@@ -177,7 +190,11 @@ export default function PricingSection() {
                         )}
                         <span
                           className={`text-[13.5px] leading-relaxed ${
-                            f.included ? "text-zinc-300" : "text-zinc-500"
+                            f.included === true
+                              ? "text-zinc-300"
+                              : f.included === "conditional"
+                              ? "text-amber-200/90"
+                              : "text-zinc-500"
                           }`}
                         >
                           {f.text}
