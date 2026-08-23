@@ -194,9 +194,12 @@ export default function PricingSection() {
 
                   {p.showSeats && (
                     <>
-                      <p className="mt-4 text-center text-[11px] uppercase tracking-widest text-zinc-600">
-                        Cupos máximo: {SEATS_TOTAL} personas
-                      </p>
+                      <div className="mt-6 flex items-center justify-center gap-2 rounded-[6px] border border-white/10 bg-white/[0.03] py-3">
+                        <Users size={15} strokeWidth={2} className="text-zinc-400" />
+                        <p className="text-[13px] font-semibold uppercase tracking-widest text-zinc-300">
+                          Cupos máximo: {SEATS_TOTAL} personas
+                        </p>
+                      </div>
                       <SeatsAvailability />
                     </>
                   )}
