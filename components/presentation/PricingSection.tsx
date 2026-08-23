@@ -1,47 +1,61 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Check } from "lucide-react";
+import { Check, X, Users } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import RevealGroup from "@/components/RevealGroup";
 import RevealItem from "@/components/RevealItem";
 
+const SEATS_TOTAL = 25;
+const SEATS_TAKEN = 13;
+
 const plans = [
   {
-    name: "Plan Fundamentos",
-    price: "$320",
+    name: "Junior",
+    duration: "8 semanas",
+    price: "$397",
+    originalPrice: "$970",
     tier: "base",
     features: [
-      "Acceso completo a la plataforma de formación",
-      "Prácticas operativas y ejercicios de role-play entre pares",
-      "Dominio de la técnica comercial aplicable a tu propio negocio o proyectos autónomos",
-      "2 Mentorías 1 a 1 + Sesiones grupales de feedback",
+      { text: "Sesiones grupales, 2 por semana", included: true },
+      { text: "4 sesiones 1 a 1 por mes", included: true },
+      { text: "Acceso a la plataforma completa", included: true },
+      { text: "Conexión directa con empresas", included: false },
+      { text: "Acceso a la bolsa de trabajo independiente", included: true },
+      { text: "Preparación de perfil de LinkedIn", included: true },
+      { text: "Creación y armado de CV profesional", included: true },
     ],
-    cta: "Seleccionar acceso base",
+    cta: "Reservar cupo",
+    showSeats: true,
   },
   {
-    name: "Plan Intermedio",
+    name: "Semi Senior",
     price: "$497",
     tier: "featured",
     features: [
-      "Todo lo incluido en el Plan Fundamentos",
-      "4 Mentorías 1 a 1 en vivo con especialistas del equipo",
-      "Certificación oficial con historial de desempeño operativo",
-      "Acceso directo a la bolsa de empresas para vinculación comercial",
+      { text: "Acceso completo a la plataforma de formación", included: true },
+      { text: "Prácticas operativas y ejercicios de role-play entre pares", included: true },
+      { text: "Sesiones grupales de feedback", included: true },
+      { text: "4 Mentorías 1 a 1 en vivo con especialistas del equipo", included: true },
+      { text: "Certificación oficial con historial de desempeño operativo", included: true },
+      { text: "Acceso directo a la bolsa de empresas para vinculación comercial", included: true },
     ],
     cta: "Más elegido · Reservar cupo",
+    showSeats: false,
   },
   {
-    name: "Plan VIP",
+    name: "Senior High Ticket",
     price: "$997",
     tier: "vip",
     features: [
-      "Todo lo incluido en el Plan Intermedio",
-      "6 Mentorías 1 a 1 estratégicas en vivo",
-      "Evaluación de especialización comercial (High-Ticket, Software B2B, Evergreen, Launching)",
-      "Tutor dedicado exclusivo durante todo el proceso de aceleración",
+      { text: "Todo lo incluido en Semi Senior", included: true },
+      { text: "6 Mentorías 1 a 1 estratégicas en vivo", included: true },
+      { text: "Evaluación de especialización comercial (High-Ticket, Software B2B, Evergreen, Launching)", included: true },
+      { text: "Tutor dedicado exclusivo durante todo el proceso de aceleración", included: true },
     ],
     cta: "Alto rendimiento · Solicitar admisión",
+    showSeats: false,
   },
 ];
 
@@ -65,6 +79,34 @@ const tierStyles: Record<string, { card: string; badge: string; price: string; c
     cta: "border border-accent/40 text-accent hover:bg-accent/10",
   },
 };
+
+function SeatsAvailability() {
+  const [revealed, setRevealed] = useState(false);
+  const seatsLeft = SEATS_TOTAL - SEATS_TAKEN;
+
+  return (
+    <div className="mt-5">
+      {!revealed ? (
+        <button
+          onClick={() => setRevealed(true)}
+          className="flex w-full items-center justify-center gap-2 rounded-full border border-white/15 py-2.5 text-[11px] uppercase tracking-widest text-zinc-300 transition-colors hover:border-white/30"
+        >
+          <Users size={13} strokeWidth={2} />
+          Actualizar disponibilidad
+        </button>
+      ) : (
+        <motion.div
+          initial={{ opacity: 0, y: 4 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center justify-center gap-2 rounded-full border border-accent/25 bg-accent/[0.06] py-2.5 text-[11.5px] text-accent"
+        >
+          <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+          {SEATS_TAKEN}/{SEATS_TOTAL} cupos ocupados · quedan {seatsLeft}
+        </motion.div>
+      )}
+    </div>
+  );
+}
 
 export default function PricingSection() {
   return (
@@ -111,7 +153,18 @@ export default function PricingSection() {
                   <h3 className="text-[16px] font-semibold text-white">
                     {p.name}
                   </h3>
-                  <p className={`mt-4 text-[2.6rem] font-bold leading-none tracking-tight ${s.price}`}>
+                  {p.duration && (
+                    <span className="mt-1 text-[12px] text-zinc-500">
+                      {p.duration}
+                    </span>
+                  )}
+
+                  {p.originalPrice && (
+                    <span className="mt-4 block text-[14px] text-zinc-600 line-through">
+                      {p.originalPrice} USD
+                    </span>
+                  )}
+                  <p className={`text-[2.6rem] font-bold leading-none tracking-tight ${s.price} ${p.originalPrice ? "mt-1" : "mt-4"}`}>
                     {p.price}
                     <span className="ml-2 text-[13px] font-medium text-zinc-500">
                       USD
@@ -120,14 +173,26 @@ export default function PricingSection() {
 
                   <ul className="mt-8 flex flex-1 flex-col gap-3">
                     {p.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2.5">
-                        <Check
-                          size={14}
-                          strokeWidth={2.5}
-                          className="mt-0.5 shrink-0 text-zinc-500"
-                        />
-                        <span className="text-[13.5px] leading-relaxed text-zinc-300">
-                          {f}
+                      <li key={f.text} className="flex items-start gap-2.5">
+                        {f.included ? (
+                          <Check
+                            size={14}
+                            strokeWidth={2.5}
+                            className="mt-0.5 shrink-0 text-zinc-500"
+                          />
+                        ) : (
+                          <X
+                            size={14}
+                            strokeWidth={2.5}
+                            className="mt-0.5 shrink-0 text-red-500"
+                          />
+                        )}
+                        <span
+                          className={`text-[13.5px] leading-relaxed ${
+                            f.included ? "text-zinc-300" : "text-zinc-500"
+                          }`}
+                        >
+                          {f.text}
                         </span>
                       </li>
                     ))}
@@ -138,11 +203,88 @@ export default function PricingSection() {
                   >
                     {p.cta}
                   </button>
+
+                  {p.showSeats && (
+                    <>
+                      <p className="mt-4 text-center text-[11px] uppercase tracking-widest text-zinc-600">
+                        Cupos máximo: {SEATS_TOTAL} personas
+                      </p>
+                      <SeatsAvailability />
+                    </>
+                  )}
                 </motion.div>
               </RevealItem>
             );
           })}
         </RevealGroup>
+
+        {/* desglose completo */}
+        <div className="mt-28">
+          <Reveal>
+            <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-zinc-400">
+              Desglose completo
+            </span>
+          </Reveal>
+          <Reveal delay={0.06} className="mt-5">
+            <h3 className="max-w-2xl text-[1.7rem] font-bold leading-[1.15] tracking-tight text-white md:text-[2.2rem]">
+              Carrera Comercial Completa
+            </h3>
+          </Reveal>
+          <Reveal delay={0.1} className="mt-4">
+            <p className="max-w-xl text-[14px] leading-relaxed text-zinc-400">
+              El detalle de lo que incluye cada etapa de la formación, de
+              Junior a Senior High Ticket.
+            </p>
+          </Reveal>
+
+          <RevealGroup
+            stagger={0.1}
+            className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3"
+          >
+            {plans.map((p) => (
+              <RevealItem key={`breakdown-${p.name}`}>
+                <div className="flex h-full flex-col rounded-2xl border border-white/10 bg-[#121418] p-7">
+                  <div className="flex items-baseline justify-between">
+                    <h4 className="text-[15px] font-semibold text-white">
+                      {p.name}
+                    </h4>
+                    <span className="text-[13px] font-semibold text-zinc-500">
+                      {p.price}
+                    </span>
+                  </div>
+                  {p.duration && (
+                    <span className="mt-1 text-[11.5px] text-zinc-600">
+                      {p.duration}
+                    </span>
+                  )}
+
+                  <ul className="mt-6 flex flex-col gap-2.5">
+                    {p.features.map((f) => (
+                      <li key={f.text} className="flex items-start gap-2.5">
+                        {f.included ? (
+                          <Check
+                            size={13}
+                            strokeWidth={2.5}
+                            className="mt-0.5 shrink-0 text-accent"
+                          />
+                        ) : (
+                          <X
+                            size={13}
+                            strokeWidth={2.5}
+                            className="mt-0.5 shrink-0 text-red-500"
+                          />
+                        )}
+                        <span className="text-[12.5px] leading-relaxed text-zinc-400">
+                          {f.text}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </RevealItem>
+            ))}
+          </RevealGroup>
+        </div>
       </div>
     </section>
   );
