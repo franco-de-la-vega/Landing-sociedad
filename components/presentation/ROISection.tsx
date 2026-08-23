@@ -7,19 +7,19 @@ const tiers = [
   {
     stage: "Nivel Inicial",
     detail: "Operatoria base y prospección en proyectos remotos.",
-    value: "$1,700",
+    value: "$1,000 – $1,700",
     height: 34,
   },
   {
     stage: "Especialista",
     detail: "Consolidador de cierres, autonomía técnica y gestión de pipeline.",
-    value: "$2,500",
+    value: "$1,700 – $2,500",
     height: 54,
   },
   {
     stage: "Closing Lead",
     detail: "Liderazgo de equipo comercial y contratos high-ticket.",
-    value: "$4,200+",
+    value: "$2,500 – $4,200+",
     height: 80,
   },
 ];
@@ -30,21 +30,21 @@ export default function ROISection() {
       <div className="mx-auto max-w-6xl">
         <Reveal>
           <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-zinc-400">
-            Proyección económica y arbitraje de ingresos
+            Construí una carrera comercial en mercados internacionales
           </span>
         </Reveal>
         <Reveal delay={0.08} className="mt-5">
           <h2 className="max-w-3xl text-[2rem] font-bold leading-[1.1] tracking-tight text-white md:text-[2.8rem]">
-            Valor de Mercado &amp; Escalabilidad Financiera
+            De tus habilidades actuales a una carrera comercial remota
           </h2>
         </Reveal>
         <Reveal delay={0.14} className="mt-4">
           <p className="max-w-xl text-[15px] leading-relaxed text-zinc-400">
-            Proyección de ingresos al operar bajo estándares comerciales
-            internacionales en moneda dura.{" "}
+            Rangos orientativos según el nivel de desempeño alcanzado en
+            proyectos comerciales remotos.{" "}
             <span className="text-zinc-500">
-              Esto es lo que podés llegar a ganar trabajando, no el costo
-              del programa.
+              No es una promesa de ingresos ni el costo del programa: depende
+              de tu ejecución y de la oportunidad a la que accedas.
             </span>
           </p>
         </Reveal>
@@ -116,7 +116,7 @@ export default function ROISection() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.6 }}
                     transition={{ duration: 0.5, delay: 0.3 + i * 0.15 }}
-                    className={`mb-4 text-center text-[1.5rem] font-bold leading-none tracking-tight sm:text-[2.1rem] ${
+                    className={`mb-4 whitespace-nowrap text-center text-[0.95rem] font-bold leading-none tracking-tight sm:text-[1.5rem] ${
                       i === 2 ? "text-accent" : "text-white"
                     }`}
                   >

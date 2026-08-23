@@ -7,31 +7,31 @@ import RevealItem from "@/components/RevealItem";
 
 const notEligible = [
   {
-    title: "Cero Fórmulas Mágicas",
-    body: "Abstenerse quienes buscan resultados inmediatos sin esfuerzo ni práctica constante.",
+    title: "Buscás dinero rápido",
+    body: "Sin esfuerzo ni práctica constante, sin dominar la técnica antes de esperar resultados.",
   },
   {
-    title: "Expectativas Irreales",
-    body: "Quienes crean que ganarán $4,000 USD trabajando 2 horas al día sin dominar la técnica.",
+    title: "No querés practicar",
+    body: "Esperás consumir contenido en video sin ejecutar en simulaciones reales.",
   },
   {
-    title: "Mentalidad Pasiva",
-    body: "Alumnos que esperan consumir contenido en video sin ejecutar en simulaciones reales.",
+    title: "No aceptás feedback",
+    body: "Preferís que el certificado haga el trabajo por vos, sin corregir tu técnica en vivo.",
   },
 ];
 
 const eligible = [
   {
-    title: "Responsabilidad Absoluta",
-    body: "Profesionales que entienden que la verdadera garantía es su propio compromiso y capacidad.",
+    title: "Estás dispuesto a practicar",
+    body: "Entendés que la verdadera garantía es tu propio compromiso y ejecución.",
   },
   {
-    title: "Enfoque en Ejecución",
-    body: "Personas dispuestas a atravesar simulaciones de alta presión y corregir su técnica en vivo.",
+    title: "Aceptás feedback",
+    body: "Estás dispuesto a atravesar simulaciones de alta presión y corregir tu técnica en vivo.",
   },
   {
-    title: "Visión de Carrera",
-    body: "Quienes buscan construir una competencia técnica real y sostenible para escalar en moneda dura.",
+    title: "Querés una carrera comercial",
+    body: "Buscás desarrollar y demostrar una competencia técnica real y sostenible en el mercado.",
   },
 ];
 
@@ -41,12 +41,12 @@ export default function AdmissionCriteriaSection() {
       <div className="mx-auto max-w-6xl">
         <Reveal>
           <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-zinc-400">
-            Criterio de admisión
+            Perfil de ingreso
           </span>
         </Reveal>
         <Reveal delay={0.08} className="mt-5">
           <h2 className="max-w-2xl text-[2rem] font-bold leading-[1.15] tracking-tight text-white md:text-[2.8rem]">
-            Criterio de Selección y Marco de Trabajo
+            ¿Para quién es esta formación?
           </h2>
         </Reveal>
         <Reveal delay={0.14} className="mt-4">
@@ -60,7 +60,7 @@ export default function AdmissionCriteriaSection() {
           <Reveal delay={0.1}>
             <div className="h-full rounded-2xl border border-white/10 bg-[#121418] p-8">
               <span className="inline-flex items-center gap-2 rounded border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[10px] uppercase tracking-widest text-zinc-400">
-                Perfil no elegible
+                No es para vos si...
               </span>
 
               <RevealGroup stagger={0.1} className="mt-8 flex flex-col gap-6">
@@ -88,7 +88,7 @@ export default function AdmissionCriteriaSection() {
           <Reveal delay={0.16}>
             <div className="h-full rounded-2xl border border-accent/40 bg-[#121418] p-8 shadow-[0_0_50px_-14px_rgba(184,147,90,0.3)]">
               <span className="inline-flex items-center gap-2 rounded border border-accent/25 bg-accent/[0.06] px-3 py-1.5 text-[10px] uppercase tracking-widest text-accent">
-                Perfil admitido
+                Es para vos si...
               </span>
 
               <RevealGroup stagger={0.1} className="mt-8 flex flex-col gap-6">

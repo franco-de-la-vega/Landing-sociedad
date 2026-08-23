@@ -1,8 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Rocket } from "lucide-react";
+import { Video, PhoneCall, MessageSquare, LineChart, ClipboardCheck, Linkedin } from "lucide-react";
 import Reveal from "@/components/Reveal";
+import RevealGroup from "@/components/RevealGroup";
+import RevealItem from "@/components/RevealItem";
 
 const nodes = [
   { x: 90, y: 70 },
@@ -22,29 +24,38 @@ const links: [number, number][] = [
   [3, 2],
 ];
 
+const deliverables = [
+  { icon: Video, label: "Videollamada comercial evaluada" },
+  { icon: PhoneCall, label: "Llamada de ventas grabada" },
+  { icon: MessageSquare, label: "Conversación comercial simulada" },
+  { icon: LineChart, label: "Pipeline en CRM" },
+  { icon: ClipboardCheck, label: "Evaluaciones de desempeño" },
+  { icon: Linkedin, label: "Perfil profesional y LinkedIn optimizado" },
+];
+
 export default function SupportSection() {
   return (
     <section className="relative border-t border-white/10 px-6 py-24 md:px-10 md:py-32">
       <div className="mx-auto max-w-6xl">
         <Reveal>
           <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-zinc-400">
-            Acompañamiento y prueba social en tiempo real
+            Portafolio de evidencia
           </span>
         </Reveal>
         <Reveal delay={0.08} className="mt-5">
           <h2 className="max-w-2xl text-[2rem] font-bold leading-[1.15] tracking-tight text-white md:text-[2.8rem]">
-            Acompañamiento Estratégico hasta la Inserción Real
+            No solo te certificamos. Te damos evidencia.
           </h2>
         </Reveal>
         <Reveal delay={0.14} className="mt-4">
           <p className="max-w-xl text-[15px] leading-relaxed text-zinc-400">
-            Soporte activo y mentores dedicados durante el proceso de
-            vinculación.
+            Un portafolio profesional real, construido durante la
+            formación, que podés mostrar a cualquier empresa.
           </p>
         </Reveal>
 
         <div className="mt-16 grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
-          {/* Izquierda: diagrama de red global */}
+          {/* Izquierda: diagrama de red */}
           <Reveal delay={0.1}>
             <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#121418] p-6">
               <svg
@@ -98,50 +109,38 @@ export default function SupportSection() {
 
               <div className="mt-4 flex flex-wrap gap-2">
                 <span className="rounded-full border border-accent/20 bg-accent/5 px-3 py-1.5 text-[10px] uppercase tracking-widest text-accent">
-                  Global Remote Network
+                  Simulaciones evaluadas
                 </span>
                 <span className="rounded-full border border-accent/20 bg-accent/5 px-3 py-1.5 text-[10px] uppercase tracking-widest text-accent">
-                  Direct Industry Pipeline
+                  Portafolio verificable
                 </span>
               </div>
             </div>
           </Reveal>
 
-          {/* Derecha: notificaciones estilo chat oscuro */}
-          <div className="flex flex-col gap-4">
-            <Reveal delay={0.16}>
-              <div className="rounded-2xl border border-white/10 bg-[#121418] p-5 shadow-2xl">
-                <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-accent" />
-                  <span className="text-[11px] uppercase tracking-widest text-zinc-500">
-                    Oferta confirmada
+          {/* Derecha: lista de entregables tangibles */}
+          <RevealGroup stagger={0.06} className="flex flex-col gap-3">
+            {deliverables.map((d) => (
+              <RevealItem key={d.label}>
+                <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-[#121418] p-4">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent">
+                    <d.icon size={16} strokeWidth={2} />
                   </span>
+                  <p className="text-[14px] font-medium text-zinc-200">
+                    {d.label}
+                  </p>
                 </div>
-                <p className="mt-3 text-[14.5px] leading-relaxed text-zinc-200">
-                  &ldquo;Me hicieron la oferta directa como Closer de
-                  Ventas. La simulación de llamadas fue determinante.&rdquo;
-                </p>
-              </div>
-            </Reveal>
-
-            <Reveal delay={0.24}>
-              <div className="flex items-center gap-3 rounded-2xl border border-accent/15 bg-[#121418] p-5 shadow-2xl">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent">
-                  <Rocket size={16} strokeWidth={2} />
-                </span>
-                <p className="text-[14.5px] font-medium text-zinc-200">
-                  ¡Contrato cerrado en USD! Incorporado al equipo
-                  comercial hoy mismo.
-                </p>
-              </div>
-            </Reveal>
-          </div>
+              </RevealItem>
+            ))}
+          </RevealGroup>
         </div>
 
         <Reveal delay={0.1} className="mt-10">
-          <p className="max-w-xl text-[13.5px] leading-relaxed text-zinc-500">
-            Garantía de acompañamiento técnico y estratégico continuo
-            durante todo el proceso de inserción.
+          <p className="max-w-2xl text-[13.5px] leading-relaxed text-zinc-500">
+            La vinculación con empresas es posterior a la formación y está
+            condicionada a tu desempeño evaluado y a la disponibilidad de
+            oportunidades en cada momento. La contratación final depende
+            también del proceso de selección de cada empresa.
           </p>
         </Reveal>
       </div>

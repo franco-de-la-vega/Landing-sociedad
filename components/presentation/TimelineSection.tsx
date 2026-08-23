@@ -6,44 +6,39 @@ import Reveal from "@/components/Reveal";
 
 const steps = [
   {
-    tag: "Día 1",
-    title: "Inicio de Formación",
-    income: null,
-    body: "Diagnóstico técnico inicial, nivelación de competencias duras y activación en el sistema adaptativo.",
+    tag: "Fase 1",
+    title: "Formación",
+    body: "8 semanas de currícula adaptativa según tu diagnóstico inicial: comunicación, discovery, objeciones y CRM.",
     featured: false,
   },
   {
-    tag: "Mes 6",
-    title: "Validación Técnica",
-    income: null,
-    body: "Graduación con dominio completo de la metodología de cierre, gestión de pipeline y simulaciones de alta presión.",
-    featured: false,
-  },
-  {
-    tag: "Mes 7",
-    title: "Inserción Remota",
-    income: "$1,000 – $1,700 USD/mes",
-    body: "Vinculación directa a proyectos internacionales. Cierres efectivos en moneda dura y retorno acelerado de la inversión.",
+    tag: "Fase 2",
+    title: "Certificación & Portafolio",
+    body: "Evaluación final, historial de desempeño y portafolio de evidencia comercial listo para mostrar.",
     featured: true,
   },
   {
-    tag: "Mes 12",
-    title: "Consolidación Comercial",
-    income: "$1,500 – $2,500 USD/mes",
-    body: "Autonomía operativa total, gestión de cuentas high-ticket y aumento en la tasa de conversión.",
+    tag: "Fase 3",
+    title: "Preparación para el Mercado",
+    body: "Perfil profesional, optimización de LinkedIn y preparación para procesos de selección reales.",
     featured: false,
   },
   {
-    tag: "Año 3",
-    title: "Mesa Chica & Director Comercial",
-    income: "$2,500 – $4,200+ USD/mes",
-    body: "Posicionamiento como Closer Senior o Lead Comercial, liderando infraestructura de ventas en empresas de alto impacto.",
+    tag: "Fase 4",
+    title: "Vinculación",
+    body: "Conexión con oportunidades comerciales según tu desempeño y la disponibilidad del momento. Posterior a la formación, no forma parte del programa académico.",
+    featured: false,
+  },
+  {
+    tag: "Fase 5",
+    title: "Consolidación & Especialización",
+    body: "Crecimiento continuo en el mercado a partir de la experiencia acumulada en proyectos reales.",
     featured: false,
   },
 ];
 
 export default function TimelineSection() {
-  const [open, setOpen] = useState(2);
+  const [open, setOpen] = useState(1);
 
   return (
     <section className="relative border-t border-white/10 px-6 py-24 md:px-10 md:py-32">
@@ -55,14 +50,13 @@ export default function TimelineSection() {
         </Reveal>
         <Reveal delay={0.08} className="mt-5">
           <h2 className="max-w-2xl text-[2rem] font-bold leading-[1.15] tracking-tight text-white md:text-[2.8rem]">
-            Tu Hoja de Ruta Comercial
+            Tu Evolución Profesional
           </h2>
         </Reveal>
         <Reveal delay={0.14} className="mt-4">
           <p className="max-w-xl text-[15px] leading-relaxed text-zinc-400">
-            Proyección de evolución técnica, inserción y escalado de
-            ingresos en moneda dura. Tocá cada etapa para ver el
-            detalle.
+            De la formación a la oportunidad comercial: así se estructura
+            el proceso completo. Tocá cada etapa para ver el detalle.
           </p>
         </Reveal>
 
@@ -147,16 +141,7 @@ export default function TimelineSection() {
                               : "border-white/10 bg-[#121418]"
                           }`}
                         >
-                          {s.income && (
-                            <p
-                              className={`text-[15px] font-bold tracking-tight ${
-                                s.featured ? "text-accent" : "text-accent"
-                              }`}
-                            >
-                              {s.income}
-                            </p>
-                          )}
-                          <p className="mt-2 text-[12.5px] leading-relaxed text-zinc-400">
+                          <p className="text-[12.5px] leading-relaxed text-zinc-400">
                             {s.body}
                           </p>
                         </div>

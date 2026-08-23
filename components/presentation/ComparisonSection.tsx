@@ -24,9 +24,9 @@ const pillars = [
   },
   {
     icon: Target,
-    title: "Conexión directa con empresas",
+    title: "Preparación con salida al mercado",
     detail:
-      "El objetivo final no es el certificado. Es la inserción laboral real en equipos comerciales del exterior.",
+      "El objetivo no es el certificado: es que llegues preparado, con evidencia y portafolio, a procesos de selección reales en equipos comerciales del exterior.",
   },
 ];
 

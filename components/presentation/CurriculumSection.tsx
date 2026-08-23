@@ -10,8 +10,8 @@ import RevealItem from "@/components/RevealItem";
 const units = [
   {
     n: "01",
-    title: "PNL Comercial",
-    body: "Lectura del interlocutor, manejo de tono y ritmo aplicados a la conversación de venta.",
+    title: "Comunicación e Influencia Comercial",
+    body: "Escucha activa, calibración de tono y lenguaje, y persuasión ética aplicadas a la conversación de venta.",
   },
   {
     n: "02",
@@ -30,8 +30,8 @@ const units = [
   },
   {
     n: "05",
-    title: "Simulación Clínica",
-    body: "Llamadas de alta presión evaluadas en vivo, con corrección inmediata de la técnica.",
+    title: "Simulación de Alta Presión",
+    body: "Llamadas evaluadas en vivo, con corrección inmediata de la técnica y construcción de portafolio.",
   },
 ];
 
@@ -48,13 +48,13 @@ export default function CurriculumSection() {
         </Reveal>
         <Reveal delay={0.08} className="mt-5">
           <h2 className="max-w-2xl text-[2rem] font-bold leading-[1.15] tracking-tight text-white md:text-[2.8rem]">
-            Cinco unidades. Una sola competencia.
+            Formación práctica en 8 semanas.
           </h2>
         </Reveal>
         <Reveal delay={0.14} className="mt-4">
           <p className="max-w-xl text-[15px] leading-relaxed text-zinc-400">
             Cada unidad construye sobre la anterior, hasta llegar a la
-            simulación clínica bajo presión.
+            simulación de alta presión y tu portafolio de evidencia.
           </p>
         </Reveal>
 
