@@ -19,9 +19,9 @@ const stories = [
     role: "Colombia",
     photo: "/team/adriana-giraldo.jpeg",
     photoPosition: "object-[center_25%]",
-    floatingBadge: "Alumna certificada ILFC",
-    impact: "Construyendo su carrera comercial internacional junto al Instituto.",
-    body: "Adriana forma parte de la comunidad de alumnas del Instituto. Su historia completa se sumará a esta sección en cuanto esté documentada y confirmada.",
+    floatingBadge: "Trabajando con empresas de Colombia",
+    impact: "De sumarse al Instituto a trabajar activamente con empresas de Colombia.",
+    body: "Adriana forma parte de la comunidad de alumnas del Instituto y hoy aplica lo desarrollado durante la formación trabajando activamente con empresas de Colombia.",
     status: "Alumna ILFC · Colombia",
   },
 ];
