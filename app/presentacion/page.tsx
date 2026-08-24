@@ -8,6 +8,7 @@ import CurriculumSection from "@/components/presentation/CurriculumSection";
 import SupportSection from "@/components/presentation/SupportSection";
 import TimelineSection from "@/components/presentation/TimelineSection";
 import ComparisonSection from "@/components/presentation/ComparisonSection";
+import SuccessStoriesSection from "@/components/presentation/SuccessStoriesSection";
 import PricingSection from "@/components/presentation/PricingSection";
 
 export const metadata: Metadata = {
@@ -28,6 +29,7 @@ export default function PresentacionPage() {
         <SupportSection />
         <TimelineSection />
         <ComparisonSection />
+        <SuccessStoriesSection />
         <PricingSection />
       </main>
     </div>
