@@ -7,7 +7,6 @@ import SimulationSection from "@/components/presentation/SimulationSection";
 import CurriculumSection from "@/components/presentation/CurriculumSection";
 import SupportSection from "@/components/presentation/SupportSection";
 import TimelineSection from "@/components/presentation/TimelineSection";
-import ValuePauseBanner from "@/components/presentation/ValuePauseBanner";
 import ComparisonSection from "@/components/presentation/ComparisonSection";
 import PricingSection from "@/components/presentation/PricingSection";
 
@@ -28,7 +27,6 @@ export default function PresentacionPage() {
         <CurriculumSection />
         <SupportSection />
         <TimelineSection />
-        <ValuePauseBanner />
         <ComparisonSection />
         <PricingSection />
       </main>
