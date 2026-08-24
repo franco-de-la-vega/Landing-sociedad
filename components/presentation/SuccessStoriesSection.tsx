@@ -16,7 +16,7 @@ const stories = [
   },
   {
     name: "Adriana Giraldo",
-    role: "Colombia",
+    role: "Closer — Colombia",
     photo: "/team/adriana-giraldo.jpeg",
     photoPosition: "object-[center_25%]",
     floatingBadge: "Trabajando con empresas de Colombia",
