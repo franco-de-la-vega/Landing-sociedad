@@ -49,7 +49,7 @@ const plans = [
       { text: "Certificación oficial con historial de desempeño", included: true },
       { text: "Conexión directa con empresas", included: true },
       { text: "6 Mentorías 1 a 1 en vivo con especialistas del equipo", included: true },
-      { text: "Especializaciones comerciales (High-Ticket, Software B2B, etc.)", included: false },
+      { text: "Evaluación de especialización comercial (Software B2B, Evergreen, Launching)", included: false },
       { text: "Tutor dedicado exclusivo", included: false },
     ],
     cta: "Reservar cupo",
