@@ -9,9 +9,9 @@ const stories = [
     role: "Closer High-Ticket — Colombia",
     photo: "/team/johana-giraldo.jpeg",
     photoPosition: "object-top",
-    floatingBadge: "Closer High-Ticket para empresas de EE.UU.",
-    impact: "De no confiar en sus propias capacidades a cerrar contratos high-ticket en EE.UU.",
-    body: "Johana llegó al Instituto sin confiar en su propia capacidad comercial. A través del entrenamiento intensivo y la práctica constante en simulaciones reales, desarrolló la técnica y la seguridad necesarias para operar como Closer High-Ticket, cerrando contratos con empresas de Estados Unidos.",
+    floatingBadge: "Closer High-Ticket para empresas de Colombia",
+    impact: "De no confiar en sus propias capacidades a cerrar contratos high-ticket en Colombia.",
+    body: "Johana llegó al Instituto sin confiar en su propia capacidad comercial. A través del entrenamiento intensivo y la práctica constante en simulaciones reales, desarrolló la técnica y la seguridad necesarias para operar como Closer High-Ticket, cerrando contratos con empresas de Colombia.",
     status: "Alumna ILFC · Colombia",
   },
   {
