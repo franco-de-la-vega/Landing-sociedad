@@ -9,7 +9,6 @@ import SupportSection from "@/components/presentation/SupportSection";
 import TimelineSection from "@/components/presentation/TimelineSection";
 import ValuePauseBanner from "@/components/presentation/ValuePauseBanner";
 import ComparisonSection from "@/components/presentation/ComparisonSection";
-import SuccessStoriesSection from "@/components/presentation/SuccessStoriesSection";
 import PricingSection from "@/components/presentation/PricingSection";
 
 export const metadata: Metadata = {
@@ -31,7 +30,6 @@ export default function PresentacionPage() {
         <TimelineSection />
         <ValuePauseBanner />
         <ComparisonSection />
-        <SuccessStoriesSection />
         <PricingSection />
       </main>
     </div>
