@@ -17,6 +17,8 @@ const plans = [
     price: "$397",
     originalPrice: null,
     installments: null,
+    savings: null,
+    discount: null,
     tier: "base",
     features: [
       { text: "Sesiones grupales, 2 por semana", included: true },
@@ -39,6 +41,8 @@ const plans = [
     price: "$497",
     originalPrice: null,
     installments: null,
+    savings: null,
+    discount: null,
     tier: "mid",
     features: [
       { text: "Todo lo incluido en Junior", included: true },
@@ -57,6 +61,8 @@ const plans = [
     price: "$1,429",
     originalPrice: "$1,786",
     installments: "o 3 cuotas de $476 USD",
+    savings: "Ahorrás $357 USD",
+    discount: "-20% OFF",
     tier: "vip",
     features: [
       { text: "Acceso completo a la plataforma de formación", included: true },
@@ -174,18 +180,30 @@ export default function PricingSection() {
                   )}
 
                   {p.originalPrice && (
-                    <span className="mt-4 block text-[15px] text-zinc-600 line-through">
-                      {p.originalPrice} USD
-                    </span>
+                    <div className="mt-4 flex items-center gap-2.5">
+                      <span className="text-[20px] font-bold text-zinc-500 line-through decoration-red-500/70 decoration-2">
+                        {p.originalPrice} USD
+                      </span>
+                      {p.discount && (
+                        <span className="rounded-full bg-red-500/15 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-red-400">
+                          {p.discount}
+                        </span>
+                      )}
+                    </div>
                   )}
-                  <p className={`text-[3.1rem] font-black leading-none tracking-tight ${s.price} ${p.originalPrice ? "mt-1" : "mt-4"}`}>
+                  <p className={`text-[3.1rem] font-black leading-none tracking-tight ${s.price} ${p.originalPrice ? "mt-1.5" : "mt-4"}`}>
                     {p.price}
                     <span className="ml-2 text-[14px] font-medium text-zinc-500">
                       USD
                     </span>
                   </p>
+                  {p.savings && (
+                    <span className="mt-2 block text-[13px] font-semibold text-emerald-400">
+                      {p.savings}
+                    </span>
+                  )}
                   {p.installments && (
-                    <span className="mt-3 inline-flex w-fit items-center gap-1.5 rounded-full border border-accent/30 bg-accent/[0.08] px-3 py-1.5 text-[12.5px] font-semibold text-accent">
+                    <span className="mt-3 inline-flex w-fit items-center gap-1.5 rounded-full border border-accent/40 bg-accent/[0.1] px-3.5 py-2 text-[13.5px] font-bold text-accent">
                       {p.installments}
                     </span>
                   )}
