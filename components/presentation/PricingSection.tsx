@@ -81,22 +81,22 @@ const plans = [
 
 const tierStyles: Record<string, { card: string; badge: string; price: string; cta: string }> = {
   base: {
-    card: "border-white/10 bg-[#121418]",
+    card: "border-[var(--color-border)] bg-[var(--color-bg-elevated)]",
     badge: "",
-    price: "text-white",
-    cta: "border border-white/15 text-zinc-200 hover:border-white/30",
+    price: "text-[var(--color-text-primary)]",
+    cta: "border border-[var(--color-border)] text-[var(--color-text-primary)] hover:border-black/25",
   },
   mid: {
-    card: "border-white/15 bg-[#141820]",
+    card: "border-[var(--color-border)] bg-[var(--color-bg-elevated-2)]",
     badge: "",
-    price: "text-white",
-    cta: "border border-white/20 text-zinc-100 hover:border-white/40",
+    price: "text-[var(--color-text-primary)]",
+    cta: "border border-[var(--color-border-strong)] text-[var(--color-text-primary)] hover:border-black/30",
   },
   vip: {
-    card: "border-accent/50 bg-[#161215] shadow-[0_0_60px_-14px_rgba(184,147,90,0.4)] md:-translate-y-4",
-    badge: "bg-accent text-[#0B0C0E]",
-    price: "text-accent",
-    cta: "bg-accent text-[#0B0C0E] hover:bg-accent-hover",
+    card: "border-[var(--color-accent)]/50 bg-[var(--color-accent-muted)] shadow-[0_24px_50px_-24px_rgba(20,18,14,0.2)] md:-translate-y-4",
+    badge: "bg-[var(--color-accent)] text-[#0B0C0E]",
+    price: "text-[var(--color-accent)]",
+    cta: "bg-[var(--color-accent)] text-[#0B0C0E] hover:bg-[var(--color-accent-hover)]",
   },
 };
 
@@ -109,7 +109,7 @@ function SeatsAvailability() {
       {!revealed ? (
         <button
           onClick={() => setRevealed(true)}
-          className="flex w-full items-center justify-center gap-2 rounded-full border border-white/15 py-3 text-[12px] font-semibold uppercase tracking-widest text-zinc-300 transition-colors hover:border-white/30"
+          className="flex w-full items-center justify-center gap-2 rounded-full border border-[var(--color-border)] py-3 text-[12px] font-semibold uppercase tracking-widest text-[var(--color-text-secondary)] transition-colors hover:border-black/25"
         >
           <Users size={14} strokeWidth={2} />
           Actualizar disponibilidad
@@ -118,9 +118,9 @@ function SeatsAvailability() {
         <motion.div
           initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center justify-center gap-2 rounded-full border border-accent/25 bg-accent/[0.06] py-3 text-[12.5px] font-semibold text-accent"
+          className="flex items-center justify-center gap-2 rounded-full border border-[var(--color-accent)]/25 bg-[var(--color-accent)]/[0.06] py-3 text-[12.5px] font-semibold text-[var(--color-accent)]"
         >
-          <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+          <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]" />
           {SEATS_TAKEN}/{SEATS_TOTAL} cupos ocupados · quedan {seatsLeft}
         </motion.div>
       )}
@@ -130,20 +130,20 @@ function SeatsAvailability() {
 
 export default function PricingSection() {
   return (
-    <section className="relative border-t border-white/10 px-6 py-24 md:px-10 md:py-32">
+    <section className="relative border-t border-[var(--color-border)] px-6 py-24 md:px-10 md:py-32">
       <div className="mx-auto max-w-6xl">
         <Reveal>
-          <span className="text-[13px] font-semibold uppercase tracking-[0.14em] text-zinc-400">
+          <span className="text-[13px] font-semibold uppercase tracking-[0.14em] text-[var(--color-text-secondary)]">
             Planes e inversión
           </span>
         </Reveal>
         <Reveal delay={0.08} className="mt-5">
-          <h2 className="max-w-2xl text-[2.3rem] font-bold leading-[1.1] tracking-tight text-white md:text-[3.2rem]">
+          <h2 className="max-w-2xl text-[2.3rem] font-bold leading-[1.1] tracking-tight text-[var(--color-text-primary)] md:text-[3.2rem]">
             Elige tu Plan de Formación
           </h2>
         </Reveal>
         <Reveal delay={0.14} className="mt-4">
-          <p className="max-w-xl text-[16px] leading-relaxed text-zinc-400">
+          <p className="max-w-xl text-[16px] leading-relaxed text-[var(--color-text-secondary)]">
             Tres niveles de aceleración: de la base a la carrera comercial
             completa.
           </p>
@@ -170,18 +170,18 @@ export default function PricingSection() {
                     </span>
                   )}
 
-                  <h3 className="text-[19px] font-bold text-white">
+                  <h3 className="text-[19px] font-bold text-[var(--color-text-primary)]">
                     {p.name}
                   </h3>
                   {p.duration && (
-                    <span className="mt-1 text-[13px] font-medium text-zinc-500">
+                    <span className="mt-1 text-[13px] font-medium text-[var(--color-text-muted)]">
                       {p.duration}
                     </span>
                   )}
 
                   {p.originalPrice && (
                     <div className="mt-4 flex items-center gap-2.5">
-                      <span className="text-[20px] font-bold text-zinc-500 line-through decoration-red-500/70 decoration-2">
+                      <span className="text-[20px] font-bold text-[var(--color-text-muted)] line-through decoration-red-500/70 decoration-2">
                         {p.originalPrice} USD
                       </span>
                       {p.discount && (
@@ -193,7 +193,7 @@ export default function PricingSection() {
                   )}
                   <p className={`text-[3.1rem] font-black leading-none tracking-tight ${s.price} ${p.originalPrice ? "mt-1.5" : "mt-4"}`}>
                     {p.price}
-                    <span className="ml-2 text-[14px] font-medium text-zinc-500">
+                    <span className="ml-2 text-[14px] font-medium text-[var(--color-text-muted)]">
                       USD
                     </span>
                   </p>
@@ -203,7 +203,7 @@ export default function PricingSection() {
                     </span>
                   )}
                   {p.installments && (
-                    <span className="mt-3 inline-flex w-fit items-center gap-1.5 rounded-full border border-accent/40 bg-accent/[0.1] px-3.5 py-2 text-[13.5px] font-bold text-accent">
+                    <span className="mt-3 inline-flex w-fit items-center gap-1.5 rounded-full border border-[var(--color-accent)]/40 bg-[var(--color-accent)]/[0.1] px-3.5 py-2 text-[13.5px] font-bold text-[var(--color-accent)]">
                       {p.installments}
                     </span>
                   )}
@@ -215,7 +215,7 @@ export default function PricingSection() {
                           <Check
                             size={15}
                             strokeWidth={2.5}
-                            className="mt-0.5 shrink-0 text-accent"
+                            className="mt-0.5 shrink-0 text-[var(--color-accent)]"
                           />
                         ) : f.included === "conditional" ? (
                           <Star
@@ -233,10 +233,10 @@ export default function PricingSection() {
                         <span
                           className={`text-[14px] font-medium leading-relaxed ${
                             f.included === true
-                              ? "text-zinc-200"
+                              ? "text-[var(--color-text-primary)]"
                               : f.included === "conditional"
                               ? "text-amber-200/90"
-                              : "text-zinc-500"
+                              : "text-[var(--color-text-muted)]"
                           }`}
                         >
                           {f.text}
@@ -253,9 +253,9 @@ export default function PricingSection() {
 
                   {p.showSeats && (
                     <>
-                      <div className="mt-6 flex items-center justify-center gap-2 rounded-[6px] border border-white/15 bg-white/[0.04] py-3.5">
-                        <Users size={16} strokeWidth={2} className="text-zinc-300" />
-                        <p className="text-[13.5px] font-bold uppercase tracking-widest text-zinc-200">
+                      <div className="mt-6 flex items-center justify-center gap-2 rounded-[6px] border border-[var(--color-border)] bg-black/[0.04] py-3.5">
+                        <Users size={16} strokeWidth={2} className="text-[var(--color-text-secondary)]" />
+                        <p className="text-[13.5px] font-bold uppercase tracking-widest text-[var(--color-text-primary)]">
                           Cupos máximo: {SEATS_TOTAL} personas
                         </p>
                       </div>

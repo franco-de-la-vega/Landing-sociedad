@@ -28,20 +28,20 @@ const signals = [
 
 export default function MarketSection() {
   return (
-    <section className="relative border-t border-white/10 px-6 py-24 md:px-10 md:py-32">
+    <section className="relative border-t border-[var(--color-border)] px-6 py-24 md:px-10 md:py-32">
       <div className="mx-auto max-w-6xl">
         <Reveal>
-          <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-zinc-400">
+          <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
             La inevitabilidad del mercado
           </span>
         </Reveal>
         <Reveal delay={0.08} className="mt-5">
-          <h2 className="max-w-2xl text-[2rem] font-bold leading-[1.15] tracking-tight text-white md:text-[2.6rem]">
+          <h2 className="max-w-2xl text-[2rem] font-bold leading-[1.15] tracking-tight text-[var(--color-text-primary)] md:text-[2.6rem]">
             El mercado no espera a la adaptación tardía.
           </h2>
         </Reveal>
         <Reveal delay={0.14} className="mt-4">
-          <p className="max-w-2xl text-[15px] leading-relaxed text-zinc-400">
+          <p className="max-w-2xl text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
             Tres señales concretas de por qué el timing importa más que
             la intención.
           </p>
@@ -53,24 +53,24 @@ export default function MarketSection() {
         >
           {signals.map((s) => (
             <RevealItem key={s.stat}>
-              <div className="flex h-full flex-col rounded-2xl border border-white/10 bg-[#121418] p-7">
+              <div className="flex h-full flex-col rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-7">
                 <div className="flex items-start justify-between">
-                  <p className="text-accent text-[2.6rem] font-bold leading-none tracking-tight">
+                  <p className="text-[var(--color-accent)] text-[2.6rem] font-bold leading-none tracking-tight">
                     {s.stat}
                   </p>
                   <ArrowUpRight
                     size={18}
                     strokeWidth={2}
-                    className="text-accent/60"
+                    className="text-[var(--color-accent)]/60"
                   />
                 </div>
-                <p className="mt-4 text-[13.5px] leading-relaxed text-zinc-400">
+                <p className="mt-4 text-[13.5px] leading-relaxed text-[var(--color-text-secondary)]">
                   {s.label}
                 </p>
-                <p className="mt-5 border-t border-white/10 pt-4 text-[13px] font-medium leading-relaxed text-white">
+                <p className="mt-5 border-t border-[var(--color-border)] pt-4 text-[13px] font-medium leading-relaxed text-[var(--color-text-primary)]">
                   {s.insight}
                 </p>
-                <span className="mt-4 text-[10.5px] uppercase tracking-widest text-zinc-600">
+                <span className="mt-4 text-[10.5px] uppercase tracking-widest text-[var(--color-text-muted)]">
                   Fuente: {s.source}
                 </span>
               </div>

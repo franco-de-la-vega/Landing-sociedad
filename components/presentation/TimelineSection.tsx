@@ -41,20 +41,20 @@ export default function TimelineSection() {
   const [open, setOpen] = useState(1);
 
   return (
-    <section className="relative border-t border-white/10 px-6 py-24 md:px-10 md:py-32">
+    <section className="relative border-t border-[var(--color-border)] px-6 py-24 md:px-10 md:py-32">
       <div className="mx-auto max-w-6xl">
         <Reveal>
-          <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-zinc-400">
+          <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
             Hoja de ruta
           </span>
         </Reveal>
         <Reveal delay={0.08} className="mt-5">
-          <h2 className="max-w-2xl text-[2rem] font-bold leading-[1.15] tracking-tight text-white md:text-[2.8rem]">
+          <h2 className="max-w-2xl text-[2rem] font-bold leading-[1.15] tracking-tight text-[var(--color-text-primary)] md:text-[2.8rem]">
             Tu Evolución Profesional
           </h2>
         </Reveal>
         <Reveal delay={0.14} className="mt-4">
-          <p className="max-w-xl text-[15px] leading-relaxed text-zinc-400">
+          <p className="max-w-xl text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
             De la formación a la oportunidad comercial: así se estructura
             el proceso completo. Tocá cada etapa para ver el detalle.
           </p>
@@ -62,7 +62,7 @@ export default function TimelineSection() {
 
         <div className="relative mt-24">
           {/* riel horizontal: línea estática + pulso de energía viajando en loop */}
-          <div className="absolute inset-x-2 top-0 hidden h-px bg-white/10 md:block" />
+          <div className="absolute inset-x-2 top-0 hidden h-px bg-black/10 md:block" />
           <motion.div
             aria-hidden
             animate={{ left: ["0%", "100%"] }}
@@ -96,10 +96,10 @@ export default function TimelineSection() {
                       }
                       transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
                       className={`h-3 w-3 rounded-full ${
-                        s.featured ? "bg-accent" : "bg-zinc-600"
+                        s.featured ? "bg-[var(--color-accent)]" : "bg-zinc-600"
                       }`}
                     />
-                    <span className="absolute top-3 h-5 w-px bg-white/10" />
+                    <span className="absolute top-3 h-5 w-px bg-black/10" />
                   </div>
 
                   {/* pastilla clickeable */}
@@ -108,19 +108,19 @@ export default function TimelineSection() {
                     className={`group w-full rounded-full border px-4 py-2.5 text-left transition-colors duration-300 md:text-center ${
                       isOpen
                         ? s.featured
-                          ? "border-accent/50 bg-accent/[0.06]"
-                          : "border-white/20 bg-white/[0.04]"
-                        : "border-white/10 bg-[#121418] hover:border-white/25"
+                          ? "border-[var(--color-accent)]/50 bg-[var(--color-accent)]/[0.06]"
+                          : "border-[var(--color-border-strong)] bg-black/[0.04]"
+                        : "border-[var(--color-border)] bg-[var(--color-bg-elevated)] hover:border-[var(--color-border-strong)]"
                     }`}
                   >
                     <span
                       className={`block text-[10px] uppercase tracking-widest ${
-                        s.featured ? "text-accent" : "text-zinc-500"
+                        s.featured ? "text-[var(--color-accent)]" : "text-[var(--color-text-muted)]"
                       }`}
                     >
                       {s.tag}
                     </span>
-                    <span className="mt-0.5 block text-[13.5px] font-semibold text-white">
+                    <span className="mt-0.5 block text-[13.5px] font-semibold text-[var(--color-text-primary)]">
                       {s.title}
                     </span>
                   </button>
@@ -137,11 +137,11 @@ export default function TimelineSection() {
                         <div
                           className={`mt-3 rounded-2xl border p-5 text-center md:text-left ${
                             s.featured
-                              ? "border-accent/30 bg-[#141a1c] shadow-[0_0_40px_-14px_rgba(184,147,90,0.35)]"
-                              : "border-white/10 bg-[#121418]"
+                              ? "border-[var(--color-accent)]/30 bg-[var(--color-bg-elevated-2)] shadow-[0_20px_40px_-22px_rgba(20,18,14,0.18)]"
+                              : "border-[var(--color-border)] bg-[var(--color-bg-elevated)]"
                           }`}
                         >
-                          <p className="text-[12.5px] leading-relaxed text-zinc-400">
+                          <p className="text-[12.5px] leading-relaxed text-[var(--color-text-secondary)]">
                             {s.body}
                           </p>
                         </div>

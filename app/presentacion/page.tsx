@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 export default function PresentacionPage() {
   return (
-    <div className="min-h-screen bg-[#0B0C0E] text-white">
+    <div className="theme-light min-h-screen bg-[var(--color-bg-base)] text-[var(--color-text-primary)]">
       <PresentationHeader />
       <main>
         <ROISection />

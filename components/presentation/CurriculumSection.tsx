@@ -39,20 +39,20 @@ export default function CurriculumSection() {
   const [open, setOpen] = useState(0);
 
   return (
-    <section className="relative border-t border-white/10 px-6 py-24 md:px-10 md:py-32">
+    <section className="relative border-t border-[var(--color-border)] px-6 py-24 md:px-10 md:py-32">
       <div className="mx-auto max-w-5xl">
         <Reveal>
-          <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-zinc-400">
+          <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
             Programa de estudio
           </span>
         </Reveal>
         <Reveal delay={0.08} className="mt-5">
-          <h2 className="max-w-2xl text-[2rem] font-bold leading-[1.15] tracking-tight text-white md:text-[2.8rem]">
+          <h2 className="max-w-2xl text-[2rem] font-bold leading-[1.15] tracking-tight text-[var(--color-text-primary)] md:text-[2.8rem]">
             Formación práctica en 8 semanas.
           </h2>
         </Reveal>
         <Reveal delay={0.14} className="mt-4">
-          <p className="max-w-xl text-[15px] leading-relaxed text-zinc-400">
+          <p className="max-w-xl text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
             Cada unidad construye sobre la anterior, hasta llegar a la
             simulación de alta presión y tu portafolio de evidencia.
           </p>
@@ -60,7 +60,7 @@ export default function CurriculumSection() {
 
         <RevealGroup
           stagger={0.08}
-          className="mt-16 flex flex-col divide-y divide-white/10 border-t border-b border-white/10"
+          className="mt-16 flex flex-col divide-y divide-[var(--color-border)] border-t border-b border-[var(--color-border)]"
         >
           {units.map((u, i) => {
             const isOpen = open === i;
@@ -72,14 +72,14 @@ export default function CurriculumSection() {
                 >
                   <span
                     className={`w-8 shrink-0 text-[13px] font-semibold transition-colors duration-300 ${
-                      isOpen ? "text-accent" : "text-zinc-600"
+                      isOpen ? "text-[var(--color-accent)]" : "text-[var(--color-text-muted)]"
                     }`}
                   >
                     {u.n}
                   </span>
                   <h3
                     className={`flex-1 text-[16px] font-semibold transition-colors duration-300 sm:text-[18px] ${
-                      isOpen ? "text-white" : "text-zinc-300 group-hover:text-white"
+                      isOpen ? "text-[var(--color-text-primary)]" : "text-[var(--color-text-secondary)] group-hover:text-[var(--color-text-primary)]"
                     }`}
                   >
                     {u.title}
@@ -87,7 +87,7 @@ export default function CurriculumSection() {
                   <motion.span
                     animate={{ rotate: isOpen ? 45 : 0 }}
                     transition={{ duration: 0.25 }}
-                    className={`shrink-0 ${isOpen ? "text-accent" : "text-zinc-600"}`}
+                    className={`shrink-0 ${isOpen ? "text-[var(--color-accent)]" : "text-[var(--color-text-muted)]"}`}
                   >
                     <Plus size={16} strokeWidth={2} />
                   </motion.span>
@@ -102,7 +102,7 @@ export default function CurriculumSection() {
                       transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                       className="overflow-hidden"
                     >
-                      <p className="max-w-2xl pb-6 pl-14 text-[14px] leading-relaxed text-zinc-400">
+                      <p className="max-w-2xl pb-6 pl-14 text-[14px] leading-relaxed text-[var(--color-text-secondary)]">
                         {u.body}
                       </p>
                     </motion.div>

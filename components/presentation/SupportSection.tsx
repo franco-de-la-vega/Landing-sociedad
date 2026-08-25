@@ -35,20 +35,20 @@ const deliverables = [
 
 export default function SupportSection() {
   return (
-    <section className="relative border-t border-white/10 px-6 py-24 md:px-10 md:py-32">
+    <section className="relative border-t border-[var(--color-border)] px-6 py-24 md:px-10 md:py-32">
       <div className="mx-auto max-w-6xl">
         <Reveal>
-          <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-zinc-400">
+          <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
             Portafolio de evidencia
           </span>
         </Reveal>
         <Reveal delay={0.08} className="mt-5">
-          <h2 className="max-w-2xl text-[2rem] font-bold leading-[1.15] tracking-tight text-white md:text-[2.8rem]">
+          <h2 className="max-w-2xl text-[2rem] font-bold leading-[1.15] tracking-tight text-[var(--color-text-primary)] md:text-[2.8rem]">
             No solo te certificamos. Te damos evidencia.
           </h2>
         </Reveal>
         <Reveal delay={0.14} className="mt-4">
-          <p className="max-w-xl text-[15px] leading-relaxed text-zinc-400">
+          <p className="max-w-xl text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
             Un portafolio profesional real, construido durante la
             formación, que podés mostrar a cualquier empresa.
           </p>
@@ -57,7 +57,7 @@ export default function SupportSection() {
         <div className="mt-16 grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
           {/* Izquierda: diagrama de red */}
           <Reveal delay={0.1}>
-            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#121418] p-6">
+            <div className="relative overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-6">
               <svg
                 viewBox="0 0 360 240"
                 className="h-auto w-full"
@@ -108,10 +108,10 @@ export default function SupportSection() {
               </svg>
 
               <div className="mt-4 flex flex-wrap gap-2">
-                <span className="rounded-full border border-accent/20 bg-accent/5 px-3 py-1.5 text-[10px] uppercase tracking-widest text-accent">
+                <span className="rounded-full border border-[var(--color-accent)]/20 bg-[var(--color-accent)]/5 px-3 py-1.5 text-[10px] uppercase tracking-widest text-[var(--color-accent)]">
                   Simulaciones evaluadas
                 </span>
-                <span className="rounded-full border border-accent/20 bg-accent/5 px-3 py-1.5 text-[10px] uppercase tracking-widest text-accent">
+                <span className="rounded-full border border-[var(--color-accent)]/20 bg-[var(--color-accent)]/5 px-3 py-1.5 text-[10px] uppercase tracking-widest text-[var(--color-accent)]">
                   Portafolio verificable
                 </span>
               </div>
@@ -122,11 +122,11 @@ export default function SupportSection() {
           <RevealGroup stagger={0.06} className="flex flex-col gap-3">
             {deliverables.map((d) => (
               <RevealItem key={d.label}>
-                <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-[#121418] p-4">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent">
+                <div className="flex items-center gap-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-4">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)]">
                     <d.icon size={16} strokeWidth={2} />
                   </span>
-                  <p className="text-[14px] font-medium text-zinc-200">
+                  <p className="text-[14px] font-medium text-[var(--color-text-primary)]">
                     {d.label}
                   </p>
                 </div>
@@ -136,7 +136,7 @@ export default function SupportSection() {
         </div>
 
         <Reveal delay={0.1} className="mt-10">
-          <p className="max-w-2xl text-[13.5px] leading-relaxed text-zinc-500">
+          <p className="max-w-2xl text-[13.5px] leading-relaxed text-[var(--color-text-muted)]">
             La vinculación con empresas es posterior a la formación y está
             condicionada a tu desempeño evaluado y a la disponibilidad de
             oportunidades en cada momento. La contratación final depende

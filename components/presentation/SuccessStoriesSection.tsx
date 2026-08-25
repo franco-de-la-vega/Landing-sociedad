@@ -28,20 +28,20 @@ const stories = [
 
 export default function SuccessStoriesSection() {
   return (
-    <section className="relative border-t border-white/10 px-6 py-24 md:px-10 md:py-32">
+    <section className="relative border-t border-[var(--color-border)] px-6 py-24 md:px-10 md:py-32">
       <div className="mx-auto max-w-6xl">
         <Reveal>
-          <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-zinc-400">
+          <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
             Prueba social · Última camada
           </span>
         </Reveal>
         <Reveal delay={0.08} className="mt-5">
-          <h2 className="max-w-2xl text-[2rem] font-bold leading-[1.15] tracking-tight text-white md:text-[2.8rem]">
+          <h2 className="max-w-2xl text-[2rem] font-bold leading-[1.15] tracking-tight text-[var(--color-text-primary)] md:text-[2.8rem]">
             Casos de Éxito
           </h2>
         </Reveal>
         <Reveal delay={0.14} className="mt-4">
-          <p className="max-w-xl text-[15px] leading-relaxed text-zinc-400">
+          <p className="max-w-xl text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
             Alumnas reales del Instituto construyendo su carrera comercial
             internacional.
           </p>
@@ -53,7 +53,7 @@ export default function SuccessStoriesSection() {
         >
           {stories.map((s) => (
             <RevealItem key={s.name}>
-              <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#121418]">
+              <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)]">
                 {/* imagen */}
                 <div className="relative aspect-[5/4]">
                   {s.photo ? (
@@ -72,7 +72,7 @@ export default function SuccessStoriesSection() {
                           "linear-gradient(160deg, var(--color-bg-elevated-2) 0%, var(--color-bg-elevated) 60%, #000 100%)",
                       }}
                     >
-                      <span className="px-4 text-center text-[11px] uppercase tracking-[0.2em] text-white/30">
+                      <span className="px-4 text-center text-[11px] uppercase tracking-[0.2em] text-[var(--color-text-primary)]/30">
                         Foto pendiente
                       </span>
                     </div>
@@ -89,19 +89,19 @@ export default function SuccessStoriesSection() {
                   <span className="text-[10.5px] font-semibold uppercase tracking-widest text-emerald-500">
                     Caso de éxito · Última camada
                   </span>
-                  <h3 className="mt-2 text-[18px] font-bold text-white">
+                  <h3 className="mt-2 text-[18px] font-bold text-[var(--color-text-primary)]">
                     {s.name}
                   </h3>
-                  <p className="mt-0.5 text-[13px] text-zinc-500">{s.role}</p>
+                  <p className="mt-0.5 text-[13px] text-[var(--color-text-muted)]">{s.role}</p>
 
-                  <h4 className="mt-4 text-[17px] font-bold leading-snug text-white">
+                  <h4 className="mt-4 text-[17px] font-bold leading-snug text-[var(--color-text-primary)]">
                     {s.impact}
                   </h4>
-                  <p className="mt-3 text-[13.5px] leading-relaxed text-zinc-400">
+                  <p className="mt-3 text-[13.5px] leading-relaxed text-[var(--color-text-secondary)]">
                     {s.body}
                   </p>
 
-                  <span className="mt-5 inline-flex w-fit items-center rounded-full border border-white/15 bg-white/[0.05] px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-widest text-zinc-300">
+                  <span className="mt-5 inline-flex w-fit items-center rounded-full border border-[var(--color-border)] bg-black/[0.05] px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-widest text-[var(--color-text-secondary)]">
                     {s.status}
                   </span>
                 </div>
