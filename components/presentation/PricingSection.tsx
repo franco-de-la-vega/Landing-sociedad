@@ -6,6 +6,7 @@ import { Check, X, Users, Star } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import RevealGroup from "@/components/RevealGroup";
 import RevealItem from "@/components/RevealItem";
+import CountUp from "./CountUp";
 
 const SEATS_TOTAL = 25;
 const SEATS_TAKEN = 13;
@@ -15,6 +16,7 @@ const plans = [
     name: "Junior",
     duration: "2 meses",
     price: "$397",
+    priceValue: 397,
     originalPrice: null,
     installments: null,
     savings: null,
@@ -38,6 +40,7 @@ const plans = [
     name: "Junior High Ticket",
     duration: "3 meses",
     price: "$497",
+    priceValue: 497,
     originalPrice: null,
     installments: null,
     savings: null,
@@ -57,6 +60,7 @@ const plans = [
     name: "Carrera Completa",
     duration: "9 meses",
     price: "$1,429",
+    priceValue: 1429,
     originalPrice: "$1,786",
     installments: "o 3 cuotas de $476 USD",
     savings: "Ahorrás $357 USD",
@@ -95,20 +99,38 @@ const tierStyles: Record<string, { card: string; badge: string; price: string }>
 };
 
 function SeatsAvailability() {
-  const [revealed, setRevealed] = useState(false);
+  const [status, setStatus] = useState<"idle" | "loading" | "revealed">("idle");
   const seatsLeft = SEATS_TOTAL - SEATS_TAKEN;
+
+  function handleClick() {
+    setStatus("loading");
+    setTimeout(() => setStatus("revealed"), 1100);
+  }
 
   return (
     <div className="mt-5">
-      {!revealed ? (
+      {status === "idle" && (
         <button
-          onClick={() => setRevealed(true)}
+          onClick={handleClick}
           className="flex w-full items-center justify-center gap-2 rounded-full border border-[var(--color-border)] py-3 text-[14px] font-semibold uppercase tracking-widest text-[var(--color-text-secondary)] transition-colors hover:border-black/25"
         >
           <Users size={14} strokeWidth={2} />
           Actualizar disponibilidad
         </button>
-      ) : (
+      )}
+
+      {status === "loading" && (
+        <div className="flex items-center justify-center gap-2 rounded-full border border-[var(--color-border)] py-3 text-[13.5px] font-semibold text-[var(--color-text-muted)]">
+          <motion.span
+            animate={{ rotate: 360 }}
+            transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
+            className="h-3.5 w-3.5 rounded-full border-2 border-[var(--color-text-muted)]/30 border-t-[var(--color-accent)]"
+          />
+          Consultando cupos...
+        </div>
+      )}
+
+      {status === "revealed" && (
         <motion.div
           initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
@@ -186,7 +208,7 @@ export default function PricingSection() {
                     </div>
                   )}
                   <p className={`text-[3.1rem] font-black leading-none tracking-tight ${s.price} ${p.originalPrice ? "mt-1.5" : "mt-4"}`}>
-                    {p.price}
+                    <CountUp value={p.priceValue} prefix="$" />
                     <span className="ml-2 text-[17px] font-medium text-[var(--color-text-muted)]">
                       USD
                     </span>

@@ -4,22 +4,29 @@ import { ArrowUpRight } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import RevealGroup from "@/components/RevealGroup";
 import RevealItem from "@/components/RevealItem";
+import CountUp from "./CountUp";
 
 const signals = [
   {
-    stat: "+161%",
+    value: 161,
+    prefix: "+",
+    suffix: "%",
     label: "Crecimiento en contratación remota de empresas de EE.UU. hacia Latinoamérica en 2023.",
     insight: "La demanda no bajó nunca. Se aceleró.",
     source: "Nearshore Americas",
   },
   {
-    stat: "45%",
+    value: 45,
+    prefix: "",
+    suffix: "%",
     label: "De los puestos de ventas B2B hoy son 100% remotos, sin oficina.",
     insight: "Ya no es la excepción. Es la norma del sector.",
     source: "AccountMakers, 2026",
   },
   {
-    stat: "#1",
+    value: 1,
+    prefix: "#",
+    suffix: "",
     label: "Account Executive es el puesto remoto más buscado en 2026, superando a software engineer.",
     insight: "Ventas remotas dejó de ser un nicho.",
     source: "DailyRemote, 2026",
@@ -52,12 +59,15 @@ export default function MarketSection() {
           className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-3"
         >
           {signals.map((s) => (
-            <RevealItem key={s.stat}>
+            <RevealItem key={s.label}>
               <div className="flex h-full flex-col rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-10">
                 <div className="flex items-start justify-between">
-                  <p className="text-[var(--color-accent)] text-[3.6rem] font-bold leading-none tracking-tight">
-                    {s.stat}
-                  </p>
+                  <CountUp
+                    value={s.value}
+                    prefix={s.prefix}
+                    suffix={s.suffix}
+                    className="text-[var(--color-accent)] text-[3.6rem] font-bold leading-none tracking-tight"
+                  />
                   <ArrowUpRight
                     size={20}
                     strokeWidth={2}
