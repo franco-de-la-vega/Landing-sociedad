@@ -104,7 +104,7 @@ function SeatsAvailability() {
 
   function handleClick() {
     setStatus("loading");
-    setTimeout(() => setStatus("revealed"), 1100);
+    setTimeout(() => setStatus("revealed"), 3000);
   }
 
   return (
