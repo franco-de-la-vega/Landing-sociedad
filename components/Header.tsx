@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import Logo from "./Logo";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -22,7 +23,8 @@ export default function Header() {
         scrolled ? "glass-panel border-x-0 border-t-0" : "border-b border-transparent"
       }`}
     >
-      <div className="mx-auto flex max-w-5xl items-center px-5 py-4 sm:px-8">
+      <div className="mx-auto flex max-w-5xl items-center gap-3 px-5 py-4 sm:px-8">
+        <Logo className="h-7 w-7 shrink-0 text-accent sm:h-8 sm:w-8" />
         <span className="min-w-0 text-[11px] font-bold leading-tight tracking-[-0.01em] sm:text-[15px]">
           Instituto Latinoamericano de Formación Comercial
         </span>
