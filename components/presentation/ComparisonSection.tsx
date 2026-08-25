@@ -33,14 +33,14 @@ const pillars = [
 export default function ComparisonSection() {
   return (
     <section className="relative border-t border-[var(--color-border)] px-6 py-24 md:px-10 md:py-32">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-7xl">
         <Reveal>
-          <span className="text-[13px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
+          <span className="text-[14px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
             Qué hace distinto al método
           </span>
         </Reveal>
         <Reveal delay={0.08} className="mt-5">
-          <h2 className="max-w-2xl text-[2rem] font-bold leading-[1.15] tracking-tight text-[var(--color-text-primary)] md:text-[2.8rem]">
+          <h2 className="max-w-2xl text-[2.4rem] font-bold leading-[1.1] tracking-tight text-[var(--color-text-primary)] md:text-[3.3rem]">
             Formación pensada para insertarte, no solo para certificarte
           </h2>
         </Reveal>
@@ -56,8 +56,8 @@ export default function ComparisonSection() {
                   <p.icon size={18} strokeWidth={2} className="text-[var(--color-accent)]" />
                 </div>
                 <div>
-                  <h3 className="text-[17px] font-semibold text-[var(--color-text-primary)]">{p.title}</h3>
-                  <p className="mt-2 max-w-2xl text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
+                  <h3 className="text-[19px] font-semibold text-[var(--color-text-primary)]">{p.title}</h3>
+                  <p className="mt-2 max-w-2xl text-[17px] leading-relaxed text-[var(--color-text-secondary)]">
                     {p.detail}
                   </p>
                 </div>

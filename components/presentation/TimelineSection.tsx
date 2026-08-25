@@ -42,19 +42,19 @@ export default function TimelineSection() {
 
   return (
     <section className="relative border-t border-[var(--color-border)] px-6 py-24 md:px-10 md:py-32">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-7xl">
         <Reveal>
-          <span className="text-[13px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
+          <span className="text-[14px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
             Hoja de ruta
           </span>
         </Reveal>
         <Reveal delay={0.08} className="mt-5">
-          <h2 className="max-w-2xl text-[2rem] font-bold leading-[1.15] tracking-tight text-[var(--color-text-primary)] md:text-[2.8rem]">
+          <h2 className="max-w-2xl text-[2.4rem] font-bold leading-[1.1] tracking-tight text-[var(--color-text-primary)] md:text-[3.3rem]">
             Tu Evolución Profesional
           </h2>
         </Reveal>
         <Reveal delay={0.14} className="mt-4">
-          <p className="max-w-xl text-[16.5px] leading-relaxed text-[var(--color-text-secondary)]">
+          <p className="max-w-xl text-[18px] leading-relaxed text-[var(--color-text-secondary)]">
             De la formación a la oportunidad comercial: así se estructura
             el proceso completo. Tocá cada etapa para ver el detalle.
           </p>
@@ -114,13 +114,13 @@ export default function TimelineSection() {
                     }`}
                   >
                     <span
-                      className={`block text-[11px] uppercase tracking-widest ${
+                      className={`block text-[12px] uppercase tracking-widest ${
                         s.featured ? "text-[var(--color-accent)]" : "text-[var(--color-text-muted)]"
                       }`}
                     >
                       {s.tag}
                     </span>
-                    <span className="mt-0.5 block text-[15px] font-semibold text-[var(--color-text-primary)]">
+                    <span className="mt-0.5 block text-[17px] font-semibold text-[var(--color-text-primary)]">
                       {s.title}
                     </span>
                   </button>

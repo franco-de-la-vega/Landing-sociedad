@@ -29,19 +29,19 @@ const stories = [
 export default function SuccessStoriesSection() {
   return (
     <section className="relative border-t border-[var(--color-border)] px-6 py-24 md:px-10 md:py-32">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-7xl">
         <Reveal>
-          <span className="text-[13px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
+          <span className="text-[14px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
             Prueba social · Última camada
           </span>
         </Reveal>
         <Reveal delay={0.08} className="mt-5">
-          <h2 className="max-w-2xl text-[2rem] font-bold leading-[1.15] tracking-tight text-[var(--color-text-primary)] md:text-[2.8rem]">
+          <h2 className="max-w-2xl text-[2.4rem] font-bold leading-[1.1] tracking-tight text-[var(--color-text-primary)] md:text-[3.3rem]">
             Casos de Éxito
           </h2>
         </Reveal>
         <Reveal delay={0.14} className="mt-4">
-          <p className="max-w-xl text-[16.5px] leading-relaxed text-[var(--color-text-secondary)]">
+          <p className="max-w-xl text-[18px] leading-relaxed text-[var(--color-text-secondary)]">
             Alumnas reales del Instituto construyendo su carrera comercial
             internacional.
           </p>
@@ -49,7 +49,7 @@ export default function SuccessStoriesSection() {
 
         <RevealGroup
           stagger={0.14}
-          className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2"
+          className="mt-14 grid grid-cols-1 gap-8 md:grid-cols-2"
         >
           {stories.map((s) => (
             <RevealItem key={s.name}>
@@ -72,36 +72,36 @@ export default function SuccessStoriesSection() {
                           "linear-gradient(160deg, var(--color-bg-elevated-2) 0%, var(--color-bg-elevated) 60%, #000 100%)",
                       }}
                     >
-                      <span className="px-4 text-center text-[12px] uppercase tracking-[0.2em] text-[var(--color-text-primary)]/30">
+                      <span className="px-4 text-center text-[13px] uppercase tracking-[0.2em] text-[var(--color-text-primary)]/30">
                         Foto pendiente
                       </span>
                     </div>
                   )}
                   <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-4 pb-4 pt-14">
-                    <span className="block rounded-md bg-emerald-500 px-3 py-1.5 text-center text-[13px] font-bold uppercase tracking-wide text-[#062018] shadow-lg">
+                    <span className="block rounded-md bg-emerald-500 px-3 py-1.5 text-center text-[14px] font-bold uppercase tracking-wide text-[#062018] shadow-lg">
                       {s.floatingBadge}
                     </span>
                   </div>
                 </div>
 
                 {/* testimonio */}
-                <div className="flex flex-1 flex-col p-6 md:p-7">
-                  <span className="text-[11.5px] font-semibold uppercase tracking-widest text-emerald-500">
+                <div className="flex flex-1 flex-col p-8 md:p-9">
+                  <span className="text-[12.5px] font-semibold uppercase tracking-widest text-emerald-500">
                     Caso de éxito · Última camada
                   </span>
-                  <h3 className="mt-2 text-[18px] font-bold text-[var(--color-text-primary)]">
+                  <h3 className="mt-2 text-[20px] font-bold text-[var(--color-text-primary)]">
                     {s.name}
                   </h3>
-                  <p className="mt-0.5 text-[14px] text-[var(--color-text-muted)]">{s.role}</p>
+                  <p className="mt-0.5 text-[15px] text-[var(--color-text-muted)]">{s.role}</p>
 
-                  <h4 className="mt-4 text-[18px] font-bold leading-snug text-[var(--color-text-primary)]">
+                  <h4 className="mt-4 text-[20px] font-bold leading-snug text-[var(--color-text-primary)]">
                     {s.impact}
                   </h4>
-                  <p className="mt-3 text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
+                  <p className="mt-3 text-[17px] leading-relaxed text-[var(--color-text-secondary)]">
                     {s.body}
                   </p>
 
-                  <span className="mt-5 inline-flex w-fit items-center rounded-full border border-[var(--color-border)] bg-black/[0.05] px-3.5 py-1.5 text-[12px] font-semibold uppercase tracking-widest text-[var(--color-text-secondary)]">
+                  <span className="mt-5 inline-flex w-fit items-center rounded-full border border-[var(--color-border)] bg-black/[0.05] px-3.5 py-1.5 text-[13px] font-semibold uppercase tracking-widest text-[var(--color-text-secondary)]">
                     {s.status}
                   </span>
                 </div>

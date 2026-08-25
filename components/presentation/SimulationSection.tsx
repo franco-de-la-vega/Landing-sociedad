@@ -20,19 +20,19 @@ const tagStyles: Record<string, string> = {
 export default function SimulationSection() {
   return (
     <section className="relative border-t border-[var(--color-border)] px-6 py-24 md:px-10 md:py-32">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-7xl">
         <Reveal>
-          <span className="text-[13px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
+          <span className="text-[14px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
             Así se entrena de verdad
           </span>
         </Reveal>
         <Reveal delay={0.08} className="mt-5">
-          <h2 className="max-w-2xl text-[2rem] font-bold leading-[1.15] tracking-tight text-[var(--color-text-primary)] md:text-[2.8rem]">
+          <h2 className="max-w-2xl text-[2.4rem] font-bold leading-[1.1] tracking-tight text-[var(--color-text-primary)] md:text-[3.3rem]">
             Practicás la llamada real, no la teoría.
           </h2>
         </Reveal>
         <Reveal delay={0.14} className="mt-4">
-          <p className="max-w-xl text-[16.5px] leading-relaxed text-[var(--color-text-secondary)]">
+          <p className="max-w-xl text-[18px] leading-relaxed text-[var(--color-text-secondary)]">
             Hacés una llamada de venta con un coach que actúa como un
             cliente difícil de verdad. Te corrige ahí mismo, en el
             momento — no en un video que ves después.
@@ -48,7 +48,7 @@ export default function SimulationSection() {
                 <Circle size={8} className="fill-amber-500/60 text-amber-500/60" />
                 <Circle size={8} className="fill-emerald-500/60 text-emerald-500/60" />
               </div>
-              <span className="flex items-center gap-2 text-[12px] uppercase tracking-widest text-[var(--color-text-muted)]">
+              <span className="flex items-center gap-2 text-[13px] uppercase tracking-widest text-[var(--color-text-muted)]">
                 <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
                 Simulación en vivo
               </span>
@@ -56,12 +56,12 @@ export default function SimulationSection() {
 
             {/* tiles de video */}
             <div className="grid grid-cols-1 gap-px bg-black/5 sm:grid-cols-2">
-              <div className="relative flex aspect-[4/3] flex-col items-center justify-center bg-[var(--color-bg-elevated-2)] p-6">
+              <div className="relative flex aspect-[4/3] flex-col items-center justify-center bg-[var(--color-bg-elevated-2)] p-8">
                 <span className="flex h-16 w-16 items-center justify-center rounded-full bg-black/5 ring-1 ring-black/10">
                   <User size={26} strokeWidth={1.75} className="text-[var(--color-text-primary)]" />
                 </span>
-                <p className="mt-3 text-[15px] font-semibold text-[var(--color-text-primary)]">Vos</p>
-                <span className="mt-1 flex items-center gap-1.5 text-[12px] text-[var(--color-text-muted)]">
+                <p className="mt-3 text-[17px] font-semibold text-[var(--color-text-primary)]">Vos</p>
+                <span className="mt-1 flex items-center gap-1.5 text-[13px] text-[var(--color-text-muted)]">
                   <Mic size={11} strokeWidth={2} />
                   Hablando
                 </span>
@@ -84,12 +84,12 @@ export default function SimulationSection() {
                 </div>
               </div>
 
-              <div className="relative flex aspect-[4/3] flex-col items-center justify-center bg-[var(--color-bg-elevated-2)] p-6">
+              <div className="relative flex aspect-[4/3] flex-col items-center justify-center bg-[var(--color-bg-elevated-2)] p-8">
                 <span className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-accent)]/10 ring-1 ring-[var(--color-accent)]/30">
                   <Headset size={26} strokeWidth={1.75} className="text-[var(--color-accent)]" />
                 </span>
-                <p className="mt-3 text-[15px] font-semibold text-[var(--color-text-primary)]">Coach</p>
-                <span className="mt-1 text-[12px] text-[var(--color-text-muted)]">
+                <p className="mt-3 text-[17px] font-semibold text-[var(--color-text-primary)]">Coach</p>
+                <span className="mt-1 text-[13px] text-[var(--color-text-muted)]">
                   Evaluando en tiempo real
                 </span>
 
@@ -102,7 +102,7 @@ export default function SimulationSection() {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true, amount: 0.6 }}
                       transition={{ duration: 0.4, delay: t.delay }}
-                      className={`rounded-full border px-2.5 py-1 text-[11.5px] font-medium ${tagStyles[t.color]}`}
+                      className={`rounded-full border px-2.5 py-1 text-[12.5px] font-medium ${tagStyles[t.color]}`}
                     >
                       {t.text}
                     </motion.span>
@@ -112,10 +112,10 @@ export default function SimulationSection() {
             </div>
 
             <div className="flex items-center justify-center gap-2 border-t border-[var(--color-border)] px-5 py-4 text-center">
-              <span className="text-[14px] text-[var(--color-text-secondary)]">
+              <span className="text-[15px] text-[var(--color-text-secondary)]">
                 Después de cada llamada recibís feedback puntual:
               </span>
-              <span className="text-[14px] font-medium text-[var(--color-text-primary)]">
+              <span className="text-[15px] font-medium text-[var(--color-text-primary)]">
                 qué funcionó y qué corregir.
               </span>
             </div>
@@ -123,7 +123,7 @@ export default function SimulationSection() {
         </Reveal>
 
         <Reveal delay={0.1} className="mt-8">
-          <p className="max-w-lg text-[15px] leading-relaxed text-[var(--color-text-muted)]">
+          <p className="max-w-lg text-[17px] leading-relaxed text-[var(--color-text-muted)]">
             Nada de teoría que se olvida. Practicás hasta que la técnica
             queda incorporada de verdad.
           </p>
