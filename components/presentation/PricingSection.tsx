@@ -221,7 +221,7 @@ export default function PricingSection() {
                           <Star
                             size={15}
                             strokeWidth={2.5}
-                            className="mt-0.5 shrink-0 text-amber-400"
+                            className="mt-0.5 shrink-0 text-[var(--color-accent-secondary)]"
                           />
                         ) : (
                           <X
@@ -235,7 +235,7 @@ export default function PricingSection() {
                             f.included === true
                               ? "text-[var(--color-text-primary)]"
                               : f.included === "conditional"
-                              ? "text-amber-200/90"
+                              ? "text-[var(--color-accent-secondary)]"
                               : "text-[var(--color-text-muted)]"
                           }`}
                         >

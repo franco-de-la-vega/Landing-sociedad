@@ -24,7 +24,7 @@ export default function Header() {
       }`}
     >
       <div className="mx-auto flex max-w-5xl items-center gap-3 px-5 py-4 sm:px-8">
-        <Logo className="h-7 w-7 shrink-0 text-accent sm:h-8 sm:w-8" />
+        <Logo className="h-7 w-7 shrink-0 text-[var(--color-accent)] sm:h-8 sm:w-8" />
         <span className="min-w-0 text-[11px] font-bold leading-tight tracking-[-0.01em] sm:text-[15px]">
           Instituto Latinoamericano de Formación Comercial
         </span>

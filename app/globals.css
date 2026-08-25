@@ -40,8 +40,7 @@ body::before {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* Tema claro, usado solo en /presentacion vía la clase .theme-light en el wrapper de la página.
-   No afecta el resto del sitio (dark, tokens en theme.css). */
+/* Tema claro, aplicado vía la clase .theme-light (hoy en <body>, todo el sitio). */
 .theme-light {
   --color-bg-canvas: #f8f6f2;
   --color-bg-base: #f8f6f2;
@@ -62,8 +61,7 @@ body::before {
   --color-accent-secondary-muted: #ece1cd;
 }
 
-.theme-light body::after,
-.theme-light::after {
+body.theme-light::after {
   display: none;
 }
 
@@ -93,7 +91,7 @@ body::before {
 
 /* Degradado emerald -> cyan, para highlights de marca dentro de titulares */
 .text-accent-gradient {
-  background: linear-gradient(90deg, var(--color-accent) 0%, #4facfe 100%);
+  background: linear-gradient(90deg, var(--color-accent) 0%, var(--color-accent-hover) 100%);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;

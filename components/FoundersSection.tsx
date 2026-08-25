@@ -29,8 +29,8 @@ const founders = [
 
 export default function FoundersSection() {
   return (
-    <section className="relative z-10 mx-auto max-w-7xl border-t border-white/10 px-6 py-24 md:px-12">
-      <h2 className="mb-16 text-left text-3xl font-bold text-white md:text-4xl">
+    <section className="relative z-10 mx-auto max-w-7xl border-t border-black/10 px-6 py-24 md:px-12">
+      <h2 className="mb-16 text-left text-3xl font-bold text-[var(--color-text-primary)] md:text-4xl">
         La estructura detrás del método.
       </h2>
 
@@ -40,7 +40,7 @@ export default function FoundersSection() {
       >
         {founders.map((f) => (
           <RevealItem key={f.name}>
-            <TiltCard className="group relative aspect-[3/4] overflow-hidden rounded-2xl border border-white/10 shadow-2xl">
+            <TiltCard className="group relative aspect-[3/4] overflow-hidden rounded-2xl border border-black/10 shadow-2xl">
               {f.photo ? (
                 <Image
                   src={f.photo}
@@ -70,7 +70,7 @@ export default function FoundersSection() {
               <div className="absolute inset-0 z-10 bg-gradient-to-t from-black via-black/35 to-transparent" />
 
               {!f.photo && (
-                <span className="absolute left-1/2 top-[42%] z-10 -translate-x-1/2 -translate-y-1/2 text-[11px] uppercase tracking-[0.2em] text-white/30">
+                <span className="absolute left-1/2 top-[42%] z-10 -translate-x-1/2 -translate-y-1/2 text-[11px] uppercase tracking-[0.2em] text-[var(--color-text-primary)]/30">
                   Foto próximamente
                 </span>
               )}
@@ -78,17 +78,17 @@ export default function FoundersSection() {
 
             {/* el nombre irrumpe fuera del marco, sobre el borde inferior */}
             <div className="relative z-20 -mt-8 pl-2 text-left">
-              <h3 className="text-2xl font-semibold leading-none tracking-tight text-white">
+              <h3 className="text-2xl font-semibold leading-none tracking-tight text-[var(--color-text-primary)]">
                 {f.name}
               </h3>
-              <p className="mt-2 text-[13px] leading-relaxed text-zinc-400">
-                <span className="font-semibold text-white">{f.role}</span>
+              <p className="mt-2 text-[13px] leading-relaxed text-[var(--color-text-secondary)]">
+                <span className="font-semibold text-[var(--color-text-primary)]">{f.role}</span>
                 {" — "}
                 {f.fullTitle}
               </p>
             </div>
 
-            <p className="mt-5 pl-2 text-sm leading-relaxed text-zinc-400">
+            <p className="mt-5 pl-2 text-sm leading-relaxed text-[var(--color-text-secondary)]">
               {f.body}
             </p>
           </RevealItem>

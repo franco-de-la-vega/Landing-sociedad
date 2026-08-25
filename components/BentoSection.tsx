@@ -37,36 +37,36 @@ export default function BentoSection() {
     <section
       id="metodo"
       ref={ref}
-      className="relative z-10 mx-auto max-w-7xl border-t border-white/10 px-6 py-24 md:px-12"
+      className="relative z-10 mx-auto max-w-7xl border-t border-black/10 px-6 py-24 md:px-12"
     >
       <Watermark text="The Method" className="top-[14%]" />
 
       <div className="relative">
         <Reveal>
-          <h2 className="mb-2 text-left text-3xl font-bold tracking-tight text-white md:text-5xl">
+          <h2 className="mb-2 text-left text-3xl font-bold tracking-tight text-[var(--color-text-primary)] md:text-5xl">
             Un sistema, no un curso.
           </h2>
         </Reveal>
         <Reveal delay={0.06}>
           <motion.span
             style={{ scaleX: ruleScale }}
-            className="mb-16 block h-px w-24 origin-left bg-gradient-to-r from-accent to-transparent"
+            className="mb-16 block h-px w-24 origin-left bg-gradient-to-r from-[var(--color-accent)] to-transparent"
           />
         </Reveal>
 
-        <RevealGroup stagger={0.14} className="flex flex-col divide-y divide-white/10 border-t border-b border-white/10">
+        <RevealGroup stagger={0.14} className="flex flex-col divide-y divide-black/10 border-t border-b border-black/10">
           {steps.map((s) => (
             <RevealItem key={s.label}>
               <div className="group grid grid-cols-1 gap-3 py-10 transition-colors duration-300 md:grid-cols-[minmax(0,220px)_1fr] md:items-baseline md:gap-10">
-                <span className="font-serif-display text-2xl italic leading-none text-zinc-500 transition-colors duration-300 group-hover:text-accent">
+                <span className="font-serif-display text-2xl italic leading-none text-[var(--color-text-muted)] transition-colors duration-300 group-hover:text-[var(--color-accent)]">
                   {s.label}
                 </span>
                 <div>
-                  <h3 className="relative inline-block text-xl font-semibold text-white transition-transform duration-300 group-hover:translate-x-1">
+                  <h3 className="relative inline-block text-xl font-semibold text-[var(--color-text-primary)] transition-transform duration-300 group-hover:translate-x-1">
                     {s.title}
-                    <span className="absolute -bottom-1 left-0 h-px w-0 bg-accent transition-all duration-500 group-hover:w-full" />
+                    <span className="absolute -bottom-1 left-0 h-px w-0 bg-[var(--color-accent)] transition-all duration-500 group-hover:w-full" />
                   </h3>
-                  <p className="mt-3 max-w-lg text-sm leading-relaxed text-zinc-400">
+                  <p className="mt-3 max-w-lg text-sm leading-relaxed text-[var(--color-text-secondary)]">
                     {s.body}
                   </p>
                 </div>

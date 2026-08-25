@@ -6,7 +6,7 @@ export default function CTASection() {
     <section id="aplicar" className="relative px-5 py-28 sm:px-8 sm:py-40">
       <div className="mx-auto flex max-w-2xl flex-col items-center text-center">
         <Reveal>
-          <span className="text-[12px] font-medium uppercase tracking-[0.14em] text-text-muted">
+          <span className="text-[12px] font-medium uppercase tracking-[0.14em] text-[var(--color-text-muted)]">
             Conocenos
           </span>
         </Reveal>
@@ -16,7 +16,7 @@ export default function CTASection() {
           </h2>
         </Reveal>
         <Reveal delay={0.14} className="mt-4">
-          <p className="max-w-lg text-[15px] leading-relaxed text-text-secondary">
+          <p className="max-w-lg text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
             Cuatro preguntas breves para entender dónde estás parado hoy.
             No hay respuestas correctas o incorrectas: el objetivo es
             ubicarte en el punto de partida que te corresponde.

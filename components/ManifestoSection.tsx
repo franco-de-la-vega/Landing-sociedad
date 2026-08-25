@@ -33,11 +33,11 @@ export default function ManifestoSection() {
   return (
     <section
       ref={ref}
-      className="relative w-full overflow-hidden border-t border-white/10 bg-bg-base py-32"
+      className="relative w-full overflow-hidden border-t border-black/10 bg-[var(--color-bg-base)] py-32"
     >
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-40 top-24 h-[420px] w-[420px] rounded-full bg-accent/[0.06] blur-[140px]"
+        className="pointer-events-none absolute -left-40 top-24 h-[420px] w-[420px] rounded-full bg-[var(--color-accent)]/[0.06] blur-[140px]"
       />
 
       <div className="relative z-10 mx-auto max-w-7xl px-6 md:px-12">
@@ -46,13 +46,13 @@ export default function ManifestoSection() {
             <motion.span
               aria-hidden
               style={{ y: quoteY }}
-              className="font-serif-display pointer-events-none absolute -left-3 -top-10 select-none text-[8rem] italic leading-none text-white/[0.06]"
+              className="font-serif-display pointer-events-none absolute -left-3 -top-10 select-none text-[8rem] italic leading-none text-[var(--color-text-primary)]/[0.06]"
             >
               &ldquo;
             </motion.span>
 
             <Reveal>
-              <span className="mb-6 text-xs uppercase tracking-widest text-zinc-500">
+              <span className="mb-6 text-xs uppercase tracking-widest text-[var(--color-text-muted)]">
                 El manifiesto
               </span>
             </Reveal>
@@ -61,7 +61,7 @@ export default function ManifestoSection() {
               <h2 className="text-metal relative text-4xl font-semibold leading-[1.2] tracking-[-0.02em] sm:text-[3.2rem]">
                 El problema no es tu capacidad
                 <br />
-                <span className="font-serif-display font-normal italic text-zinc-400">
+                <span className="font-serif-display font-normal italic text-[var(--color-text-secondary)]">
                   Es como
                 </span>
                 <br />
@@ -69,7 +69,7 @@ export default function ManifestoSection() {
                   te formaron...
                   <motion.span
                     style={{ scaleX: ruleScale }}
-                    className="absolute -bottom-1 left-0 h-px w-full origin-left bg-gradient-to-r from-accent via-accent/60 to-transparent"
+                    className="absolute -bottom-1 left-0 h-px w-full origin-left bg-gradient-to-r from-[var(--color-accent)] via-[var(--color-accent)]/60 to-transparent"
                   />
                 </span>
               </h2>
@@ -79,22 +79,22 @@ export default function ManifestoSection() {
           <div className="relative lg:col-span-7">
             <motion.div
               style={{ scaleY: ruleScale }}
-              className="absolute left-0 top-0 hidden h-full w-px origin-top bg-gradient-to-b from-accent via-accent/30 to-transparent lg:block"
+              className="absolute left-0 top-0 hidden h-full w-px origin-top bg-gradient-to-b from-[var(--color-accent)] via-[var(--color-accent)]/30 to-transparent lg:block"
             />
 
             <RevealGroup
               stagger={0.12}
-              className="flex flex-col divide-y divide-white/10 border-t border-b border-white/10 lg:pl-10"
+              className="flex flex-col divide-y divide-black/10 border-t border-b border-black/10 lg:pl-10"
             >
               {pillars.map((p) => (
                 <RevealItem key={p.headline}>
-                  <div className="group relative flex items-start gap-6 px-2 py-8 transition-all hover:bg-white/[0.01]">
-                    <span className="mt-3 hidden h-1.5 w-1.5 shrink-0 rounded-full bg-zinc-700 transition-colors duration-300 group-hover:bg-accent sm:block" />
+                  <div className="group relative flex items-start gap-6 px-2 py-8 transition-all hover:bg-black/[0.02]">
+                    <span className="mt-3 hidden h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-text-muted)]/40 transition-colors duration-300 group-hover:bg-[var(--color-accent)] sm:block" />
                     <div>
-                      <h3 className="mb-2 text-2xl font-bold tracking-tight text-white transition-transform group-hover:translate-x-1">
+                      <h3 className="mb-2 text-2xl font-bold tracking-tight text-[var(--color-text-primary)] transition-transform group-hover:translate-x-1">
                         {p.headline}
                       </h3>
-                      <p className="max-w-xl text-base font-normal leading-relaxed text-zinc-400">
+                      <p className="max-w-xl text-base font-normal leading-relaxed text-[var(--color-text-secondary)]">
                         {p.body}
                       </p>
                     </div>

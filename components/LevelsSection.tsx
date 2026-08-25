@@ -43,24 +43,24 @@ export default function LevelsSection() {
   const [open, setOpen] = useState(0);
 
   return (
-    <section className="relative z-10 mx-auto max-w-7xl border-t border-white/10 px-6 py-24 md:px-12">
+    <section className="relative z-10 mx-auto max-w-7xl border-t border-black/10 px-6 py-24 md:px-12">
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-4">
           <Reveal>
-            <span className="mb-6 block text-xs uppercase tracking-widest text-zinc-500">
+            <span className="mb-6 block text-xs uppercase tracking-widest text-[var(--color-text-muted)]">
               El diagnóstico
             </span>
           </Reveal>
           <Reveal delay={0.08}>
-            <h2 className="max-w-sm text-3xl font-bold tracking-tight text-white md:text-4xl">
+            <h2 className="max-w-sm text-3xl font-bold tracking-tight text-[var(--color-text-primary)] md:text-4xl">
               Un examen te ubica.
             </h2>
-            <span className="mt-4 inline-block border border-white/15 px-3 py-1 text-xs uppercase tracking-widest text-zinc-400">
+            <span className="mt-4 inline-block border border-black/12 px-3 py-1 text-xs uppercase tracking-widest text-[var(--color-text-secondary)]">
               No suponemos nada
             </span>
           </Reveal>
           <Reveal delay={0.16}>
-            <p className="mt-6 max-w-sm text-sm leading-relaxed text-zinc-400">
+            <p className="mt-6 max-w-sm text-sm leading-relaxed text-[var(--color-text-secondary)]">
               Cinco niveles, cada uno con su propia currícula. Explorá qué te
               espera en cada etapa.
             </p>
@@ -69,7 +69,7 @@ export default function LevelsSection() {
 
         <RevealGroup
           stagger={0.08}
-          className="flex flex-col divide-y divide-white/10 border-t border-b border-white/10 lg:col-span-8"
+          className="flex flex-col divide-y divide-black/10 border-t border-b border-black/10 lg:col-span-8"
         >
           {levels.map((l, i) => {
             const isOpen = open === i;
@@ -83,25 +83,25 @@ export default function LevelsSection() {
                     <div className="flex items-baseline gap-5">
                       <span
                         className={`text-xs tracking-[0.1em] transition-colors duration-300 ${
-                          isOpen ? "text-accent" : "text-zinc-600"
+                          isOpen ? "text-[var(--color-accent)]" : "text-[var(--color-text-muted)]"
                         }`}
                       >
                         {l.code}
                       </span>
                       <span
                         className={`text-xl font-semibold tracking-tight transition-colors duration-300 ${
-                          isOpen ? "text-white" : "text-zinc-400 group-hover:text-white"
+                          isOpen ? "text-[var(--color-text-primary)]" : "text-[var(--color-text-secondary)] group-hover:text-[var(--color-text-primary)]"
                         }`}
                       >
                         {l.name}
                       </span>
-                      <span className="hidden text-sm text-zinc-500 sm:inline">
+                      <span className="hidden text-sm text-[var(--color-text-muted)] sm:inline">
                         {l.intro}
                       </span>
                     </div>
                     <span
                       className={`shrink-0 text-lg font-light transition-transform duration-300 ${
-                        isOpen ? "rotate-45 text-accent" : "text-zinc-600"
+                        isOpen ? "rotate-45 text-[var(--color-accent)]" : "text-[var(--color-text-muted)]"
                       }`}
                     >
                       +
@@ -117,7 +117,7 @@ export default function LevelsSection() {
                         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                         className="overflow-hidden"
                       >
-                        <p className="max-w-xl pb-7 pl-0 text-sm leading-relaxed text-zinc-400 sm:pl-[4.5rem]">
+                        <p className="max-w-xl pb-7 pl-0 text-sm leading-relaxed text-[var(--color-text-secondary)] sm:pl-[4.5rem]">
                           {l.body}
                         </p>
                       </motion.div>
