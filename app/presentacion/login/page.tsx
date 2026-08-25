@@ -2,6 +2,7 @@
 
 import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Eye, EyeOff } from "lucide-react";
 import Logo from "@/components/Logo";
 
 function LoginForm() {
@@ -11,6 +12,7 @@ function LoginForm() {
 
   const [user, setUser] = useState("");
   const [pass, setPass] = useState("");
+  const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -64,12 +66,22 @@ function LoginForm() {
               <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-widest text-[var(--color-text-muted)]">
                 Contraseña
               </label>
-              <input
-                type="password"
-                value={pass}
-                onChange={(e) => setPass(e.target.value)}
-                className="w-full rounded-[6px] border border-[var(--color-border)] bg-[var(--color-bg-base)] px-3.5 py-2.5 text-[14px] text-[var(--color-text-primary)] outline-none transition-colors focus:border-[var(--color-accent)]"
-              />
+              <div className="relative">
+                <input
+                  type={showPass ? "text" : "password"}
+                  value={pass}
+                  onChange={(e) => setPass(e.target.value)}
+                  className="w-full rounded-[6px] border border-[var(--color-border)] bg-[var(--color-bg-base)] px-3.5 py-2.5 pr-10 text-[14px] text-[var(--color-text-primary)] outline-none transition-colors focus:border-[var(--color-accent)]"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPass((v) => !v)}
+                  aria-label={showPass ? "Ocultar contraseña" : "Mostrar contraseña"}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)]"
+                >
+                  {showPass ? <EyeOff size={16} strokeWidth={1.75} /> : <Eye size={16} strokeWidth={1.75} />}
+                </button>
+              </div>
             </div>
 
             {error && (
