@@ -32,7 +32,6 @@ const plans = [
       { text: "Preparación de perfil de LinkedIn", included: true },
       { text: "Creación y armado de CV profesional", included: true },
     ],
-    cta: "Reservar cupo",
     showSeats: true,
   },
   {
@@ -52,7 +51,6 @@ const plans = [
       { text: "Evaluación de especialización comercial (Software B2B, Evergreen, Launching)", included: false },
       { text: "Tutor dedicado exclusivo", included: false },
     ],
-    cta: "Reservar cupo",
     showSeats: false,
   },
   {
@@ -74,29 +72,25 @@ const plans = [
       { text: "Evaluación de especialización comercial (High-Ticket, Software B2B, Evergreen, Launching)", included: true },
       { text: "Tutor dedicado exclusivo durante todo el proceso", included: true },
     ],
-    cta: "Aprendé todo · Solicitar admisión",
     showSeats: false,
   },
 ];
 
-const tierStyles: Record<string, { card: string; badge: string; price: string; cta: string }> = {
+const tierStyles: Record<string, { card: string; badge: string; price: string }> = {
   base: {
     card: "border-[var(--color-border)] bg-[var(--color-bg-elevated)]",
     badge: "",
     price: "text-[var(--color-text-primary)]",
-    cta: "border border-[var(--color-border)] text-[var(--color-text-primary)] hover:border-black/25",
   },
   mid: {
     card: "border-[var(--color-border)] bg-[var(--color-bg-elevated-2)]",
     badge: "",
     price: "text-[var(--color-text-primary)]",
-    cta: "border border-[var(--color-border-strong)] text-[var(--color-text-primary)] hover:border-black/30",
   },
   vip: {
     card: "border-[var(--color-accent)]/50 bg-[var(--color-accent-muted)] shadow-[0_24px_50px_-24px_rgba(20,18,14,0.2)] md:-translate-y-4",
     badge: "bg-[var(--color-accent)] text-[#0B0C0E]",
     price: "text-[var(--color-accent)]",
-    cta: "bg-[var(--color-accent)] text-[#0B0C0E] hover:bg-[var(--color-accent-hover)]",
   },
 };
 
@@ -244,12 +238,6 @@ export default function PricingSection() {
                       </li>
                     ))}
                   </ul>
-
-                  <button
-                    className={`mt-8 rounded-full px-5 py-3.5 text-[14px] font-semibold uppercase tracking-widest transition-colors duration-300 ${s.cta}`}
-                  >
-                    {p.cta}
-                  </button>
 
                   {p.showSeats && (
                     <>
