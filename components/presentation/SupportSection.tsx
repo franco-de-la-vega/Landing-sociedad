@@ -38,7 +38,7 @@ export default function SupportSection() {
     <section className="relative border-t border-[var(--color-border)] px-6 py-24 md:px-10 md:py-32">
       <div className="mx-auto max-w-6xl">
         <Reveal>
-          <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
+          <span className="text-[13px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
             Portafolio de evidencia
           </span>
         </Reveal>
@@ -48,7 +48,7 @@ export default function SupportSection() {
           </h2>
         </Reveal>
         <Reveal delay={0.14} className="mt-4">
-          <p className="max-w-xl text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
+          <p className="max-w-xl text-[16.5px] leading-relaxed text-[var(--color-text-secondary)]">
             Un portafolio profesional real, construido durante la
             formación, que podés mostrar a cualquier empresa.
           </p>
@@ -108,10 +108,10 @@ export default function SupportSection() {
               </svg>
 
               <div className="mt-4 flex flex-wrap gap-2">
-                <span className="rounded-full border border-[var(--color-accent)]/20 bg-[var(--color-accent)]/5 px-3 py-1.5 text-[10px] uppercase tracking-widest text-[var(--color-accent)]">
+                <span className="rounded-full border border-[var(--color-accent)]/20 bg-[var(--color-accent)]/5 px-3 py-1.5 text-[11px] uppercase tracking-widest text-[var(--color-accent)]">
                   Simulaciones evaluadas
                 </span>
-                <span className="rounded-full border border-[var(--color-accent)]/20 bg-[var(--color-accent)]/5 px-3 py-1.5 text-[10px] uppercase tracking-widest text-[var(--color-accent)]">
+                <span className="rounded-full border border-[var(--color-accent)]/20 bg-[var(--color-accent)]/5 px-3 py-1.5 text-[11px] uppercase tracking-widest text-[var(--color-accent)]">
                   Portafolio verificable
                 </span>
               </div>
@@ -126,7 +126,7 @@ export default function SupportSection() {
                   <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)]">
                     <d.icon size={16} strokeWidth={2} />
                   </span>
-                  <p className="text-[14px] font-medium text-[var(--color-text-primary)]">
+                  <p className="text-[15px] font-medium text-[var(--color-text-primary)]">
                     {d.label}
                   </p>
                 </div>
@@ -136,7 +136,7 @@ export default function SupportSection() {
         </div>
 
         <Reveal delay={0.1} className="mt-10">
-          <p className="max-w-2xl text-[13.5px] leading-relaxed text-[var(--color-text-muted)]">
+          <p className="max-w-2xl text-[15px] leading-relaxed text-[var(--color-text-muted)]">
             La vinculación con empresas es posterior a la formación y está
             condicionada a tu desempeño evaluado y a la disponibilidad de
             oportunidades en cada momento. La contratación final depende

@@ -44,7 +44,7 @@ export default function TimelineSection() {
     <section className="relative border-t border-[var(--color-border)] px-6 py-24 md:px-10 md:py-32">
       <div className="mx-auto max-w-6xl">
         <Reveal>
-          <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
+          <span className="text-[13px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
             Hoja de ruta
           </span>
         </Reveal>
@@ -54,7 +54,7 @@ export default function TimelineSection() {
           </h2>
         </Reveal>
         <Reveal delay={0.14} className="mt-4">
-          <p className="max-w-xl text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
+          <p className="max-w-xl text-[16.5px] leading-relaxed text-[var(--color-text-secondary)]">
             De la formación a la oportunidad comercial: así se estructura
             el proceso completo. Tocá cada etapa para ver el detalle.
           </p>
@@ -114,13 +114,13 @@ export default function TimelineSection() {
                     }`}
                   >
                     <span
-                      className={`block text-[10px] uppercase tracking-widest ${
+                      className={`block text-[11px] uppercase tracking-widest ${
                         s.featured ? "text-[var(--color-accent)]" : "text-[var(--color-text-muted)]"
                       }`}
                     >
                       {s.tag}
                     </span>
-                    <span className="mt-0.5 block text-[13.5px] font-semibold text-[var(--color-text-primary)]">
+                    <span className="mt-0.5 block text-[15px] font-semibold text-[var(--color-text-primary)]">
                       {s.title}
                     </span>
                   </button>
@@ -141,7 +141,7 @@ export default function TimelineSection() {
                               : "border-[var(--color-border)] bg-[var(--color-bg-elevated)]"
                           }`}
                         >
-                          <p className="text-[12.5px] leading-relaxed text-[var(--color-text-secondary)]">
+                          <p className="text-[13.5px] leading-relaxed text-[var(--color-text-secondary)]">
                             {s.body}
                           </p>
                         </div>

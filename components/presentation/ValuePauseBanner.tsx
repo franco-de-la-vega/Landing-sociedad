@@ -12,7 +12,7 @@ export default function ValuePauseBanner() {
           </h2>
         </Reveal>
         <Reveal delay={0.1} className="mt-6">
-          <p className="mx-auto max-w-2xl text-[15px] leading-relaxed text-[var(--color-text-secondary)] md:text-[17px]">
+          <p className="mx-auto max-w-2xl text-[16.5px] leading-relaxed text-[var(--color-text-secondary)] md:text-[18px]">
             No te formamos para que sepas hablar de ventas. Te entrenamos
             para que puedas demostrar que sabés vender.
           </p>

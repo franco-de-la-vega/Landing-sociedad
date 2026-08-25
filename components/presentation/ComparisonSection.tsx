@@ -35,7 +35,7 @@ export default function ComparisonSection() {
     <section className="relative border-t border-[var(--color-border)] px-6 py-24 md:px-10 md:py-32">
       <div className="mx-auto max-w-6xl">
         <Reveal>
-          <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
+          <span className="text-[13px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
             Qué hace distinto al método
           </span>
         </Reveal>
@@ -56,8 +56,8 @@ export default function ComparisonSection() {
                   <p.icon size={18} strokeWidth={2} className="text-[var(--color-accent)]" />
                 </div>
                 <div>
-                  <h3 className="text-[16px] font-semibold text-[var(--color-text-primary)]">{p.title}</h3>
-                  <p className="mt-2 max-w-2xl text-[13.5px] leading-relaxed text-[var(--color-text-secondary)]">
+                  <h3 className="text-[17px] font-semibold text-[var(--color-text-primary)]">{p.title}</h3>
+                  <p className="mt-2 max-w-2xl text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
                     {p.detail}
                   </p>
                 </div>

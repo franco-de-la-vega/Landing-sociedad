@@ -42,7 +42,7 @@ export default function CurriculumSection() {
     <section className="relative border-t border-[var(--color-border)] px-6 py-24 md:px-10 md:py-32">
       <div className="mx-auto max-w-5xl">
         <Reveal>
-          <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
+          <span className="text-[13px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
             Programa de estudio
           </span>
         </Reveal>
@@ -52,7 +52,7 @@ export default function CurriculumSection() {
           </h2>
         </Reveal>
         <Reveal delay={0.14} className="mt-4">
-          <p className="max-w-xl text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
+          <p className="max-w-xl text-[16.5px] leading-relaxed text-[var(--color-text-secondary)]">
             Cada unidad construye sobre la anterior, hasta llegar a la
             simulación de alta presión y tu portafolio de evidencia.
           </p>
@@ -71,14 +71,14 @@ export default function CurriculumSection() {
                   className="group flex w-full items-center gap-6 py-6 text-left"
                 >
                   <span
-                    className={`w-8 shrink-0 text-[13px] font-semibold transition-colors duration-300 ${
+                    className={`w-8 shrink-0 text-[14px] font-semibold transition-colors duration-300 ${
                       isOpen ? "text-[var(--color-accent)]" : "text-[var(--color-text-muted)]"
                     }`}
                   >
                     {u.n}
                   </span>
                   <h3
-                    className={`flex-1 text-[16px] font-semibold transition-colors duration-300 sm:text-[18px] ${
+                    className={`flex-1 text-[17px] font-semibold transition-colors duration-300 sm:text-[18px] ${
                       isOpen ? "text-[var(--color-text-primary)]" : "text-[var(--color-text-secondary)] group-hover:text-[var(--color-text-primary)]"
                     }`}
                   >
@@ -102,7 +102,7 @@ export default function CurriculumSection() {
                       transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                       className="overflow-hidden"
                     >
-                      <p className="max-w-2xl pb-6 pl-14 text-[14px] leading-relaxed text-[var(--color-text-secondary)]">
+                      <p className="max-w-2xl pb-6 pl-14 text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
                         {u.body}
                       </p>
                     </motion.div>

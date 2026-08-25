@@ -109,7 +109,7 @@ function SeatsAvailability() {
       {!revealed ? (
         <button
           onClick={() => setRevealed(true)}
-          className="flex w-full items-center justify-center gap-2 rounded-full border border-[var(--color-border)] py-3 text-[12px] font-semibold uppercase tracking-widest text-[var(--color-text-secondary)] transition-colors hover:border-black/25"
+          className="flex w-full items-center justify-center gap-2 rounded-full border border-[var(--color-border)] py-3 text-[13px] font-semibold uppercase tracking-widest text-[var(--color-text-secondary)] transition-colors hover:border-black/25"
         >
           <Users size={14} strokeWidth={2} />
           Actualizar disponibilidad
@@ -118,7 +118,7 @@ function SeatsAvailability() {
         <motion.div
           initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center justify-center gap-2 rounded-full border border-[var(--color-accent)]/25 bg-[var(--color-accent)]/[0.06] py-3 text-[12.5px] font-semibold text-[var(--color-accent)]"
+          className="flex items-center justify-center gap-2 rounded-full border border-[var(--color-accent)]/25 bg-[var(--color-accent)]/[0.06] py-3 text-[13.5px] font-semibold text-[var(--color-accent)]"
         >
           <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]" />
           {SEATS_TAKEN}/{SEATS_TOTAL} cupos ocupados · quedan {seatsLeft}
@@ -133,7 +133,7 @@ export default function PricingSection() {
     <section className="relative border-t border-[var(--color-border)] px-6 py-24 md:px-10 md:py-32">
       <div className="mx-auto max-w-6xl">
         <Reveal>
-          <span className="text-[13px] font-semibold uppercase tracking-[0.14em] text-[var(--color-text-secondary)]">
+          <span className="text-[14px] font-semibold uppercase tracking-[0.14em] text-[var(--color-text-secondary)]">
             Planes e inversión
           </span>
         </Reveal>
@@ -143,7 +143,7 @@ export default function PricingSection() {
           </h2>
         </Reveal>
         <Reveal delay={0.14} className="mt-4">
-          <p className="max-w-xl text-[16px] leading-relaxed text-[var(--color-text-secondary)]">
+          <p className="max-w-xl text-[17px] leading-relaxed text-[var(--color-text-secondary)]">
             Tres niveles de aceleración: de la base a la carrera comercial
             completa.
           </p>
@@ -164,7 +164,7 @@ export default function PricingSection() {
                 >
                   {p.tier === "vip" && (
                     <span
-                      className={`absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-wide ${s.badge}`}
+                      className={`absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wide ${s.badge}`}
                     >
                       Aprendé todo
                     </span>
@@ -174,7 +174,7 @@ export default function PricingSection() {
                     {p.name}
                   </h3>
                   {p.duration && (
-                    <span className="mt-1 text-[13px] font-medium text-[var(--color-text-muted)]">
+                    <span className="mt-1 text-[14px] font-medium text-[var(--color-text-muted)]">
                       {p.duration}
                     </span>
                   )}
@@ -185,7 +185,7 @@ export default function PricingSection() {
                         {p.originalPrice} USD
                       </span>
                       {p.discount && (
-                        <span className="rounded-full bg-red-500/15 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-red-400">
+                        <span className="rounded-full bg-red-500/15 px-2.5 py-1 text-[12px] font-bold uppercase tracking-wide text-red-400">
                           {p.discount}
                         </span>
                       )}
@@ -193,17 +193,17 @@ export default function PricingSection() {
                   )}
                   <p className={`text-[3.1rem] font-black leading-none tracking-tight ${s.price} ${p.originalPrice ? "mt-1.5" : "mt-4"}`}>
                     {p.price}
-                    <span className="ml-2 text-[14px] font-medium text-[var(--color-text-muted)]">
+                    <span className="ml-2 text-[15px] font-medium text-[var(--color-text-muted)]">
                       USD
                     </span>
                   </p>
                   {p.savings && (
-                    <span className="mt-2 block text-[13px] font-semibold text-emerald-400">
+                    <span className="mt-2 block text-[14px] font-semibold text-emerald-400">
                       {p.savings}
                     </span>
                   )}
                   {p.installments && (
-                    <span className="mt-3 inline-flex w-fit items-center gap-1.5 rounded-full border border-[var(--color-accent)]/40 bg-[var(--color-accent)]/[0.1] px-3.5 py-2 text-[13.5px] font-bold text-[var(--color-accent)]">
+                    <span className="mt-3 inline-flex w-fit items-center gap-1.5 rounded-full border border-[var(--color-accent)]/40 bg-[var(--color-accent)]/[0.1] px-3.5 py-2 text-[15px] font-bold text-[var(--color-accent)]">
                       {p.installments}
                     </span>
                   )}
@@ -231,7 +231,7 @@ export default function PricingSection() {
                           />
                         )}
                         <span
-                          className={`text-[14px] font-medium leading-relaxed ${
+                          className={`text-[15px] font-medium leading-relaxed ${
                             f.included === true
                               ? "text-[var(--color-text-primary)]"
                               : f.included === "conditional"
@@ -246,7 +246,7 @@ export default function PricingSection() {
                   </ul>
 
                   <button
-                    className={`mt-8 rounded-full px-5 py-3.5 text-[12px] font-semibold uppercase tracking-widest transition-colors duration-300 ${s.cta}`}
+                    className={`mt-8 rounded-full px-5 py-3.5 text-[13px] font-semibold uppercase tracking-widest transition-colors duration-300 ${s.cta}`}
                   >
                     {p.cta}
                   </button>
@@ -255,7 +255,7 @@ export default function PricingSection() {
                     <>
                       <div className="mt-6 flex items-center justify-center gap-2 rounded-[6px] border border-[var(--color-border)] bg-black/[0.04] py-3.5">
                         <Users size={16} strokeWidth={2} className="text-[var(--color-text-secondary)]" />
-                        <p className="text-[13.5px] font-bold uppercase tracking-widest text-[var(--color-text-primary)]">
+                        <p className="text-[15px] font-bold uppercase tracking-widest text-[var(--color-text-primary)]">
                           Cupos máximo: {SEATS_TOTAL} personas
                         </p>
                       </div>

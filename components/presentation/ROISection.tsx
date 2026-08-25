@@ -29,7 +29,7 @@ export default function ROISection() {
     <section className="relative px-6 py-24 md:px-10 md:py-32">
       <div className="mx-auto max-w-6xl">
         <Reveal>
-          <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
+          <span className="text-[13px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
             Construí una carrera comercial en mercados internacionales
           </span>
         </Reveal>
@@ -39,7 +39,7 @@ export default function ROISection() {
           </h2>
         </Reveal>
         <Reveal delay={0.14} className="mt-4">
-          <p className="max-w-xl text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
+          <p className="max-w-xl text-[16.5px] leading-relaxed text-[var(--color-text-secondary)]">
             Rangos orientativos según el nivel de desempeño alcanzado en
             proyectos comerciales remotos.{" "}
             <span className="text-[var(--color-text-muted)]">
@@ -63,10 +63,10 @@ export default function ROISection() {
             />
 
             <div className="relative flex items-center justify-between">
-              <span className="text-[12px] font-medium text-[var(--color-text-secondary)]">
+              <span className="text-[13px] font-medium text-[var(--color-text-secondary)]">
                 Escalada de ingresos por etapa
               </span>
-              <span className="text-[11px] uppercase tracking-widest text-[var(--color-text-muted)]">
+              <span className="text-[12px] uppercase tracking-widest text-[var(--color-text-muted)]">
                 USD / mes
               </span>
             </div>
@@ -146,10 +146,10 @@ export default function ROISection() {
             <div className="relative mt-4 flex justify-between gap-6 sm:gap-10 md:px-4">
               {tiers.map((t) => (
                 <div key={t.stage} className="flex-1 text-center">
-                  <h3 className="text-[13.5px] font-semibold text-[var(--color-text-primary)]">
+                  <h3 className="text-[15px] font-semibold text-[var(--color-text-primary)]">
                     {t.stage}
                   </h3>
-                  <p className="mx-auto mt-1 max-w-[160px] text-[11.5px] leading-relaxed text-[var(--color-text-muted)]">
+                  <p className="mx-auto mt-1 max-w-[160px] text-[12.5px] leading-relaxed text-[var(--color-text-muted)]">
                     {t.detail}
                   </p>
                 </div>
@@ -159,7 +159,7 @@ export default function ROISection() {
         </Reveal>
 
         <Reveal delay={0.1} className="mt-8">
-          <p className="text-[12px] italic leading-relaxed text-[var(--color-text-muted)]">
+          <p className="text-[13px] italic leading-relaxed text-[var(--color-text-muted)]">
             Datos proyectados según estándares de contratación remota en
             mercados de moneda dura.
           </p>

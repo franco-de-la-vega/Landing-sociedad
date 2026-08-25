@@ -31,7 +31,7 @@ export default function MarketSection() {
     <section className="relative border-t border-[var(--color-border)] px-6 py-24 md:px-10 md:py-32">
       <div className="mx-auto max-w-6xl">
         <Reveal>
-          <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
+          <span className="text-[13px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
             La inevitabilidad del mercado
           </span>
         </Reveal>
@@ -41,7 +41,7 @@ export default function MarketSection() {
           </h2>
         </Reveal>
         <Reveal delay={0.14} className="mt-4">
-          <p className="max-w-2xl text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
+          <p className="max-w-2xl text-[16.5px] leading-relaxed text-[var(--color-text-secondary)]">
             Tres señales concretas de por qué el timing importa más que
             la intención.
           </p>
@@ -49,28 +49,28 @@ export default function MarketSection() {
 
         <RevealGroup
           stagger={0.14}
-          className="mt-16 grid grid-cols-1 gap-5 md:grid-cols-3"
+          className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-3"
         >
           {signals.map((s) => (
             <RevealItem key={s.stat}>
-              <div className="flex h-full flex-col rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-7">
+              <div className="flex h-full flex-col rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-8">
                 <div className="flex items-start justify-between">
-                  <p className="text-[var(--color-accent)] text-[2.6rem] font-bold leading-none tracking-tight">
+                  <p className="text-[var(--color-accent)] text-[3rem] font-bold leading-none tracking-tight">
                     {s.stat}
                   </p>
                   <ArrowUpRight
-                    size={18}
+                    size={20}
                     strokeWidth={2}
                     className="text-[var(--color-accent)]/60"
                   />
                 </div>
-                <p className="mt-4 text-[13.5px] leading-relaxed text-[var(--color-text-secondary)]">
+                <p className="mt-5 text-[16px] leading-relaxed text-[var(--color-text-secondary)]">
                   {s.label}
                 </p>
-                <p className="mt-5 border-t border-[var(--color-border)] pt-4 text-[13px] font-medium leading-relaxed text-[var(--color-text-primary)]">
+                <p className="mt-6 border-t border-[var(--color-border)] pt-5 text-[15px] font-medium leading-relaxed text-[var(--color-text-primary)]">
                   {s.insight}
                 </p>
-                <span className="mt-4 text-[10.5px] uppercase tracking-widest text-[var(--color-text-muted)]">
+                <span className="mt-5 text-[12px] uppercase tracking-widest text-[var(--color-text-muted)]">
                   Fuente: {s.source}
                 </span>
               </div>
