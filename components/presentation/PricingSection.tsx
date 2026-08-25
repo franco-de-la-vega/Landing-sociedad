@@ -241,9 +241,9 @@ export default function PricingSection() {
 
                   {p.showSeats && (
                     <>
-                      <div className="mt-6 flex items-center justify-center gap-2 rounded-[6px] border border-[var(--color-border)] bg-black/[0.04] py-3.5">
+                      <div className="mt-6 flex flex-col items-center justify-center gap-1.5 rounded-[6px] border border-[var(--color-border)] bg-black/[0.04] px-3 py-4 text-center">
                         <Users size={16} strokeWidth={2} className="text-[var(--color-text-secondary)]" />
-                        <p className="text-[17px] font-bold uppercase tracking-widest text-[var(--color-text-primary)]">
+                        <p className="text-[13px] font-bold uppercase tracking-wide text-[var(--color-text-primary)]">
                           Cupos máximo: {SEATS_TOTAL} personas
                         </p>
                       </div>
