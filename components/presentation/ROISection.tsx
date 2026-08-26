@@ -2,24 +2,31 @@
 
 import { motion } from "framer-motion";
 import Reveal from "@/components/Reveal";
+import RangeCountUp from "./RangeCountUp";
 
 const tiers = [
   {
     stage: "Nivel Inicial",
     detail: "Operatoria base y prospección en proyectos remotos.",
-    value: "$1,000 – $1,700",
+    low: 1000,
+    high: 1700,
+    suffix: "",
     height: 34,
   },
   {
     stage: "Especialista",
     detail: "Consolidador de cierres, autonomía técnica y gestión de pipeline.",
-    value: "$1,700 – $2,500",
+    low: 1700,
+    high: 2500,
+    suffix: "",
     height: 54,
   },
   {
     stage: "Closing Lead",
     detail: "Liderazgo de equipo comercial y contratos high-ticket.",
-    value: "$2,500 – $4,200+",
+    low: 2500,
+    high: 4200,
+    suffix: "+",
     height: 80,
   },
 ];
@@ -111,17 +118,15 @@ export default function ROISection() {
                   key={t.stage}
                   className="relative flex h-full flex-1 flex-col items-center justify-end"
                 >
-                  <motion.p
-                    initial={{ opacity: 0, y: 8 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.6 }}
-                    transition={{ duration: 0.5, delay: 0.3 + i * 0.15 }}
+                  <RangeCountUp
+                    low={t.low}
+                    high={t.high}
+                    suffix={t.suffix}
+                    delay={0.3 + i * 0.15}
                     className={`mb-4 whitespace-nowrap text-center text-[0.95rem] font-bold leading-none tracking-tight sm:text-[1.5rem] ${
                       i === 2 ? "text-[var(--color-accent)]" : "text-[var(--color-text-primary)]"
                     }`}
-                  >
-                    {t.value}
-                  </motion.p>
+                  />
 
                   <motion.div
                     initial={{ height: 0 }}
