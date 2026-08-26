@@ -32,6 +32,8 @@ export default function MultiStepForm() {
   const [data, setData] = useState<FormData>(initialData);
   const [direction, setDirection] = useState(1);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
 
   const update = (field: keyof FormData, value: string) =>
     setData((d) => ({ ...d, [field]: value }));
@@ -50,10 +52,24 @@ export default function MultiStepForm() {
     return false;
   };
 
-  const next = () => {
+  const next = async () => {
     if (!canAdvance()) return;
     if (step === TOTAL_STEPS - 1) {
-      setSubmitted(true);
+      setSubmitting(true);
+      setSubmitError(false);
+      try {
+        const res = await fetch("/api/apply", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+        if (!res.ok) throw new Error("submit_failed");
+        setSubmitted(true);
+      } catch {
+        setSubmitError(true);
+      } finally {
+        setSubmitting(false);
+      }
       return;
     }
     setDirection(1);
@@ -193,6 +209,12 @@ export default function MultiStepForm() {
         </StepWrap>
       </div>
 
+      {submitError && (
+        <p className="mt-4 text-[13px] font-medium text-red-500">
+          No pudimos enviar tu aplicación. Probá de nuevo en unos segundos.
+        </p>
+      )}
+
       <div className="mt-10 flex items-center justify-between">
         <button
           onClick={back}
@@ -204,10 +226,14 @@ export default function MultiStepForm() {
         </button>
         <button
           onClick={next}
-          disabled={!canAdvance()}
+          disabled={!canAdvance() || submitting}
           className="inline-flex items-center gap-2 rounded-[var(--radius-control)] bg-accent px-6 py-3 text-[14px] font-semibold tracking-tight text-white transition-all duration-300 hover:bg-accent-hover hover:shadow-[0_8px_28px_-8px_rgba(255,42,68,0.6)] disabled:cursor-not-allowed disabled:opacity-40"
         >
-          {step === TOTAL_STEPS - 1 ? "Enviar aplicación" : "Continuar"}
+          {submitting
+            ? "Enviando..."
+            : step === TOTAL_STEPS - 1
+            ? "Enviar aplicación"
+            : "Continuar"}
           <ArrowRight size={15} strokeWidth={2} />
         </button>
       </div>
