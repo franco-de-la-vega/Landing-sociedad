@@ -9,6 +9,7 @@ import CurriculumSection from "@/components/presentation/CurriculumSection";
 import SupportSection from "@/components/presentation/SupportSection";
 import TimelineSection from "@/components/presentation/TimelineSection";
 import ComparisonSection from "@/components/presentation/ComparisonSection";
+import PreCloseSection from "@/components/presentation/PreCloseSection";
 import SuccessStoriesSection from "@/components/presentation/SuccessStoriesSection";
 import CohortDateBanner from "@/components/presentation/CohortDateBanner";
 import PricingSection from "@/components/presentation/PricingSection";
@@ -32,6 +33,7 @@ export default function PresentacionPage() {
         <SupportSection />
         <TimelineSection />
         <ComparisonSection />
+        <PreCloseSection />
         <SuccessStoriesSection />
         <CohortDateBanner />
         <PricingSection />
