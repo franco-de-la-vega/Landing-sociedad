@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { EASE_OUT } from "@/lib/motion";
 
@@ -112,22 +112,20 @@ export default function MultiStepForm() {
       </div>
 
       <div className="relative min-h-[220px] overflow-hidden">
-        <AnimatePresence mode="wait" custom={direction}>
-          {step === 0 && (
-            <StepWrap key="s0" direction={direction}>
+        <StepWrap key={step} direction={direction}>
+            {step === 0 && (
               <Field label="¿Cuál es tu situación actual?">
                 <textarea
+                  autoFocus
                   className="form-input"
                   placeholder="Contanos en qué estás hoy: trabajando, buscando un cambio, estudiando..."
                   value={data.situacion}
                   onChange={(e) => update("situacion", e.target.value)}
                 />
               </Field>
-            </StepWrap>
-          )}
+            )}
 
-          {step === 1 && (
-            <StepWrap key="s1" direction={direction}>
+            {step === 1 && (
               <Field label="¿Tenés experiencia previa en ventas o en trabajo remoto?">
                 <textarea
                   autoFocus
@@ -137,11 +135,9 @@ export default function MultiStepForm() {
                   onChange={(e) => update("experiencia", e.target.value)}
                 />
               </Field>
-            </StepWrap>
-          )}
+            )}
 
-          {step === 2 && (
-            <StepWrap key="s2" direction={direction}>
+            {step === 2 && (
               <Field label="¿Qué estás buscando lograr?">
                 <textarea
                   autoFocus
@@ -151,11 +147,9 @@ export default function MultiStepForm() {
                   onChange={(e) => update("busqueda", e.target.value)}
                 />
               </Field>
-            </StepWrap>
-          )}
+            )}
 
-          {step === 3 && (
-            <StepWrap key="s3" direction={direction}>
+            {step === 3 && (
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <Field label="Nombre">
                   <input
@@ -195,9 +189,8 @@ export default function MultiStepForm() {
                   />
                 </Field>
               </div>
-            </StepWrap>
-          )}
-        </AnimatePresence>
+            )}
+        </StepWrap>
       </div>
 
       <div className="mt-10 flex items-center justify-between">
