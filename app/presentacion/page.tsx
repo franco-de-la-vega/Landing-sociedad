@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import PresentationHeader from "@/components/presentation/PresentationHeader";
 import CursorSpotlight from "@/components/presentation/CursorSpotlight";
+import SectionNav from "@/components/presentation/SectionNav";
 import HeroSection from "@/components/presentation/HeroSection";
 import SystemStatementSection from "@/components/presentation/SystemStatementSection";
 import MarketSection from "@/components/presentation/MarketSection";
@@ -29,6 +30,7 @@ export default function PresentacionPage() {
     <div className="theme-light min-h-screen bg-[var(--color-bg-base)] text-[var(--color-text-primary)]">
       <CursorSpotlight />
       <PresentationHeader />
+      <SectionNav />
       <main>
         <HeroSection />
         <MarketSection />
