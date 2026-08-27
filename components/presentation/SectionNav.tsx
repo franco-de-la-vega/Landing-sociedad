@@ -25,6 +25,7 @@ const labels = [
 export default function SectionNav() {
   const [active, setActive] = useState(0);
   const sectionsRef = useRef<HTMLElement[]>([]);
+  const activeRef = useRef(0);
 
   useEffect(() => {
     const main = document.querySelector("main");
@@ -37,7 +38,10 @@ export default function SectionNav() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const idx = sections.indexOf(entry.target as HTMLElement);
-            if (idx !== -1) setActive(idx);
+            if (idx !== -1) {
+              activeRef.current = idx;
+              setActive(idx);
+            }
           }
         });
       },
@@ -49,8 +53,31 @@ export default function SectionNav() {
   }, []);
 
   function goTo(i: number) {
-    sectionsRef.current[i]?.scrollIntoView({ behavior: "smooth", block: "start" });
+    const clamped = Math.max(0, Math.min(i, sectionsRef.current.length - 1));
+    sectionsRef.current[clamped]?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
+
+  useEffect(() => {
+    function isTypingTarget(el: EventTarget | null) {
+      if (!(el instanceof HTMLElement)) return false;
+      const tag = el.tagName;
+      return tag === "INPUT" || tag === "TEXTAREA" || el.isContentEditable;
+    }
+
+    function onKeyDown(e: KeyboardEvent) {
+      if (isTypingTarget(e.target) || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.key === "ArrowDown" || e.key === "PageDown") {
+        e.preventDefault();
+        goTo(activeRef.current + 1);
+      } else if (e.key === "ArrowUp" || e.key === "PageUp") {
+        e.preventDefault();
+        goTo(activeRef.current - 1);
+      }
+    }
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
 
   return (
     <nav
