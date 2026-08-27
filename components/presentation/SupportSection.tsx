@@ -1,39 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Video, PhoneCall, MessageSquare, LineChart, ClipboardCheck, Linkedin } from "lucide-react";
 import Reveal from "@/components/Reveal";
-import RevealGroup from "@/components/RevealGroup";
-import RevealItem from "@/components/RevealItem";
-
-const nodes = [
-  { x: 90, y: 70 },
-  { x: 220, y: 40 },
-  { x: 320, y: 110 },
-  { x: 180, y: 160 },
-  { x: 60, y: 180 },
-  { x: 300, y: 200 },
-];
-
-const links: [number, number][] = [
-  [0, 1],
-  [1, 2],
-  [1, 3],
-  [3, 4],
-  [2, 5],
-  [3, 2],
-];
-
-const deliverables = [
-  { icon: Video, label: "Videollamada comercial evaluada" },
-  { icon: PhoneCall, label: "Llamada de ventas grabada" },
-  { icon: MessageSquare, label: "Conversación comercial simulada" },
-  { icon: LineChart, label: "Pipeline en CRM" },
-  { icon: ClipboardCheck, label: "Evaluaciones de desempeño" },
-  { icon: Linkedin, label: "Perfil profesional y LinkedIn optimizado" },
-];
 
 export default function SupportSection() {
+  const [fanned, setFanned] = useState(false);
+
   return (
     <section className="relative border-t border-[var(--color-border)] px-6 py-24 md:px-10 md:py-32">
       <div className="mx-auto max-w-7xl">
@@ -44,7 +17,7 @@ export default function SupportSection() {
         </Reveal>
         <Reveal delay={0.08} className="mt-5">
           <h2 className="max-w-2xl text-[2.4rem] font-bold leading-[1.1] tracking-tight text-[var(--color-text-primary)] md:text-[3.3rem]">
-            No solo te certificamos. Te damos evidencia.
+            Tu formación deja huella.
           </h2>
         </Reveal>
         <Reveal delay={0.14} className="mt-4">
@@ -54,85 +27,101 @@ export default function SupportSection() {
           </p>
         </Reveal>
 
-        <div className="mt-16 grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
-          {/* Izquierda: diagrama de red */}
+        <div className="mt-16">
+          {/* Portafolio apilado, como documentos reales sobre una mesa */}
           <Reveal delay={0.1}>
-            <div className="relative overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-8">
-              <svg
-                viewBox="0 0 360 240"
-                className="h-auto w-full"
-                aria-hidden
+            <div
+              className="relative flex h-[420px] items-center justify-center"
+              onMouseEnter={() => setFanned(true)}
+              onMouseLeave={() => setFanned(false)}
+            >
+              {/* Card 3: Performance Report (fondo) */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.5 }}
+                animate={{
+                  rotate: fanned ? -18 : -9,
+                  x: fanned ? -110 : 0,
+                  y: fanned ? 8 : 0,
+                }}
+                transition={{ duration: 0.5, delay: fanned ? 0 : 0.05, ease: [0.16, 1, 0.3, 1] }}
+                className="absolute h-[260px] w-[300px] rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-6 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.15)]"
               >
-                {links.map(([a, b], i) => (
-                  <motion.line
-                    key={i}
-                    x1={nodes[a].x}
-                    y1={nodes[a].y}
-                    x2={nodes[b].x}
-                    y2={nodes[b].y}
-                    stroke="rgba(184,147,90,0.3)"
-                    strokeWidth="1"
-                    initial={{ pathLength: 0, opacity: 0 }}
-                    whileInView={{ pathLength: 1, opacity: 1 }}
-                    viewport={{ once: true, amount: 0.6 }}
-                    transition={{ duration: 1, delay: 0.15 * i, ease: "easeOut" }}
-                  />
-                ))}
-                {nodes.map((n, i) => (
-                  <g key={i}>
-                    <motion.circle
-                      cx={n.x}
-                      cy={n.y}
-                      r="10"
-                      fill="rgba(184,147,90,0.1)"
-                      initial={{ scale: 0 }}
-                      whileInView={{ scale: 1 }}
-                      viewport={{ once: true, amount: 0.6 }}
-                      transition={{ duration: 0.5, delay: 0.1 * i }}
+                <span className="text-[10px] font-semibold uppercase tracking-widest text-[var(--color-text-muted)]">
+                  Performance Report
+                </span>
+                <div className="mt-6 flex items-end gap-2">
+                  {[38, 62, 48, 74, 56].map((h, i) => (
+                    <span
+                      key={i}
+                      className="w-4 rounded-sm bg-[var(--color-accent)]/25"
+                      style={{ height: `${h}px` }}
                     />
-                    <motion.circle
-                      cx={n.x}
-                      cy={n.y}
-                      r="3.5"
-                      fill="#B8935A"
-                      animate={{ opacity: [0.5, 1, 0.5] }}
-                      transition={{
-                        duration: 2.5,
-                        repeat: Infinity,
-                        delay: 0.2 * i,
-                        ease: "easeInOut",
-                      }}
-                    />
-                  </g>
-                ))}
-              </svg>
+                  ))}
+                </div>
+              </motion.div>
 
-              <div className="mt-4 flex flex-wrap gap-2">
-                <span className="rounded-full border border-[var(--color-accent)]/20 bg-[var(--color-accent)]/5 px-3 py-1.5 text-[12px] uppercase tracking-widest text-[var(--color-accent)]">
-                  Simulaciones evaluadas
+              {/* Card 2: WhatsApp Follow-up (medio) */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.5 }}
+                animate={{
+                  rotate: fanned ? -3 : 7,
+                  x: fanned ? 10 : 24,
+                  y: fanned ? 4 : 0,
+                }}
+                transition={{ duration: 0.5, delay: fanned ? 0 : 0.15, ease: [0.16, 1, 0.3, 1] }}
+                className="absolute h-[260px] w-[300px] rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-6 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.18)]"
+              >
+                <span className="text-[10px] font-semibold uppercase tracking-widest text-[var(--color-text-muted)]">
+                  WhatsApp — Follow-up
                 </span>
-                <span className="rounded-full border border-[var(--color-accent)]/20 bg-[var(--color-accent)]/5 px-3 py-1.5 text-[12px] uppercase tracking-widest text-[var(--color-accent)]">
-                  Portafolio verificable
+                <div className="mt-6 flex flex-col gap-2">
+                  <div className="ml-auto w-[70%] rounded-xl rounded-tr-sm bg-[var(--color-accent)]/15 px-3 py-2 text-[12px] text-[var(--color-text-secondary)]">
+                    Quedamos en retomar el jueves
+                  </div>
+                  <div className="w-[60%] rounded-xl rounded-tl-sm bg-[var(--color-border)]/60 px-3 py-2 text-[12px] text-[var(--color-text-secondary)]">
+                    Perfecto, ahí estoy
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Card 1: Call Recording (frente) */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.5 }}
+                animate={{
+                  rotate: fanned ? 14 : -2,
+                  x: fanned ? 120 : -24,
+                  y: fanned ? 8 : 0,
+                }}
+                transition={{ duration: 0.5, delay: fanned ? 0 : 0.25, ease: [0.16, 1, 0.3, 1] }}
+                className="absolute h-[260px] w-[300px] rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-6 shadow-[0_24px_60px_-16px_rgba(0,0,0,0.22)]"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-red-400" />
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-[var(--color-text-muted)]">
+                    Call Recording — Discovery
+                  </span>
+                </div>
+                <div className="mt-8 flex h-16 items-center gap-[3px]">
+                  {[6, 14, 22, 12, 28, 18, 9, 24, 15, 20, 8, 16, 26, 11, 19].map((h, i) => (
+                    <span
+                      key={i}
+                      className="w-[3px] rounded-full bg-[var(--color-accent)]"
+                      style={{ height: `${h}px`, opacity: 0.35 + (i % 5) * 0.13 }}
+                    />
+                  ))}
+                </div>
+                <span className="mt-6 inline-block rounded-full border border-[var(--color-accent)]/25 bg-[var(--color-accent)]/8 px-3 py-1 text-[11px] uppercase tracking-widest text-[var(--color-accent)]">
+                  Evaluado
                 </span>
-              </div>
+              </motion.div>
             </div>
           </Reveal>
-
-          {/* Derecha: lista de entregables tangibles */}
-          <RevealGroup stagger={0.06} className="flex flex-col gap-3">
-            {deliverables.map((d) => (
-              <RevealItem key={d.label}>
-                <div className="flex items-center gap-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-4">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)]">
-                    <d.icon size={16} strokeWidth={2} />
-                  </span>
-                  <p className="text-[17px] font-medium text-[var(--color-text-primary)]">
-                    {d.label}
-                  </p>
-                </div>
-              </RevealItem>
-            ))}
-          </RevealGroup>
         </div>
 
         <Reveal delay={0.1} className="mt-10">

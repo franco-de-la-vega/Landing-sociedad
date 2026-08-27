@@ -1,17 +1,22 @@
 import type { Metadata } from "next";
 import PresentationHeader from "@/components/presentation/PresentationHeader";
 import CursorSpotlight from "@/components/presentation/CursorSpotlight";
-import ROISection from "@/components/presentation/ROISection";
-import AdmissionCriteriaSection from "@/components/presentation/AdmissionCriteriaSection";
+import HeroSection from "@/components/presentation/HeroSection";
+import SystemStatementSection from "@/components/presentation/SystemStatementSection";
 import MarketSection from "@/components/presentation/MarketSection";
+import ROISection from "@/components/presentation/ROISection";
+import MarketNeedsSection from "@/components/presentation/MarketNeedsSection";
+import AdmissionCriteriaSection from "@/components/presentation/AdmissionCriteriaSection";
 import SimulationSection from "@/components/presentation/SimulationSection";
 import CurriculumSection from "@/components/presentation/CurriculumSection";
+import PerformanceSystemSection from "@/components/presentation/PerformanceSystemSection";
 import SupportSection from "@/components/presentation/SupportSection";
+import EmployabilitySection from "@/components/presentation/EmployabilitySection";
 import TimelineSection from "@/components/presentation/TimelineSection";
-import ComparisonSection from "@/components/presentation/ComparisonSection";
-import PreCloseSection from "@/components/presentation/PreCloseSection";
 import SuccessStoriesSection from "@/components/presentation/SuccessStoriesSection";
-import CohortDateBanner from "@/components/presentation/CohortDateBanner";
+import FAQSection from "@/components/presentation/FAQSection";
+import PricingLadderSection from "@/components/presentation/PricingLadderSection";
+import PlanComparisonSection from "@/components/presentation/PlanComparisonSection";
 import PricingSection from "@/components/presentation/PricingSection";
 
 export const metadata: Metadata = {
@@ -25,17 +30,22 @@ export default function PresentacionPage() {
       <CursorSpotlight />
       <PresentationHeader />
       <main>
-        <ROISection />
-        <AdmissionCriteriaSection />
+        <HeroSection />
         <MarketSection />
+        <ROISection />
+        <MarketNeedsSection />
+        <SystemStatementSection />
+        <AdmissionCriteriaSection />
         <SimulationSection />
         <CurriculumSection />
+        <PerformanceSystemSection />
         <SupportSection />
+        <EmployabilitySection />
         <TimelineSection />
-        <ComparisonSection />
-        <PreCloseSection />
         <SuccessStoriesSection />
-        <CohortDateBanner />
+        <PricingLadderSection />
+        <PlanComparisonSection />
+        <FAQSection />
         <PricingSection />
       </main>
     </div>

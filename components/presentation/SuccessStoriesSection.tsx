@@ -77,8 +77,8 @@ export default function SuccessStoriesSection() {
                       </span>
                     </div>
                   )}
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-4 pb-4 pt-14">
-                    <span className="block rounded-md bg-emerald-500 px-3 py-1.5 text-center text-[14px] font-bold uppercase tracking-wide text-[#062018] shadow-lg">
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-5 pb-4 pt-16">
+                    <span className="block text-[14px] font-semibold uppercase tracking-wide text-white/90">
                       {s.floatingBadge}
                     </span>
                   </div>
@@ -86,10 +86,7 @@ export default function SuccessStoriesSection() {
 
                 {/* testimonio */}
                 <div className="flex flex-1 flex-col p-8 md:p-9">
-                  <span className="text-[12.5px] font-semibold uppercase tracking-widest text-emerald-500">
-                    Caso de éxito · Última camada
-                  </span>
-                  <h3 className="mt-2 text-[20px] font-bold text-[var(--color-text-primary)]">
+                  <h3 className="text-[20px] font-bold text-[var(--color-text-primary)]">
                     {s.name}
                   </h3>
                   <p className="mt-0.5 text-[15px] text-[var(--color-text-muted)]">{s.role}</p>
@@ -101,7 +98,7 @@ export default function SuccessStoriesSection() {
                     {s.body}
                   </p>
 
-                  <span className="mt-5 inline-flex w-fit items-center rounded-full border border-[var(--color-border)] bg-black/[0.05] px-3.5 py-1.5 text-[13px] font-semibold uppercase tracking-widest text-[var(--color-text-secondary)]">
+                  <span className="mt-5 inline-flex w-fit items-center rounded-full border border-[var(--color-accent)]/25 bg-[var(--color-accent)]/[0.06] px-3.5 py-1.5 text-[13px] font-semibold uppercase tracking-widest text-[var(--color-accent)]">
                     {s.status}
                   </span>
                 </div>

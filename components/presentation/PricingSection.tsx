@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Check, X, Users, Star } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Check, X, Users, Star, ChevronDown } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import RevealGroup from "@/components/RevealGroup";
 import RevealItem from "@/components/RevealItem";
@@ -13,7 +13,10 @@ const SEATS_TAKEN = 13;
 
 const plans = [
   {
-    name: "Junior",
+    name: "Closer Junior",
+    kicker: "Entra a la profesión",
+    tag: "Tu puerta de entrada a las ventas remotas.",
+    message: "Aprendé a hacerlo y demostrá que podés hacerlo.",
     duration: "2 meses",
     price: "$397",
     priceValue: 397,
@@ -22,6 +25,13 @@ const plans = [
     savings: null,
     discount: null,
     tier: "base",
+    highlights: [
+      "Sesiones grupales, 2 por semana",
+      "4 sesiones 1 a 1 por mes",
+      "Acceso a la plataforma completa",
+      "Preparación de perfil de LinkedIn",
+      "Creación y armado de CV profesional",
+    ],
     features: [
       { text: "Sesiones grupales, 2 por semana", included: true },
       { text: "4 sesiones 1 a 1 por mes", included: true },
@@ -37,7 +47,10 @@ const plans = [
     showSeats: true,
   },
   {
-    name: "Junior High Ticket",
+    name: "Closer Junior High Ticket",
+    kicker: "Especializate",
+    tag: "Sube la complejidad. Sube tu nivel.",
+    message: "Aprendé a adaptar y ejecutar la estructura comercial frente a escenarios más complejos.",
     duration: "3 meses",
     price: "$497",
     priceValue: 497,
@@ -46,6 +59,12 @@ const plans = [
     savings: null,
     discount: null,
     tier: "mid",
+    highlights: [
+      "Todo lo incluido en Junior",
+      "Certificación oficial con historial de desempeño",
+      "Conexión directa con empresas",
+      "6 Mentorías 1 a 1 en vivo con especialistas del equipo",
+    ],
     features: [
       { text: "Todo lo incluido en Junior", included: true },
       { text: "Certificación oficial con historial de desempeño", included: true },
@@ -58,6 +77,9 @@ const plans = [
   },
   {
     name: "Carrera Completa",
+    kicker: "Profesionalizate",
+    tag: "De aprender a vender a construir una carrera comercial.",
+    message: "Aprendé, demostrá, medí tu desempeño y preparate para competir profesionalmente.",
     duration: "9 meses",
     price: "$1,429",
     priceValue: 1429,
@@ -66,6 +88,13 @@ const plans = [
     savings: "Ahorrás $357 USD",
     discount: "-20% OFF",
     tier: "vip",
+    highlights: [
+      "Acceso completo a la plataforma de formación",
+      "10 Mentorías 1 a 1 en vivo con especialistas del equipo",
+      "Certificación oficial con historial de desempeño operativo",
+      "Conexión directa con empresas y bolsa de vinculación comercial",
+      "Evaluación de especialización comercial (High-Ticket, Software B2B, etc.)",
+    ],
     features: [
       { text: "Acceso completo a la plataforma de formación", included: true },
       { text: "Prácticas operativas y ejercicios de role-play entre pares", included: true },
@@ -144,138 +173,167 @@ function SeatsAvailability() {
   );
 }
 
+function PlanCard({ p }: { p: (typeof plans)[number] }) {
+  const [expanded, setExpanded] = useState(false);
+  const s = tierStyles[p.tier];
+
+  return (
+    <motion.div
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.25, ease: "easeOut" }}
+      className={`relative flex h-full flex-col rounded-2xl border p-10 md:p-11 ${s.card}`}
+    >
+      {p.tier === "vip" && (
+        <span
+          className={`absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-[12px] font-semibold uppercase tracking-wide ${s.badge}`}
+        >
+          Ruta profesional completa
+        </span>
+      )}
+
+      <span className="text-[12px] font-semibold uppercase tracking-widest text-[var(--color-accent)]">
+        {p.kicker}
+      </span>
+      <h3 className="mt-1.5 text-[19px] font-bold text-[var(--color-text-primary)]">
+        {p.name}
+      </h3>
+      <p className="mt-1 text-[14px] leading-snug text-[var(--color-text-muted)]">{p.tag}</p>
+      {p.duration && (
+        <span className="mt-3 block text-[15px] font-medium text-[var(--color-text-muted)]">
+          {p.duration}
+        </span>
+      )}
+
+      {p.originalPrice && (
+        <div className="mt-4 flex items-center gap-2.5">
+          <span className="text-[20px] font-bold text-[var(--color-text-muted)] line-through decoration-red-500/70 decoration-2">
+            {p.originalPrice} USD
+          </span>
+          {p.discount && (
+            <span className="rounded-full bg-red-500/15 px-2.5 py-1 text-[13px] font-bold uppercase tracking-wide text-red-400">
+              {p.discount}
+            </span>
+          )}
+        </div>
+      )}
+      <p className={`text-[3.1rem] font-black leading-none tracking-tight ${s.price} ${p.originalPrice ? "mt-1.5" : "mt-4"}`}>
+        <CountUp value={p.priceValue} prefix="$" />
+        <span className="ml-2 text-[17px] font-medium text-[var(--color-text-muted)]">
+          USD
+        </span>
+      </p>
+      {p.savings && (
+        <span className="mt-2 block text-[15px] font-semibold text-emerald-400">
+          {p.savings}
+        </span>
+      )}
+      {p.installments && (
+        <span className="mt-3 inline-flex w-fit items-center gap-1.5 rounded-full border border-[var(--color-accent)]/40 bg-[var(--color-accent)]/[0.1] px-3.5 py-2 text-[17px] font-bold text-[var(--color-accent)]">
+          {p.installments}
+        </span>
+      )}
+
+      <ul className="mt-8 flex flex-col gap-3.5">
+        {p.highlights.map((h) => (
+          <li key={h} className="flex items-start gap-2.5">
+            <Check size={15} strokeWidth={2.5} className="mt-0.5 shrink-0 text-[var(--color-accent)]" />
+            <span className="text-[17px] font-medium leading-relaxed text-[var(--color-text-primary)]">
+              {h}
+            </span>
+          </li>
+        ))}
+      </ul>
+
+      <button
+        onClick={() => setExpanded((e) => !e)}
+        className="mt-6 flex items-center justify-center gap-2 rounded-full border border-[var(--color-border)] py-3 text-[13px] font-semibold uppercase tracking-widest text-[var(--color-text-secondary)] transition-colors hover:border-black/25"
+      >
+        {expanded ? "Ocultar detalle" : "Ver este nivel"}
+        <motion.span animate={{ rotate: expanded ? 180 : 0 }} transition={{ duration: 0.25 }}>
+          <ChevronDown size={14} strokeWidth={2.5} />
+        </motion.span>
+      </button>
+
+      <AnimatePresence initial={false}>
+        {expanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="overflow-hidden"
+          >
+            <ul className="mt-5 flex flex-col gap-3 border-t border-[var(--color-border)] pt-5">
+              {p.features.map((f) => (
+                <li key={f.text} className="flex items-start gap-2.5">
+                  {f.included === true ? (
+                    <Check size={14} strokeWidth={2.5} className="mt-0.5 shrink-0 text-[var(--color-accent)]" />
+                  ) : f.included === "conditional" ? (
+                    <Star size={14} strokeWidth={2.5} className="mt-0.5 shrink-0 text-[var(--color-accent-secondary)]" />
+                  ) : (
+                    <X size={14} strokeWidth={2.5} className="mt-0.5 shrink-0 text-red-500" />
+                  )}
+                  <span
+                    className={`text-[15px] font-medium leading-relaxed ${
+                      f.included === true
+                        ? "text-[var(--color-text-primary)]"
+                        : f.included === "conditional"
+                        ? "text-[var(--color-accent-secondary)]"
+                        : "text-[var(--color-text-muted)]"
+                    }`}
+                  >
+                    {f.text}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <p className="mt-6 flex-1 border-t border-[var(--color-border)] pt-5 text-[15px] italic leading-relaxed text-[var(--color-text-secondary)]">
+        {p.message}
+      </p>
+
+      {p.showSeats && (
+        <>
+          <div className="mt-6 flex flex-col items-center justify-center gap-1.5 rounded-[6px] border border-[var(--color-border)] bg-black/[0.04] px-3 py-4 text-center">
+            <Users size={16} strokeWidth={2} className="text-[var(--color-text-secondary)]" />
+            <p className="text-[13px] font-bold uppercase tracking-wide text-[var(--color-text-primary)]">
+              Cupos máximo: {SEATS_TOTAL} personas
+            </p>
+          </div>
+          <SeatsAvailability />
+        </>
+      )}
+    </motion.div>
+  );
+}
+
 export default function PricingSection() {
   return (
     <section className="relative border-t border-[var(--color-border)] px-6 py-24 md:px-10 md:py-32">
       <div className="mx-auto max-w-7xl">
         <Reveal>
-          <span className="text-[15px] font-semibold uppercase tracking-[0.14em] text-[var(--color-text-secondary)]">
-            Planes e inversión
+          <span className="text-[14px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
+            Tu programa
           </span>
         </Reveal>
         <Reveal delay={0.08} className="mt-5">
-          <h2 className="max-w-2xl text-[2.6rem] font-bold leading-[1.1] tracking-tight text-[var(--color-text-primary)] md:text-[3.6rem]">
-            Elige tu Plan de Formación
+          <h2 className="max-w-2xl text-[2.2rem] font-bold leading-[1.1] tracking-tight text-[var(--color-text-primary)] md:text-[2.8rem]">
+            Elegí el nivel de formación que se ajusta a vos.
           </h2>
-        </Reveal>
-        <Reveal delay={0.14} className="mt-4">
-          <p className="max-w-xl text-[19px] leading-relaxed text-[var(--color-text-secondary)]">
-            Tres niveles de aceleración: de la base a la carrera comercial
-            completa.
-          </p>
         </Reveal>
 
         <RevealGroup
           stagger={0.12}
-          className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-3 md:items-center"
+          className="mt-14 grid grid-cols-1 gap-8 md:grid-cols-3 md:items-center"
         >
-          {plans.map((p) => {
-            const s = tierStyles[p.tier];
-            return (
-              <RevealItem key={p.name}>
-                <motion.div
-                  whileHover={{ y: -4 }}
-                  transition={{ duration: 0.25, ease: "easeOut" }}
-                  className={`relative flex h-full flex-col rounded-2xl border p-10 md:p-11 ${s.card}`}
-                >
-                  {p.tier === "vip" && (
-                    <span
-                      className={`absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-[12px] font-semibold uppercase tracking-wide ${s.badge}`}
-                    >
-                      Aprendé todo
-                    </span>
-                  )}
-
-                  <h3 className="text-[19px] font-bold text-[var(--color-text-primary)]">
-                    {p.name}
-                  </h3>
-                  {p.duration && (
-                    <span className="mt-1 text-[15px] font-medium text-[var(--color-text-muted)]">
-                      {p.duration}
-                    </span>
-                  )}
-
-                  {p.originalPrice && (
-                    <div className="mt-4 flex items-center gap-2.5">
-                      <span className="text-[20px] font-bold text-[var(--color-text-muted)] line-through decoration-red-500/70 decoration-2">
-                        {p.originalPrice} USD
-                      </span>
-                      {p.discount && (
-                        <span className="rounded-full bg-red-500/15 px-2.5 py-1 text-[13px] font-bold uppercase tracking-wide text-red-400">
-                          {p.discount}
-                        </span>
-                      )}
-                    </div>
-                  )}
-                  <p className={`text-[3.1rem] font-black leading-none tracking-tight ${s.price} ${p.originalPrice ? "mt-1.5" : "mt-4"}`}>
-                    <CountUp value={p.priceValue} prefix="$" />
-                    <span className="ml-2 text-[17px] font-medium text-[var(--color-text-muted)]">
-                      USD
-                    </span>
-                  </p>
-                  {p.savings && (
-                    <span className="mt-2 block text-[15px] font-semibold text-emerald-400">
-                      {p.savings}
-                    </span>
-                  )}
-                  {p.installments && (
-                    <span className="mt-3 inline-flex w-fit items-center gap-1.5 rounded-full border border-[var(--color-accent)]/40 bg-[var(--color-accent)]/[0.1] px-3.5 py-2 text-[17px] font-bold text-[var(--color-accent)]">
-                      {p.installments}
-                    </span>
-                  )}
-
-                  <ul className="mt-8 flex flex-1 flex-col gap-3.5">
-                    {p.features.map((f) => (
-                      <li key={f.text} className="flex items-start gap-2.5">
-                        {f.included === true ? (
-                          <Check
-                            size={15}
-                            strokeWidth={2.5}
-                            className="mt-0.5 shrink-0 text-[var(--color-accent)]"
-                          />
-                        ) : f.included === "conditional" ? (
-                          <Star
-                            size={15}
-                            strokeWidth={2.5}
-                            className="mt-0.5 shrink-0 text-[var(--color-accent-secondary)]"
-                          />
-                        ) : (
-                          <X
-                            size={15}
-                            strokeWidth={2.5}
-                            className="mt-0.5 shrink-0 text-red-500"
-                          />
-                        )}
-                        <span
-                          className={`text-[17px] font-medium leading-relaxed ${
-                            f.included === true
-                              ? "text-[var(--color-text-primary)]"
-                              : f.included === "conditional"
-                              ? "text-[var(--color-accent-secondary)]"
-                              : "text-[var(--color-text-muted)]"
-                          }`}
-                        >
-                          {f.text}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  {p.showSeats && (
-                    <>
-                      <div className="mt-6 flex flex-col items-center justify-center gap-1.5 rounded-[6px] border border-[var(--color-border)] bg-black/[0.04] px-3 py-4 text-center">
-                        <Users size={16} strokeWidth={2} className="text-[var(--color-text-secondary)]" />
-                        <p className="text-[13px] font-bold uppercase tracking-wide text-[var(--color-text-primary)]">
-                          Cupos máximo: {SEATS_TOTAL} personas
-                        </p>
-                      </div>
-                      <SeatsAvailability />
-                    </>
-                  )}
-                </motion.div>
-              </RevealItem>
-            );
-          })}
+          {plans.map((p) => (
+            <RevealItem key={p.name}>
+              <PlanCard p={p} />
+            </RevealItem>
+          ))}
         </RevealGroup>
       </div>
     </section>
