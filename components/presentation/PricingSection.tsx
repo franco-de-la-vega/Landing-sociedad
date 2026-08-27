@@ -176,6 +176,9 @@ function SeatsAvailability() {
 function PlanCard({ p }: { p: (typeof plans)[number] }) {
   const [expanded, setExpanded] = useState(false);
   const s = tierStyles[p.tier];
+  const baseText = (t: string) => t.split(" (")[0].trim();
+  const highlightBases = p.highlights.map(baseText);
+  const extraFeatures = p.features.filter((f) => !highlightBases.includes(baseText(f.text)));
 
   return (
     <motion.div
@@ -185,7 +188,7 @@ function PlanCard({ p }: { p: (typeof plans)[number] }) {
     >
       {p.tier === "vip" && (
         <span
-          className={`absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-[12px] font-semibold uppercase tracking-wide ${s.badge}`}
+          className={`absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-4 py-1.5 text-center text-[12px] font-semibold uppercase tracking-wide ${s.badge}`}
         >
           Ruta profesional completa
         </span>
@@ -264,7 +267,7 @@ function PlanCard({ p }: { p: (typeof plans)[number] }) {
             className="overflow-hidden"
           >
             <ul className="mt-5 flex flex-col gap-3 border-t border-[var(--color-border)] pt-5">
-              {p.features.map((f) => (
+              {extraFeatures.map((f) => (
                 <li key={f.text} className="flex items-start gap-2.5">
                   {f.included === true ? (
                     <Check size={14} strokeWidth={2.5} className="mt-0.5 shrink-0 text-[var(--color-accent)]" />
@@ -297,7 +300,7 @@ function PlanCard({ p }: { p: (typeof plans)[number] }) {
 
       {p.showSeats && (
         <>
-          <div className="mt-6 flex flex-col items-center justify-center gap-1.5 rounded-[6px] border border-[var(--color-border)] bg-black/[0.04] px-3 py-4 text-center">
+          <div className="mt-6 flex flex-col items-center justify-center gap-2 rounded-2xl border border-[var(--color-border)] bg-black/[0.04] px-6 py-6 text-center">
             <Users size={16} strokeWidth={2} className="text-[var(--color-text-secondary)]" />
             <p className="text-[13px] font-bold uppercase tracking-wide text-[var(--color-text-primary)]">
               Cupos máximo: {SEATS_TOTAL} personas
