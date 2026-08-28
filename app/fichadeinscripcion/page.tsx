@@ -178,13 +178,25 @@ function CustomSelect({
   );
 }
 
-const CONFETTI_PARTICLES = Array.from({ length: 16 }, (_, i) => {
-  const angle = (i / 16) * Math.PI * 2;
+const CONFETTI_COUNT = 30;
+const CONFETTI_PARTICLES = Array.from({ length: CONFETTI_COUNT }, (_, i) => {
+  const angle = (i / CONFETTI_COUNT) * Math.PI * 2 + (i % 2) * 0.15;
+  const distance = 160 + (i % 4) * 45;
+  const size = 4 + (i % 3) * 3;
+  const colorRoll = i % 3;
   return {
-    x: Math.cos(angle) * (60 + (i % 3) * 14),
-    y: Math.sin(angle) * (60 + (i % 3) * 14),
-    delay: (i % 4) * 0.03,
-    accent: i % 2 === 0,
+    x: Math.cos(angle) * distance,
+    y: Math.sin(angle) * distance,
+    size,
+    rotate: (i % 2 === 0 ? 1 : -1) * (180 + i * 12),
+    delay: (i % 5) * 0.025,
+    color:
+      colorRoll === 0
+        ? "var(--color-accent)"
+        : colorRoll === 1
+          ? "var(--color-accent-hover)"
+          : "var(--color-text-primary)",
+    shape: i % 4 === 0 ? "0%" : "2px",
   };
 });
 
@@ -211,7 +223,7 @@ function CountdownRing({ seconds, onComplete }: { seconds: number; onComplete: (
   function handleStart() {
     setStarted(true);
     setBursting(true);
-    setTimeout(() => setBursting(false), 900);
+    setTimeout(() => setBursting(false), 1300);
   }
 
   const radius = 46;
@@ -237,21 +249,34 @@ function CountdownRing({ seconds, onComplete }: { seconds: number; onComplete: (
 
   return (
     <div className="flex flex-col items-center gap-5">
-      <div className="relative flex h-28 w-28 items-center justify-center">
+      <div className="relative flex h-28 w-28 items-center justify-center overflow-visible">
         {bursting &&
           CONFETTI_PARTICLES.map((p, i) => (
             <motion.span
               key={i}
-              className="absolute h-1.5 w-1.5 rounded-full"
+              className="absolute z-20"
               style={{
-                background: p.accent ? "var(--color-accent)" : "var(--color-text-muted)",
+                width: p.size,
+                height: p.size,
+                background: p.color,
+                borderRadius: p.shape,
+                top: "50%",
+                left: "50%",
+                marginTop: -p.size / 2,
+                marginLeft: -p.size / 2,
               }}
-              initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
-              animate={{ x: p.x, y: p.y, opacity: 0, scale: 0.4 }}
-              transition={{ duration: 0.75, delay: p.delay, ease: "easeOut" }}
+              initial={{ x: 0, y: 0, opacity: 1, scale: 0.3, rotate: 0 }}
+              animate={{
+                x: p.x,
+                y: p.y,
+                opacity: 0,
+                scale: [0.3, 1.3, 0.9],
+                rotate: p.rotate,
+              }}
+              transition={{ duration: 1.1, delay: p.delay, ease: "easeOut" }}
             />
           ))}
-        <svg viewBox="0 0 100 100" className="h-28 w-28 -rotate-90">
+        <svg viewBox="0 0 100 100" className="relative z-10 h-28 w-28 -rotate-90">
           <circle cx="50" cy="50" r={radius} fill="none" stroke="var(--color-border)" strokeWidth="1.5" />
           <circle
             cx="50"
