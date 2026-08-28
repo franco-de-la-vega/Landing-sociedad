@@ -438,8 +438,13 @@ export default function FichaInscripcionPage() {
           <RevealItem>
             <p className="mx-auto mt-6 max-w-sm text-[17px] leading-relaxed text-[var(--color-text-secondary)]">
               De verdad, esto es importante para vos. Mucha gente piensa y
-              duda, y se queda ahí. Vos accionaste. Tomate 10 segundos para
-              felicitarte por eso.
+              duda, y se queda ahí. Vos accionaste.
+            </p>
+          </RevealItem>
+
+          <RevealItem>
+            <p className="mx-auto mt-5 max-w-sm text-[19px] font-bold leading-snug text-[var(--color-text-primary)]">
+              Tomate 10 segundos, ahora mismo, para felicitarte por eso.
             </p>
           </RevealItem>
         </RevealGroup>
