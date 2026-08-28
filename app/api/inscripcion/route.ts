@@ -6,8 +6,10 @@ const ALUMNOS_DATABASE_ID = "3ca3d284-28ee-81e3-8343-f71a7bea47b5";
 async function syncAlumno(
   notionToken: string,
   nombreCompleto: string,
-  whatsapp: string
+  whatsapp: string,
+  email: string
 ) {
+  const contacto = `${whatsapp} / ${email}`;
   const headers = {
     Authorization: `Bearer ${notionToken}`,
     "Notion-Version": NOTION_VERSION,
@@ -41,7 +43,7 @@ async function syncAlumno(
       headers,
       body: JSON.stringify({
         properties: {
-          Contacto: { rich_text: [{ text: { content: whatsapp } }] },
+          Contacto: { rich_text: [{ text: { content: contacto } }] },
         },
       }),
     });
@@ -59,7 +61,7 @@ async function syncAlumno(
       parent: { database_id: ALUMNOS_DATABASE_ID },
       properties: {
         Nombre: { title: [{ text: { content: nombreCompleto } }] },
-        Contacto: { rich_text: [{ text: { content: whatsapp } }] },
+        Contacto: { rich_text: [{ text: { content: contacto } }] },
       },
     }),
   });
@@ -123,7 +125,7 @@ export async function POST(req: NextRequest) {
     // Un fallo acá no debe romper la respuesta al formulario: la inscripción
     // ya quedó registrada en "Inscripciones ILFC", que es lo crítico.
     try {
-      await syncAlumno(notionToken, nombreCompleto, whatsapp);
+      await syncAlumno(notionToken, nombreCompleto, whatsapp, email);
     } catch (alumnoErr) {
       console.error("Error sincronizando con base 'Alumnos':", alumnoErr);
     }
