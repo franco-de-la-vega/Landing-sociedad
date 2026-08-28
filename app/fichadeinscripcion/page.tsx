@@ -443,9 +443,13 @@ export default function FichaInscripcionPage() {
           </RevealItem>
 
           <RevealItem>
-            <p className="mx-auto mt-5 max-w-sm text-[19px] font-bold leading-snug text-[var(--color-text-primary)]">
-              Tomate 10 segundos, ahora mismo, para felicitarte por eso.
-            </p>
+            <div className="mx-auto mt-8 max-w-sm rounded-2xl border border-[var(--color-accent)]/30 bg-[var(--color-accent-muted)] px-6 py-5">
+              <p className="text-[1.4rem] font-bold leading-[1.25] text-[var(--color-accent-hover)] md:text-[1.6rem]">
+                Tomate 10 segundos, ahora mismo,
+                <br />
+                para felicitarte por eso.
+              </p>
+            </div>
           </RevealItem>
         </RevealGroup>
 
