@@ -178,7 +178,19 @@ function CustomSelect({
   );
 }
 
+const CONFETTI_PARTICLES = Array.from({ length: 16 }, (_, i) => {
+  const angle = (i / 16) * Math.PI * 2;
+  return {
+    x: Math.cos(angle) * (60 + (i % 3) * 14),
+    y: Math.sin(angle) * (60 + (i % 3) * 14),
+    delay: (i % 4) * 0.03,
+    accent: i % 2 === 0,
+  };
+});
+
 function CountdownRing({ seconds, onComplete }: { seconds: number; onComplete: () => void }) {
+  const [started, setStarted] = useState(false);
+  const [bursting, setBursting] = useState(false);
   const [remaining, setRemaining] = useState(seconds);
   const onCompleteRef = useRef(onComplete);
 
@@ -187,21 +199,58 @@ function CountdownRing({ seconds, onComplete }: { seconds: number; onComplete: (
   }, [onComplete]);
 
   useEffect(() => {
+    if (!started) return;
     if (remaining <= 0) {
       onCompleteRef.current();
       return;
     }
     const t = setTimeout(() => setRemaining((r) => r - 1), 1000);
     return () => clearTimeout(t);
-  }, [remaining]);
+  }, [started, remaining]);
+
+  function handleStart() {
+    setStarted(true);
+    setBursting(true);
+    setTimeout(() => setBursting(false), 900);
+  }
 
   const radius = 46;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference * (1 - remaining / seconds);
 
+  if (!started) {
+    return (
+      <div className="relative flex h-28 w-28 items-center justify-center">
+        <button
+          type="button"
+          onClick={handleStart}
+          className="relative z-10 flex h-28 w-28 flex-col items-center justify-center gap-1 rounded-full border border-[var(--color-accent)]/30 bg-[var(--color-accent-muted)] text-[var(--color-accent-hover)] transition-colors hover:border-[var(--color-accent)]/60"
+        >
+          <svg viewBox="0 0 24 24" fill="none" className="h-6 w-6">
+            <path d="M8 5v14l11-7-11-7z" fill="var(--color-accent)" />
+          </svg>
+          <span className="text-[12px] font-semibold uppercase tracking-[0.08em]">Iniciar</span>
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col items-center gap-5">
       <div className="relative flex h-28 w-28 items-center justify-center">
+        {bursting &&
+          CONFETTI_PARTICLES.map((p, i) => (
+            <motion.span
+              key={i}
+              className="absolute h-1.5 w-1.5 rounded-full"
+              style={{
+                background: p.accent ? "var(--color-accent)" : "var(--color-text-muted)",
+              }}
+              initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
+              animate={{ x: p.x, y: p.y, opacity: 0, scale: 0.4 }}
+              transition={{ duration: 0.75, delay: p.delay, ease: "easeOut" }}
+            />
+          ))}
         <svg viewBox="0 0 100 100" className="h-28 w-28 -rotate-90">
           <circle cx="50" cy="50" r={radius} fill="none" stroke="var(--color-border)" strokeWidth="1.5" />
           <circle
@@ -380,22 +429,23 @@ export default function FichaInscripcionPage() {
 
           <RevealItem>
             <h1 className="mt-6 text-[2.5rem] font-bold leading-[1.1] tracking-tight text-[var(--color-text-primary)] md:text-[3.4rem]">
-              Bienvenido/a a ILFC.<br />
-              <span className="text-[var(--color-accent)]">En serio.</span>
+              <span className="text-[var(--color-accent)]">¡Felicitaciones</span>
+              <br />
+              por estar acá!
             </h1>
           </RevealItem>
 
           <RevealItem>
             <p className="mx-auto mt-6 max-w-sm text-[17px] leading-relaxed text-[var(--color-text-secondary)]">
-              Dedicate estos 10 segundos a algo simple: felicitarte. Mucha
-              gente piensa y duda. Vos accionaste. Y en el mundo de hoy, el
-              que acciona es el que gana.
+              De verdad, esto es importante para vos. Mucha gente piensa y
+              duda, y se queda ahí. Vos accionaste. Tomate 10 segundos para
+              felicitarte por eso.
             </p>
           </RevealItem>
         </RevealGroup>
 
         {!showForm ? (
-          <Reveal className="flex flex-col items-center pb-10">
+          <Reveal className="flex flex-col items-center pb-10 pt-8 md:pt-12">
             <CountdownRing seconds={10} onComplete={() => setShowForm(true)} />
           </Reveal>
         ) : (
