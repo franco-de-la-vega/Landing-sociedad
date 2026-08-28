@@ -35,6 +35,11 @@ const NIVEL_OPTIONS = [
   "Lidero equipo",
 ];
 const PLAN_OPTIONS = ["Junior", "Junior High Ticket", "Tercer Nivel"];
+const PLAN_DURATION_MESES: Record<string, number> = {
+  Junior: 2,
+  "Junior High Ticket": 3,
+  "Tercer Nivel": 9,
+};
 const DISPONIBILIDAD_OPTIONS = ["Mañana", "Tarde", "Noche", "Flexible"];
 
 const OBJETIVO_MAX = 1000;
@@ -484,7 +489,9 @@ export default function FichaInscripcionPage() {
             <section className="px-7 py-8 md:px-9">
               <SectionHeading eyebrow="04" title="Tu objetivo" />
               <div>
-                <FieldLabel required>¿Qué esperás lograr en los próximos 3 meses?</FieldLabel>
+                <FieldLabel required>
+                  ¿Qué esperás lograr en los próximos {PLAN_DURATION_MESES[form.plan] ?? 3} meses?
+                </FieldLabel>
                 <textarea
                   className={`${inputClass} min-h-[140px] resize-none`}
                   value={form.objetivo}
