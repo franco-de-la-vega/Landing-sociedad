@@ -1,5 +1,74 @@
 import { NextRequest, NextResponse } from "next/server";
 
+const NOTION_VERSION = "2022-06-28";
+const ALUMNOS_DATABASE_ID = "3ca3d284-28ee-81e3-8343-f71a7bea47b5";
+
+async function syncAlumno(
+  notionToken: string,
+  nombreCompleto: string,
+  whatsapp: string
+) {
+  const headers = {
+    Authorization: `Bearer ${notionToken}`,
+    "Notion-Version": NOTION_VERSION,
+    "Content-Type": "application/json",
+  };
+
+  const queryRes = await fetch(
+    `https://api.notion.com/v1/databases/${ALUMNOS_DATABASE_ID}/query`,
+    {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        filter: {
+          property: "Nombre",
+          title: { equals: nombreCompleto },
+        },
+      }),
+    }
+  );
+
+  if (!queryRes.ok) {
+    throw new Error(`alumnos_query_failed: ${await queryRes.text()}`);
+  }
+
+  const queryData = await queryRes.json();
+  const existingPage = queryData.results?.[0];
+
+  if (existingPage) {
+    const patchRes = await fetch(`https://api.notion.com/v1/pages/${existingPage.id}`, {
+      method: "PATCH",
+      headers,
+      body: JSON.stringify({
+        properties: {
+          Contacto: { rich_text: [{ text: { content: whatsapp } }] },
+        },
+      }),
+    });
+
+    if (!patchRes.ok) {
+      throw new Error(`alumnos_patch_failed: ${await patchRes.text()}`);
+    }
+    return;
+  }
+
+  const createRes = await fetch("https://api.notion.com/v1/pages", {
+    method: "POST",
+    headers,
+    body: JSON.stringify({
+      parent: { database_id: ALUMNOS_DATABASE_ID },
+      properties: {
+        Nombre: { title: [{ text: { content: nombreCompleto } }] },
+        Contacto: { rich_text: [{ text: { content: whatsapp } }] },
+      },
+    }),
+  });
+
+  if (!createRes.ok) {
+    throw new Error(`alumnos_create_failed: ${await createRes.text()}`);
+  }
+}
+
 export async function POST(req: NextRequest) {
   const notionToken = process.env.NOTION_TOKEN;
   const databaseId = process.env.NOTION_DATABASE_ID;
@@ -26,7 +95,7 @@ export async function POST(req: NextRequest) {
       method: "POST",
       headers: {
         Authorization: `Bearer ${notionToken}`,
-        "Notion-Version": "2022-06-28",
+        "Notion-Version": NOTION_VERSION,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -48,6 +117,15 @@ export async function POST(req: NextRequest) {
     if (!res.ok) {
       const errorBody = await res.text();
       return NextResponse.json({ ok: false, error: errorBody }, { status: 500 });
+    }
+
+    // Sincroniza (o crea) la fila correspondiente en la base "Alumnos".
+    // Un fallo acá no debe romper la respuesta al formulario: la inscripción
+    // ya quedó registrada en "Inscripciones ILFC", que es lo crítico.
+    try {
+      await syncAlumno(notionToken, nombreCompleto, whatsapp);
+    } catch (alumnoErr) {
+      console.error("Error sincronizando con base 'Alumnos':", alumnoErr);
     }
 
     return NextResponse.json({ ok: true }, { status: 200 });
