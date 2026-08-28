@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { motion } from "framer-motion";
 import Reveal from "@/components/Reveal";
+import RevealGroup from "@/components/RevealGroup";
+import RevealItem from "@/components/RevealItem";
 
 type FormState = {
   nombre: string;
@@ -175,11 +178,62 @@ function CustomSelect({
   );
 }
 
+function CountdownRing({ seconds, onComplete }: { seconds: number; onComplete: () => void }) {
+  const [remaining, setRemaining] = useState(seconds);
+  const onCompleteRef = useRef(onComplete);
+
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
+
+  useEffect(() => {
+    if (remaining <= 0) {
+      onCompleteRef.current();
+      return;
+    }
+    const t = setTimeout(() => setRemaining((r) => r - 1), 1000);
+    return () => clearTimeout(t);
+  }, [remaining]);
+
+  const radius = 46;
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference * (1 - remaining / seconds);
+
+  return (
+    <div className="flex flex-col items-center gap-5">
+      <div className="relative flex h-28 w-28 items-center justify-center">
+        <svg viewBox="0 0 100 100" className="h-28 w-28 -rotate-90">
+          <circle cx="50" cy="50" r={radius} fill="none" stroke="var(--color-border)" strokeWidth="1.5" />
+          <circle
+            cx="50"
+            cy="50"
+            r={radius}
+            fill="none"
+            stroke="var(--color-accent)"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeDasharray={circumference}
+            strokeDashoffset={offset}
+            style={{ transition: "stroke-dashoffset 1s linear" }}
+          />
+        </svg>
+        <span className="absolute text-[2.25rem] font-light tabular-nums text-[var(--color-text-primary)]">
+          {remaining}
+        </span>
+      </div>
+      <span className="text-[12px] font-medium uppercase tracking-[0.12em] text-[var(--color-text-muted)]">
+        Preparando tu ficha
+      </span>
+    </div>
+  );
+}
+
 export default function FichaInscripcionPage() {
   const [form, setForm] = useState<FormState>(initialState);
   const [touched, setTouched] = useState<Partial<Record<keyof FormState, boolean>>>({});
   const [status, setStatus] = useState<"idle" | "loading" | "error" | "success">("idle");
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [showForm, setShowForm] = useState(false);
 
   function update<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((f) => ({ ...f, [key]: value }));
@@ -306,57 +360,60 @@ export default function FichaInscripcionPage() {
       </div>
 
       <div className="relative mx-auto max-w-2xl">
-        {/* intro motivacional */}
-        <Reveal className="mx-auto mb-14 max-w-xl text-center md:mb-16">
-          <span className="text-[13px] font-semibold uppercase tracking-[0.14em] text-[var(--color-accent)]">
-            Antes de empezar
-          </span>
-          <h1 className="mt-4 text-[2.3rem] font-bold leading-[1.12] tracking-tight text-[var(--color-text-primary)] md:text-[3rem]">
-            Tu camino empieza acá, y es más importante de lo que creés.
-          </h1>
-          <p className="mx-auto mt-6 max-w-md text-[16px] leading-relaxed text-[var(--color-text-secondary)]">
-            El mundo remoto cambió las reglas del juego: hoy una persona con
-            criterio comercial y disciplina puede facturar en dólares desde
-            cualquier lugar, sin depender de un puesto de oficina ni de un
-            techo de ingresos fijo. Vender ya no es un talento improvisado,
-            es una profesión que se entrena, se mide y se certifica.
-          </p>
-          <p className="mx-auto mt-4 max-w-md text-[16px] leading-relaxed text-[var(--color-text-secondary)]">
-            Tomate un minuto para felicitarte por este paso: no es poco animarse
-            a empezar algo nuevo. Ahora contanos quién sos y hacia dónde vas,
-            nosotros nos encargamos del resto.
-          </p>
+        {/* intro emocional */}
+        <RevealGroup stagger={0.14} className="mx-auto mb-16 max-w-lg text-center md:mb-20">
+          <RevealItem>
+            <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-accent)]/25 bg-[var(--color-accent-muted)] px-4 py-1.5">
+              <span className="relative flex h-2 w-2">
+                <motion.span
+                  className="absolute inline-flex h-full w-full rounded-full bg-[var(--color-accent)]"
+                  animate={{ scale: [1, 2.4], opacity: [0.6, 0] }}
+                  transition={{ duration: 1.6, repeat: Infinity, ease: "easeOut" }}
+                />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--color-accent)]" />
+              </span>
+              <span className="text-[12.5px] font-semibold uppercase tracking-[0.1em] text-[var(--color-accent-hover)]">
+                Ya diste el paso
+              </span>
+            </span>
+          </RevealItem>
 
-          <div className="mx-auto mt-10 grid max-w-md grid-cols-3 gap-4 border-t border-[var(--color-border)] pt-8">
-            {[
-              { label: "Ingresos en USD" },
-              { label: "100% remoto" },
-              { label: "Con evidencia real" },
-            ].map((v) => (
-              <div key={v.label} className="flex flex-col items-center gap-2">
-                <span className="h-1 w-1 rounded-full bg-[var(--color-accent)]" aria-hidden />
-                <span className="text-[12px] font-medium uppercase tracking-[0.06em] text-[var(--color-text-muted)]">
-                  {v.label}
-                </span>
-              </div>
-            ))}
-          </div>
-        </Reveal>
+          <RevealItem>
+            <h1 className="mt-6 text-[2.5rem] font-bold leading-[1.1] tracking-tight text-[var(--color-text-primary)] md:text-[3.4rem]">
+              Bienvenido/a a ILFC.<br />
+              <span className="text-[var(--color-accent)]">En serio.</span>
+            </h1>
+          </RevealItem>
 
-        <Reveal className="mb-10 text-center">
-          <span className="text-[13px] font-semibold uppercase tracking-[0.14em] text-[var(--color-text-secondary)]">
-            Instituto Latinoamericano de Formación Comercial
-          </span>
-          <h2 className="mx-auto mt-4 max-w-md text-[2.1rem] font-bold leading-[1.15] tracking-tight text-[var(--color-text-primary)] md:text-[2.5rem]">
-            Bienvenido/a a ILFC
-          </h2>
-          <p className="mx-auto mt-3 max-w-sm text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
-            Completá tu ficha de inscripción para dar el primer paso de tu formación.
-          </p>
-        </Reveal>
+          <RevealItem>
+            <p className="mx-auto mt-6 max-w-sm text-[17px] leading-relaxed text-[var(--color-text-secondary)]">
+              Dedicate estos 10 segundos a algo simple: felicitarte. Mucha
+              gente piensa y duda. Vos accionaste. Y en el mundo de hoy, el
+              que acciona es el que gana.
+            </p>
+          </RevealItem>
+        </RevealGroup>
 
-        <Reveal delay={0.08}>
-          <form
+        {!showForm ? (
+          <Reveal className="flex flex-col items-center pb-10">
+            <CountdownRing seconds={10} onComplete={() => setShowForm(true)} />
+          </Reveal>
+        ) : (
+          <>
+            <Reveal className="mb-10 text-center">
+              <span className="text-[13px] font-semibold uppercase tracking-[0.14em] text-[var(--color-text-secondary)]">
+                Instituto Latinoamericano de Formación Comercial
+              </span>
+              <h2 className="mx-auto mt-4 max-w-md text-[2.1rem] font-bold leading-[1.15] tracking-tight text-[var(--color-text-primary)] md:text-[2.5rem]">
+                Bienvenido/a a ILFC
+              </h2>
+              <p className="mx-auto mt-3 max-w-sm text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
+                Completá tu ficha de inscripción para dar el primer paso de tu formación.
+              </p>
+            </Reveal>
+
+            <Reveal delay={0.08}>
+              <form
             onSubmit={handleSubmit}
             noValidate
             className="mx-auto max-w-xl overflow-hidden rounded-3xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] shadow-[0_20px_40px_rgba(0,0,0,0.06)]"
@@ -525,7 +582,9 @@ export default function FichaInscripcionPage() {
               </button>
             </div>
           </form>
-        </Reveal>
+            </Reveal>
+          </>
+        )}
       </div>
     </div>
   );
