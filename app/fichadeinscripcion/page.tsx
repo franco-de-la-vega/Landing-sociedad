@@ -524,7 +524,10 @@ export default function FichaInscripcionPage() {
                     type="email"
                     className={inputClass}
                     value={form.email}
-                    onChange={(e) => update("email", e.target.value)}
+                    onChange={(e) => {
+                      update("email", e.target.value);
+                      if (e.target.value) markTouched("email");
+                    }}
                     onBlur={() => markTouched("email")}
                     placeholder="tu@email.com"
                   />
