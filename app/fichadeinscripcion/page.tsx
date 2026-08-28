@@ -37,11 +37,11 @@ const NIVEL_OPTIONS = [
   "Vendo hace más de 1 año",
   "Lidero equipo",
 ];
-const PLAN_OPTIONS = ["Junior", "Junior High Ticket", "Tercer Nivel"];
+const PLAN_OPTIONS = ["Junior", "Junior High Ticket", "Carrera Completa"];
 const PLAN_DURATION_MESES: Record<string, number> = {
   Junior: 2,
   "Junior High Ticket": 3,
-  "Tercer Nivel": 9,
+  "Carrera Completa": 9,
 };
 const DISPONIBILIDAD_OPTIONS = ["Mañana", "Tarde", "Noche", "Flexible"];
 
