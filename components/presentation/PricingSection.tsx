@@ -13,7 +13,7 @@ const SEATS_TAKEN = 13;
 
 const plans = [
   {
-    name: "Closer Junior",
+    name: "Comercial Junior",
     kicker: "Entra a la profesión",
     tag: "Tu puerta de entrada a las ventas remotas.",
     message: "Aprendé a hacerlo y demostrá que podés hacerlo.",
@@ -47,7 +47,7 @@ const plans = [
     showSeats: true,
   },
   {
-    name: "Closer Junior High Ticket",
+    name: "Comercial High Ticket",
     kicker: "Especializate",
     tag: "Sube la complejidad. Sube tu nivel.",
     message: "Aprendé a adaptar y ejecutar la estructura comercial frente a escenarios más complejos.",
@@ -60,13 +60,13 @@ const plans = [
     discount: null,
     tier: "mid",
     highlights: [
-      "Todo lo incluido en Junior",
+      "Todo lo incluido en Comercial Junior",
       "Certificación oficial con historial de desempeño",
       "Conexión directa con empresas",
       "6 Mentorías 1 a 1 en vivo con especialistas del equipo",
     ],
     features: [
-      { text: "Todo lo incluido en Junior", included: true },
+      { text: "Todo lo incluido en Comercial Junior", included: true },
       { text: "Certificación oficial con historial de desempeño", included: true },
       { text: "Conexión directa con empresas", included: true },
       { text: "6 Mentorías 1 a 1 en vivo con especialistas del equipo", included: true },

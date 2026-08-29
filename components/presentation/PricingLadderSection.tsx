@@ -5,14 +5,14 @@ import RevealItem from "@/components/RevealItem";
 const stages = [
   {
     verb: "Entrar",
-    name: "Closer Junior",
+    name: "Comercial Junior",
     duration: "2 meses",
     body: "Fundamentos comerciales, discovery y cierre. Practicás, generás tu primera evidencia y quedás operativo en ventas remotas.",
     featured: false,
   },
   {
     verb: "Especializar",
-    name: "Closer Junior High Ticket",
+    name: "Comercial High Ticket",
     duration: "3 meses",
     body: "Venta consultiva, objeciones avanzadas y negociación. Subís la complejidad de las conversaciones que sabés manejar.",
     featured: false,

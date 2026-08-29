@@ -50,10 +50,10 @@ export default function PlanComparisonSection() {
                     &nbsp;
                   </th>
                   <th className="px-4 py-4 text-center text-[14px] font-bold text-[var(--color-text-primary)]">
-                    Junior
+                    Comercial Junior
                   </th>
                   <th className="px-4 py-4 text-center text-[14px] font-bold text-[var(--color-text-primary)]">
-                    High Ticket
+                    Comercial High Ticket
                   </th>
                   <th className="px-4 py-4 text-center text-[14px] font-bold text-[var(--color-accent)]">
                     Carrera

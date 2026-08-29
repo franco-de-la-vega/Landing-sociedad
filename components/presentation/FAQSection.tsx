@@ -16,12 +16,12 @@ const faqs = [
     a: "No. La currícula se adapta al diagnóstico inicial, así que podés arrancar sin experiencia previa en ventas remotas.",
   },
   {
-    q: "¿Cuál es la diferencia entre Junior y High Ticket?",
-    a: "Junior te da los fundamentos completos para empezar a operar. High Ticket suma venta consultiva, objeciones avanzadas, negociación y especialización en escenarios de mayor complejidad y valor.",
+    q: "¿Cuál es la diferencia entre Comercial Junior y Comercial High Ticket?",
+    a: "Comercial Junior te da los fundamentos completos para empezar a operar. Comercial High Ticket suma venta consultiva, objeciones avanzadas, negociación y especialización en escenarios de mayor complejidad y valor.",
   },
   {
     q: "¿Qué incluye la Carrera Completa?",
-    a: "Todo lo de Junior y High Ticket, más el sistema de IA + Data, portafolio profesional, preparación de LinkedIn y CV, entrevistas, roleplays de selección, gate de validación profesional y vinculación con empresas.",
+    a: "Todo lo de Comercial Junior y Comercial High Ticket, más el sistema de IA + Data, portafolio profesional, preparación de LinkedIn y CV, entrevistas, roleplays de selección, gate de validación profesional y vinculación con empresas.",
   },
   {
     q: "¿Las clases son prácticas?",
@@ -48,8 +48,8 @@ const faqs = [
     a: "Nuestra visión es que el ciclo de performance pueda seguir midiéndose y desarrollándose después de la formación, dentro del ecosistema ILFC.",
   },
   {
-    q: "¿Puedo empezar solamente con Closer Junior?",
-    a: "Sí. Closer Junior es un producto completo por sí mismo, no una versión incompleta — es tu puerta de entrada a la profesión.",
+    q: "¿Puedo empezar solamente con Comercial Junior?",
+    a: "Sí. Comercial Junior es un producto completo por sí mismo, no una versión incompleta — es tu puerta de entrada a la profesión.",
   },
 ];
 
