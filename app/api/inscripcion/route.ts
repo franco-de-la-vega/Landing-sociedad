@@ -7,7 +7,8 @@ async function syncAlumno(
   notionToken: string,
   nombreCompleto: string,
   whatsapp: string,
-  email: string
+  email: string,
+  vendedor: string
 ) {
   const contacto = `${whatsapp} / ${email}`;
   const headers = {
@@ -44,6 +45,7 @@ async function syncAlumno(
       body: JSON.stringify({
         properties: {
           Contacto: { rich_text: [{ text: { content: contacto } }] },
+          Vendedor: { select: { name: vendedor } },
         },
       }),
     });
@@ -62,6 +64,7 @@ async function syncAlumno(
       properties: {
         Nombre: { title: [{ text: { content: nombreCompleto } }] },
         Contacto: { rich_text: [{ text: { content: contacto } }] },
+        Vendedor: { select: { name: vendedor } },
       },
     }),
   });
@@ -90,6 +93,7 @@ export async function POST(req: NextRequest) {
     fechaPago,
     disponibilidad,
     objetivo3Meses,
+    vendedor,
   } = body;
 
   try {
@@ -112,6 +116,7 @@ export async function POST(req: NextRequest) {
           "Fecha de pago": { date: { start: fechaPago } },
           Disponibilidad: { select: { name: disponibilidad } },
           "Objetivo 3 meses": { rich_text: [{ text: { content: objetivo3Meses } }] },
+          Vendedor: { select: { name: vendedor } },
         },
       }),
     });
@@ -125,7 +130,7 @@ export async function POST(req: NextRequest) {
     // Un fallo acá no debe romper la respuesta al formulario: la inscripción
     // ya quedó registrada en "Inscripciones ILFC", que es lo crítico.
     try {
-      await syncAlumno(notionToken, nombreCompleto, whatsapp, email);
+      await syncAlumno(notionToken, nombreCompleto, whatsapp, email, vendedor);
     } catch (alumnoErr) {
       console.error("Error sincronizando con base 'Alumnos':", alumnoErr);
     }

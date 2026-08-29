@@ -16,6 +16,7 @@ type FormState = {
   fechaPago: string;
   disponibilidad: string;
   objetivo: string;
+  vendedor: string;
 };
 
 const initialState: FormState = {
@@ -28,6 +29,7 @@ const initialState: FormState = {
   fechaPago: "",
   disponibilidad: "",
   objetivo: "",
+  vendedor: "",
 };
 
 const FUENTE_OPTIONS = ["TikTok", "Instagram", "Recomendación de alguien", "Otro"];
@@ -44,6 +46,7 @@ const PLAN_DURATION_MESES: Record<string, number> = {
   "Carrera Completa": 9,
 };
 const DISPONIBILIDAD_OPTIONS = ["Mañana", "Tarde", "Noche", "Flexible"];
+const VENDEDOR_OPTIONS = ["Franco", "Natalia", "Andres"];
 
 const OBJETIVO_MAX = 1000;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -330,6 +333,7 @@ export default function FichaInscripcionPage() {
     if (!form.plan) e.plan = "Seleccioná una opción.";
     if (!form.fechaPago) e.fechaPago = "Ingresá la fecha de pago.";
     if (!form.disponibilidad) e.disponibilidad = "Seleccioná una opción.";
+    if (!form.vendedor) e.vendedor = "Seleccioná una opción.";
     if (!form.objetivo.trim()) e.objetivo = "Contanos qué esperás lograr.";
     else if (form.objetivo.length > OBJETIVO_MAX) e.objetivo = `Máximo ${OBJETIVO_MAX} caracteres.`;
     return e;
@@ -353,6 +357,7 @@ export default function FichaInscripcionPage() {
       fechaPago: true,
       disponibilidad: true,
       objetivo: true,
+      vendedor: true,
     });
     if (!isValid) return;
 
@@ -373,6 +378,7 @@ export default function FichaInscripcionPage() {
           fechaPago: form.fechaPago,
           disponibilidad: form.disponibilidad,
           objetivo3Meses: form.objetivo.trim(),
+          vendedor: form.vendedor,
           timestamp: new Date().toISOString(),
         }),
       });
@@ -624,6 +630,19 @@ export default function FichaInscripcionPage() {
                     onBlur={() => markTouched("fechaPago")}
                   />
                   <FieldError message={touched.fechaPago ? errors.fechaPago : undefined} />
+                </div>
+
+                <div>
+                  <FieldLabel required>¿Quién te atendió?</FieldLabel>
+                  <CustomSelect
+                    value={form.vendedor}
+                    onChange={(v) => update("vendedor", v)}
+                    onBlur={() => markTouched("vendedor")}
+                    options={VENDEDOR_OPTIONS}
+                    placeholder="Seleccioná una opción"
+                    hasError={touched.vendedor && !!errors.vendedor}
+                  />
+                  <FieldError message={touched.vendedor ? errors.vendedor : undefined} />
                 </div>
               </div>
             </section>
