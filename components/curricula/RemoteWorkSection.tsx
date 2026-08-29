@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Video, Database, MessageSquare, Mail, Calendar, GitBranch, RefreshCw, Gauge } from "lucide-react";
 import { motion, useMotionValue, useSpring, useTransform, type MotionValue } from "framer-motion";
 import Reveal from "@/components/Reveal";
@@ -19,6 +19,42 @@ const TOOLS = [
   { icon: Gauge, label: "KPIs", depth: 1.5, rotate: 3, y: -10 },
 ];
 
+type Dot = { id: number; left: number; top: number; size: number; duration: number; delay: number; drift: number };
+
+function Particles() {
+  const [dots, setDots] = useState<Dot[]>([]);
+
+  // se generan solo en el cliente (post-mount) para evitar mismatch de hidratación
+  // entre el render del servidor y el del navegador con Math.random().
+  useEffect(() => {
+    setDots(
+      Array.from({ length: 22 }, (_, i) => ({
+        id: i,
+        left: Math.random() * 100,
+        top: Math.random() * 100,
+        size: 2 + Math.random() * 2.5,
+        duration: 4 + Math.random() * 4,
+        delay: Math.random() * 4,
+        drift: 10 + Math.random() * 16,
+      }))
+    );
+  }, []);
+
+  return (
+    <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden>
+      {dots.map((d) => (
+        <motion.span
+          key={d.id}
+          className="absolute rounded-full bg-[var(--color-accent)]"
+          style={{ left: `${d.left}%`, top: `${d.top}%`, width: d.size, height: d.size }}
+          animate={{ y: [0, -d.drift, 0], opacity: [0, 0.5, 0] }}
+          transition={{ duration: d.duration, delay: d.delay, repeat: Infinity, ease: "easeInOut" }}
+        />
+      ))}
+    </div>
+  );
+}
+
 function FloatingWindow({
   tool,
   index,
@@ -34,24 +70,31 @@ function FloatingWindow({
   const y = useTransform(springY, (v: number) => v * tool.depth * 14);
 
   return (
-    <RevealItem className="[transform-style:preserve-3d]">
-      <motion.div
-        style={{ x, y, rotate: tool.rotate }}
-        animate={{ y: [tool.y, tool.y - 8, tool.y] }}
-        transition={{ y: { duration: 3.4 + index * 0.3, repeat: Infinity, ease: "easeInOut", delay: index * 0.15 } }}
-        whileHover={{ scale: 1.05, rotate: 0, transition: { duration: 0.25 } }}
-        className="overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] shadow-[0_12px_28px_rgba(0,0,0,0.06)]"
-      >
-        {/* barra de ventana estilo app */}
-        <div className="flex items-center gap-1.5 border-b border-[var(--color-border)] bg-[var(--color-bg-base)] px-3 py-2">
-          <span className="h-2 w-2 rounded-full bg-[#EF6A5F]" aria-hidden />
-          <span className="h-2 w-2 rounded-full bg-[#F5BD4F]" aria-hidden />
-          <span className="h-2 w-2 rounded-full bg-[#61C654]" aria-hidden />
-        </div>
-        <div className="flex flex-col items-center gap-3 px-4 py-7">
-          <tool.icon size={22} strokeWidth={1.8} className="text-[var(--color-accent)]" />
-          <span className="text-[15.5px] font-medium text-[var(--color-text-secondary)]">{tool.label}</span>
-        </div>
+    <RevealItem className="relative z-10">
+      {/* capa de parallax (cursor) */}
+      <motion.div style={{ x, y }}>
+        {/* capa de flotación (bob infinito) — separada de la de parallax para que no compitan por la misma transform */}
+        <motion.div
+          animate={{ y: [tool.y, tool.y - 8, tool.y] }}
+          transition={{ duration: 3.4 + index * 0.3, repeat: Infinity, ease: "easeInOut", delay: index * 0.15 }}
+        >
+          <motion.div
+            style={{ rotate: tool.rotate }}
+            whileHover={{ scale: 1.06, rotate: 0, transition: { duration: 0.25 } }}
+            className="cursor-default overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] shadow-[0_12px_28px_rgba(0,0,0,0.06)]"
+          >
+            {/* barra de ventana estilo app */}
+            <div className="flex items-center gap-1.5 border-b border-[var(--color-border)] bg-[var(--color-bg-base)] px-3 py-2">
+              <span className="h-2 w-2 rounded-full bg-[#EF6A5F]" aria-hidden />
+              <span className="h-2 w-2 rounded-full bg-[#F5BD4F]" aria-hidden />
+              <span className="h-2 w-2 rounded-full bg-[#61C654]" aria-hidden />
+            </div>
+            <div className="flex flex-col items-center gap-3 px-4 py-7">
+              <tool.icon size={22} strokeWidth={1.8} className="text-[var(--color-accent)]" />
+              <span className="text-[15.5px] font-medium text-[var(--color-text-secondary)]">{tool.label}</span>
+            </div>
+          </motion.div>
+        </motion.div>
       </motion.div>
     </RevealItem>
   );
@@ -106,11 +149,12 @@ export default function RemoteWorkSection() {
           className="relative mx-auto mt-16 max-w-3xl px-6 py-6"
         >
           <div
-            className="pointer-events-none absolute left-1/2 top-1/2 h-[26rem] w-[36rem] -translate-x-1/2 -translate-y-1/2 opacity-[0.06] blur-3xl"
+            className="pointer-events-none absolute left-1/2 top-1/2 z-0 h-[26rem] w-[36rem] -translate-x-1/2 -translate-y-1/2 opacity-[0.06] blur-3xl"
             style={{ background: "radial-gradient(ellipse, var(--color-accent) 0%, transparent 70%)" }}
             aria-hidden
           />
-          <RevealGroup stagger={0.06} className="relative grid grid-cols-2 gap-5 sm:grid-cols-4 sm:gap-6">
+          <Particles />
+          <RevealGroup stagger={0.06} className="relative z-10 grid grid-cols-2 gap-5 sm:grid-cols-4 sm:gap-6">
             {TOOLS.map((t, i) => (
               <FloatingWindow key={t.label} tool={t} index={i} springX={springX} springY={springY} />
             ))}
