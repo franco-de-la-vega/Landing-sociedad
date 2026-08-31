@@ -129,10 +129,22 @@ export async function POST(req: NextRequest) {
     // Sincroniza (o crea) la fila correspondiente en la base "Alumnos".
     // Un fallo acá no debe romper la respuesta al formulario: la inscripción
     // ya quedó registrada en "Inscripciones ILFC", que es lo crítico.
+    // Reintenta una vez antes de rendirse (la mayoría de los fallos son
+    // hiccups transitorios de red/rate-limit, no errores permanentes).
     try {
       await syncAlumno(notionToken, nombreCompleto, whatsapp, email, vendedor);
-    } catch (alumnoErr) {
-      console.error("Error sincronizando con base 'Alumnos':", alumnoErr);
+    } catch (firstErr) {
+      console.error("Error sincronizando con base 'Alumnos' (intento 1):", firstErr);
+      try {
+        await new Promise((r) => setTimeout(r, 1200));
+        await syncAlumno(notionToken, nombreCompleto, whatsapp, email, vendedor);
+        console.error(`Sync 'Alumnos' recuperado en el reintento para: ${nombreCompleto}`);
+      } catch (secondErr) {
+        console.error(
+          `SYNC_ALUMNOS_FALLO_DEFINITIVO para "${nombreCompleto}" (revisar manualmente en Alumnos):`,
+          secondErr
+        );
+      }
     }
 
     return NextResponse.json({ ok: true }, { status: 200 });
