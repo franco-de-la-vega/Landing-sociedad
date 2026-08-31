@@ -10,6 +10,7 @@ export default function RangeCountUp({
   duration = 1.4,
   delay = 0,
   className,
+  style,
 }: {
   low: number;
   high: number;
@@ -17,6 +18,7 @@ export default function RangeCountUp({
   duration?: number;
   delay?: number;
   className?: string;
+  style?: React.CSSProperties;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.6 });
@@ -46,7 +48,7 @@ export default function RangeCountUp({
   }, [inView, low, high, duration, delay]);
 
   return (
-    <span ref={ref} className={className}>
+    <span ref={ref} className={className} style={style}>
       ${displayLow.toLocaleString("en-US")} – ${displayHigh.toLocaleString("en-US")}
       {suffix}
     </span>
