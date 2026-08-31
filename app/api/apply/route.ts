@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const NOTION_VERSION = "2022-06-28";
-const LEADS_DATABASE_ID = "3c63d284-28ee-81ae-991a-f362c63f3857"; // "Base de datos leads"
+const LEADS_DATABASE_ID = "3cd3d284-28ee-81be-9295-e958618d1190"; // "Leads Web (formlat.com)"
 
 export async function POST(req: NextRequest) {
   const notionToken = process.env.NOTION_TOKEN;
@@ -12,14 +12,6 @@ export async function POST(req: NextRequest) {
 
   const body = await req.json();
   const { situacion, experiencia, busqueda, nombre, email, whatsapp, disponibilidad } = body;
-
-  const notas = [
-    `Email: ${email}`,
-    `Disponibilidad: ${disponibilidad}`,
-    `Situación: ${situacion}`,
-    `Experiencia: ${experiencia}`,
-    `Qué busca: ${busqueda}`,
-  ].join("\n");
 
   try {
     const res = await fetch("https://api.notion.com/v1/pages", {
@@ -33,10 +25,13 @@ export async function POST(req: NextRequest) {
         parent: { database_id: LEADS_DATABASE_ID },
         properties: {
           Nombre: { title: [{ text: { content: nombre } }] },
-          Telefono: { phone_number: whatsapp },
+          Email: { email },
+          WhatsApp: { phone_number: whatsapp },
+          Situación: { rich_text: [{ text: { content: situacion } }] },
+          Experiencia: { rich_text: [{ text: { content: experiencia } }] },
+          "Qué busca": { rich_text: [{ text: { content: busqueda } }] },
+          Disponibilidad: { rich_text: [{ text: { content: disponibilidad } }] },
           Estado: { select: { name: "Nuevo" } },
-          Dueño: { select: { name: "TODOS" } },
-          Notas: { rich_text: [{ text: { content: notas } }] },
         },
       }),
     });
