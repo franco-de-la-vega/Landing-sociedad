@@ -6,15 +6,15 @@ import TiltCard from "./TiltCard";
 const founders = [
   {
     name: "Natalia",
-    role: "CBO",
-    fullTitle: "Chief Business Officer",
+    role: "CCO",
+    fullTitle: "Chief Commercial Officer",
     photo: "/team/natalia.jpg",
     body: "Co-fundadora y directora de vinculación institucional (B2B). Gestora del canal corporativo y alianzas internacionales para conectar a los closers con las mejores vacantes del mercado.",
   },
   {
     name: "Andrés",
-    role: "CRO",
-    fullTitle: "Chief Revenue Officer",
+    role: "COO",
+    fullTitle: "Chief Operating Officer",
     photo: "/team/andres.png",
     body: "Co-fundador y director comercial (B2C). Lidera la estrategia de ventas directas, el acompañamiento continuo de los alumnos y la optimización del rendimiento en cada etapa del proceso.",
   },
