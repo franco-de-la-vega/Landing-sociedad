@@ -19,8 +19,10 @@ export default function Header() {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? "glass-panel border-x-0 border-t-0" : "border-b border-transparent"
+      className={`fixed top-0 left-0 right-0 z-50 border-b transition-all duration-500 ${
+        scrolled
+          ? "border-[var(--color-border)] bg-[rgba(248,246,242,0.94)] backdrop-blur-xl"
+          : "border-transparent bg-transparent"
       }`}
     >
       <div className="mx-auto flex max-w-5xl items-center gap-3 px-5 py-4 sm:px-8">
