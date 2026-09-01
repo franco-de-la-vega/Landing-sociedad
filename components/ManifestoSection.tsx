@@ -65,7 +65,7 @@ export default function ManifestoSection() {
                   Es como
                 </span>
                 <br />
-                <span className="relative">
+                <span className="text-metal relative">
                   te formaron...
                   <motion.span
                     style={{ scaleX: ruleScale }}

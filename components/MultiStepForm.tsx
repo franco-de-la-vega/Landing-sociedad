@@ -229,7 +229,7 @@ export default function MultiStepForm() {
         </p>
       )}
 
-      <div className="relative min-h-[220px] overflow-hidden">
+      <div className="relative">
         <StepWrap key={step} direction={direction}>
             {step === 0 && (
               <Field label="¿A qué te dedicás hoy?">
@@ -390,7 +390,6 @@ function StepWrap({
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -24 * direction }}
       transition={{ duration: 0.4, ease: EASE_OUT }}
-      className="absolute inset-0"
     >
       {children}
     </motion.div>
