@@ -5,6 +5,56 @@ import { isHoneypotFilled } from "@/lib/antiSpam";
 const NOTION_VERSION = "2022-06-28";
 const ALUMNOS_DATABASE_ID = "3ca3d284-28ee-81e3-8343-f71a7bea47b5";
 
+function normalizeNombre(n: string) {
+  return n.trim().toLowerCase().replace(/\s+/g, " ");
+}
+
+// La API de Notion no permite filtrar "title equals" ignorando mayúsculas
+// ni espacios extra, así que traemos todas las filas y comparamos acá con
+// el nombre normalizado. Evita que "Cintia orlandi" (ya cargada a mano) y
+// "Cintia Orlandi" (un reenvío del form) se traten como personas distintas
+// y terminen duplicadas.
+async function findAlumnoPorNombre(
+  notionToken: string,
+  nombreCompleto: string
+): Promise<string | null> {
+  const target = normalizeNombre(nombreCompleto);
+  const headers = {
+    Authorization: `Bearer ${notionToken}`,
+    "Notion-Version": NOTION_VERSION,
+    "Content-Type": "application/json",
+  };
+
+  let cursor: string | undefined;
+  do {
+    const queryRes = await fetch(
+      `https://api.notion.com/v1/databases/${ALUMNOS_DATABASE_ID}/query`,
+      {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          page_size: 100,
+          ...(cursor ? { start_cursor: cursor } : {}),
+        }),
+      }
+    );
+
+    if (!queryRes.ok) {
+      throw new Error(`alumnos_query_failed: ${await queryRes.text()}`);
+    }
+
+    const queryData = await queryRes.json();
+    for (const page of queryData.results || []) {
+      const title = page.properties?.Nombre?.title?.[0]?.plain_text ?? "";
+      if (normalizeNombre(title) === target) return page.id;
+    }
+
+    cursor = queryData.has_more ? queryData.next_cursor : undefined;
+  } while (cursor);
+
+  return null;
+}
+
 async function syncAlumno(
   notionToken: string,
   nombreCompleto: string,
@@ -19,29 +69,10 @@ async function syncAlumno(
     "Content-Type": "application/json",
   };
 
-  const queryRes = await fetch(
-    `https://api.notion.com/v1/databases/${ALUMNOS_DATABASE_ID}/query`,
-    {
-      method: "POST",
-      headers,
-      body: JSON.stringify({
-        filter: {
-          property: "Nombre",
-          title: { equals: nombreCompleto },
-        },
-      }),
-    }
-  );
+  const existingPageId = await findAlumnoPorNombre(notionToken, nombreCompleto);
 
-  if (!queryRes.ok) {
-    throw new Error(`alumnos_query_failed: ${await queryRes.text()}`);
-  }
-
-  const queryData = await queryRes.json();
-  const existingPage = queryData.results?.[0];
-
-  if (existingPage) {
-    const patchRes = await fetch(`https://api.notion.com/v1/pages/${existingPage.id}`, {
+  if (existingPageId) {
+    const patchRes = await fetch(`https://api.notion.com/v1/pages/${existingPageId}`, {
       method: "PATCH",
       headers,
       body: JSON.stringify({
