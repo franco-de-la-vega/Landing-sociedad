@@ -13,6 +13,7 @@ type FormData = {
   email: string;
   whatsapp: string;
   disponibilidad: string;
+  sitioWeb: string; // honeypot: invisible para personas, los bots lo completan
 };
 
 const initialData: FormData = {
@@ -23,6 +24,7 @@ const initialData: FormData = {
   email: "",
   whatsapp: "",
   disponibilidad: "",
+  sitioWeb: "",
 };
 
 const TOTAL_STEPS = 4;
@@ -167,6 +169,17 @@ export default function MultiStepForm() {
 
             {step === 3 && (
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                {/* honeypot: oculto para personas, los bots de autocompletado lo llenan igual */}
+                <input
+                  type="text"
+                  name="sitioWeb"
+                  value={data.sitioWeb}
+                  onChange={(e) => update("sitioWeb", e.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  className="absolute left-[-9999px] top-auto h-px w-px overflow-hidden opacity-0"
+                />
                 <Field label="Nombre">
                   <input
                     autoFocus

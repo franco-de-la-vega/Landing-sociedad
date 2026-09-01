@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { alertFailure } from "@/lib/alert";
+import { hasRecentDuplicate, isHoneypotFilled } from "@/lib/antiSpam";
+import { scoreLead } from "@/lib/leadScore";
 
 const NOTION_VERSION = "2022-06-28";
 const LEADS_DATABASE_ID = "3cd3d284-28ee-81be-9295-e958618d1190"; // "Leads Web (formlat.com)"
@@ -12,9 +14,20 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json();
-  const { situacion, experiencia, busqueda, nombre, email, whatsapp, disponibilidad } = body;
+  const { situacion, experiencia, busqueda, nombre, email, whatsapp, disponibilidad, sitioWeb } = body;
+
+  // Honeypot: un bot completa este campo invisible, una persona no lo ve.
+  // Respondemos ok igual para no darle pistas de que fue detectado.
+  if (isHoneypotFilled(sitioWeb)) {
+    return NextResponse.json({ ok: true });
+  }
 
   try {
+    if (await hasRecentDuplicate(notionToken, LEADS_DATABASE_ID, "WhatsApp", whatsapp)) {
+      return NextResponse.json({ ok: true });
+    }
+
+    const prioridad = scoreLead({ situacion, experiencia, busqueda, disponibilidad });
     const res = await fetch("https://api.notion.com/v1/pages", {
       method: "POST",
       headers: {
@@ -33,6 +46,7 @@ export async function POST(req: NextRequest) {
           "Qué busca": { rich_text: [{ text: { content: busqueda } }] },
           Disponibilidad: { rich_text: [{ text: { content: disponibilidad } }] },
           Estado: { select: { name: "Nuevo" } },
+          Prioridad: { select: { name: prioridad } },
         },
       }),
     });

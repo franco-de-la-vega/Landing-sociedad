@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { alertFailure } from "@/lib/alert";
+import { isHoneypotFilled } from "@/lib/antiSpam";
 
 const NOTION_VERSION = "2022-06-28";
 const ALUMNOS_DATABASE_ID = "3ca3d284-28ee-81e3-8343-f71a7bea47b5";
@@ -95,7 +96,12 @@ export async function POST(req: NextRequest) {
     disponibilidad,
     objetivo3Meses,
     vendedor,
+    sitioWeb,
   } = body;
+
+  if (isHoneypotFilled(sitioWeb)) {
+    return NextResponse.json({ ok: true }, { status: 200 });
+  }
 
   try {
     const res = await fetch("https://api.notion.com/v1/pages", {

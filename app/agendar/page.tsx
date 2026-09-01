@@ -172,6 +172,7 @@ function AgendarFlow() {
   const [nombre, setNombre] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
   const [mensaje, setMensaje] = useState("");
+  const [sitioWeb, setSitioWeb] = useState(""); // honeypot: invisible para personas, los bots lo completan
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(false);
   const [slotTaken, setSlotTaken] = useState(false);
@@ -219,6 +220,7 @@ function AgendarFlow() {
           nombre,
           whatsapp,
           mensaje,
+          sitioWeb,
           date: toDateKey(selectedDate),
           hour: selectedHour,
           ...(vendedorFijo ? { vendedor: vendedorFijo } : {}),
@@ -455,6 +457,17 @@ function AgendarFlow() {
               </div>
 
               <div className="flex flex-col gap-4">
+                {/* honeypot: oculto para personas, los bots de autocompletado lo llenan igual */}
+                <input
+                  type="text"
+                  name="sitioWeb"
+                  value={sitioWeb}
+                  onChange={(e) => setSitioWeb(e.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  className="absolute left-[-9999px] top-auto h-px w-px overflow-hidden opacity-0"
+                />
                 <div>
                   <label className="mb-1.5 block text-[13px] font-semibold uppercase tracking-[0.05em] text-[var(--color-text-muted)]">
                     Nombre

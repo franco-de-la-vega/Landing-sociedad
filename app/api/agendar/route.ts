@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { alertFailure } from "@/lib/alert";
+import { isHoneypotFilled } from "@/lib/antiSpam";
 
 const NOTION_VERSION = "2022-06-28";
 const LEADS_DATABASE_ID = "3c63d284-28ee-81ae-991a-f362c63f3857"; // "Base de datos leads"
@@ -22,14 +23,21 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json();
-  const { nombre, whatsapp, mensaje, date, hour, vendedor } = body as {
+  const { nombre, whatsapp, mensaje, date, hour, vendedor, sitioWeb } = body as {
     nombre: string;
     whatsapp: string;
     mensaje?: string;
     date: string; // "YYYY-MM-DD"
     hour: number; // 10-21
     vendedor?: string; // opcional: link personal, si no viene se auto-asigna
+    sitioWeb?: string; // honeypot
   };
+
+  // Honeypot: un bot completa este campo invisible, una persona no lo ve.
+  // Respondemos ok igual para no darle pistas de que fue detectado.
+  if (isHoneypotFilled(sitioWeb)) {
+    return NextResponse.json({ ok: true, vendedor: vendedor || "Franco" });
+  }
 
   if (!nombre || !whatsapp || !date || hour === undefined) {
     return NextResponse.json({ ok: false, error: "missing_fields" }, { status: 400 });

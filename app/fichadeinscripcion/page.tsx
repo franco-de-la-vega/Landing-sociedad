@@ -17,6 +17,7 @@ type FormState = {
   disponibilidad: string;
   objetivo: string;
   vendedor: string;
+  sitioWeb: string; // honeypot: invisible para personas, los bots lo completan
 };
 
 const initialState: FormState = {
@@ -30,6 +31,7 @@ const initialState: FormState = {
   disponibilidad: "",
   objetivo: "",
   vendedor: "",
+  sitioWeb: "",
 };
 
 const FUENTE_OPTIONS = ["TikTok", "Instagram", "Recomendación de alguien", "Otro"];
@@ -341,8 +343,8 @@ export default function FichaInscripcionPage() {
 
   const isValid = Object.keys(errors).length === 0;
 
-  const totalFields = Object.keys(initialState).length;
-  const filledFields = Object.values(form).filter((v) => v.trim() !== "").length;
+  const totalFields = Object.keys(initialState).length - 1; // -1: no cuenta el honeypot
+  const filledFields = Object.entries(form).filter(([k, v]) => k !== "sitioWeb" && v.trim() !== "").length;
   const progress = Math.round((filledFields / totalFields) * 100);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -379,6 +381,7 @@ export default function FichaInscripcionPage() {
           disponibilidad: form.disponibilidad,
           objetivo3Meses: form.objetivo.trim(),
           vendedor: form.vendedor,
+          sitioWeb: form.sitioWeb,
           timestamp: new Date().toISOString(),
         }),
       });
@@ -508,6 +511,17 @@ export default function FichaInscripcionPage() {
             noValidate
             className="mx-auto max-w-xl overflow-hidden rounded-3xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] shadow-[0_20px_40px_rgba(0,0,0,0.06)]"
           >
+            {/* honeypot: oculto para personas, los bots de autocompletado lo llenan igual */}
+            <input
+              type="text"
+              name="sitioWeb"
+              value={form.sitioWeb}
+              onChange={(e) => update("sitioWeb", e.target.value)}
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              className="absolute left-[-9999px] top-auto h-px w-px overflow-hidden opacity-0"
+            />
             <section className="px-7 py-8 md:px-9">
               <SectionHeading eyebrow="01" title="Tus datos" />
               <div className="flex flex-col gap-6">
