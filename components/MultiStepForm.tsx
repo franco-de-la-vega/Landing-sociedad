@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { ArrowLeft, ArrowRight, CalendarPlus, Check, ChevronLeft, Loader2 } from "lucide-react";
 import { EASE_OUT } from "@/lib/motion";
+import BookingCalendar, { type BookingSelection } from "@/components/BookingCalendar";
+import { DIA_LABEL, MES_LABEL, PAISES, convertSlot, googleCalendarLink, toDateKey } from "@/lib/booking";
 
 type FormData = {
   situacion: string;
@@ -33,9 +35,17 @@ export default function MultiStepForm() {
   const [step, setStep] = useState(0);
   const [data, setData] = useState<FormData>(initialData);
   const [direction, setDirection] = useState(1);
-  const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(false);
+
+  // Una vez enviadas las respuestas, el flujo pasa a agendar la llamada
+  // directo ahí mismo, sin salir de la página.
+  const [flowStep, setFlowStep] = useState<"questions" | "booking" | "done">("questions");
+  const [calendarKey, setCalendarKey] = useState(0);
+  const [selection, setSelection] = useState<BookingSelection | null>(null);
+  const [booking, setBooking] = useState(false);
+  const [bookingError, setBookingError] = useState(false);
+  const [slotTaken, setSlotTaken] = useState(false);
 
   const update = (field: keyof FormData, value: string) =>
     setData((d) => ({ ...d, [field]: value }));
@@ -66,7 +76,7 @@ export default function MultiStepForm() {
           body: JSON.stringify(data),
         });
         if (!res.ok) throw new Error("submit_failed");
-        setSubmitted(true);
+        setFlowStep("booking");
       } catch {
         setSubmitError(true);
       } finally {
@@ -83,19 +93,104 @@ export default function MultiStepForm() {
     setStep((s) => Math.max(0, s - 1));
   };
 
-  if (submitted) {
+  async function bookNow(sel: BookingSelection) {
+    setBooking(true);
+    setBookingError(false);
+    setSlotTaken(false);
+    try {
+      const res = await fetch("/api/agendar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nombre: data.nombre.trim(),
+          whatsapp: data.whatsapp.trim(),
+          sitioWeb: data.sitioWeb,
+          date: toDateKey(sel.date),
+          hour: sel.hour,
+        }),
+      });
+      if (res.status === 409) {
+        setSlotTaken(true);
+        setCalendarKey((k) => k + 1); // fuerza a releer disponibilidad
+        setBooking(false);
+        return;
+      }
+      if (!res.ok) throw new Error("submit_failed");
+      setSelection(sel);
+      setFlowStep("done");
+    } catch {
+      setBookingError(true);
+    } finally {
+      setBooking(false);
+    }
+  }
+
+  if (flowStep === "done" && selection) {
     return (
-      <div className="glass-panel rounded-[var(--radius-panel)] p-10 text-center sm:p-14">
+      <div className="glass-panel relative overflow-hidden rounded-[var(--radius-panel)] p-10 text-center sm:p-14">
         <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-accent">
           <Check size={18} strokeWidth={2} className="text-accent" />
         </span>
         <p className="mt-6 text-[17px] font-medium tracking-tight">
-          Recibimos tu aplicación.
+          ¡Listo, {data.nombre.trim().split(" ")[0]}! Quedó agendado.
         </p>
         <p className="mt-2 text-[14px] text-text-secondary">
-          Te contactamos a la brevedad para coordinar tu diagnóstico de
-          nivel.
+          {DIA_LABEL[selection.date.getDay()]} {selection.date.getDate()} de{" "}
+          {MES_LABEL[selection.date.getMonth()]} a las {convertSlot(selection.date, selection.hour, selection.tz).time}hs
+          {" "}({PAISES.find((p) => p.tz === selection.tz)?.label})
         </p>
+        <p className="mt-4 text-[13px] text-text-muted">
+          Te vamos a escribir por WhatsApp con el link para la llamada.
+        </p>
+        <a
+          href={googleCalendarLink(selection.date, selection.hour)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-5 inline-flex items-center gap-2 rounded-[var(--radius-control)] border border-[var(--color-border)] px-4 py-2.5 text-[13px] font-semibold tracking-tight transition-colors hover:border-accent"
+        >
+          <CalendarPlus size={15} className="text-accent" />
+          Agregar a mi calendario
+        </a>
+      </div>
+    );
+  }
+
+  if (flowStep === "booking") {
+    return (
+      <div className="glass-panel rounded-[var(--radius-panel)] p-7 text-left sm:p-10">
+        <button
+          type="button"
+          onClick={() => setFlowStep("questions")}
+          className="mb-5 inline-flex items-center gap-1.5 text-[13px] font-medium text-text-muted transition-colors hover:text-text-primary"
+        >
+          <ChevronLeft size={14} strokeWidth={2} /> Atrás
+        </button>
+        <p className="text-[17px] font-medium tracking-tight">
+          Gracias, {data.nombre.trim().split(" ")[0]}. Ya diste el primer paso.
+        </p>
+        <p className="mt-2 text-[14px] text-text-secondary">
+          Elegí cuándo te llamamos para conocerte mejor y contarte cómo sigue.
+        </p>
+
+        <div className="mt-6">
+          <BookingCalendar key={calendarKey} onContinue={bookNow} continueLabel={booking ? "Agendando..." : "Confirmar horario"} />
+        </div>
+
+        {slotTaken && (
+          <p className="mt-4 text-[13px] font-medium text-red-500">
+            Justo se ocupó ese horario. Elegí otro de la lista.
+          </p>
+        )}
+        {bookingError && (
+          <p className="mt-4 text-[13px] font-medium text-red-500">
+            Hubo un error al confirmar. Probá de nuevo en un momento.
+          </p>
+        )}
+        {booking && (
+          <div className="mt-4 flex items-center gap-2 text-[13px] text-text-secondary">
+            <Loader2 size={14} className="animate-spin" /> Agendando tu llamada...
+          </div>
+        )}
       </div>
     );
   }

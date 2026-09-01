@@ -7,6 +7,9 @@ const LEADS_DATABASE_ID = "3c63d284-28ee-81ae-991a-f362c63f3857"; // "Base de da
 const VENDEDORES = ["Franco", "Natalia", "Andres"];
 // Se agenda de lunes a sábado. Tope: jueves 17/9 (el viernes 18 arranca el cohort).
 const MAX_BOOKING_DATE = "2026-09-17";
+// Nadie puede agendar dentro de las próximas MIN_LEAD_HOURS horas: le da
+// tiempo al equipo a averiguar sobre la persona antes de la llamada.
+const MIN_LEAD_HOURS = 12;
 
 function notionHeaders(token: string) {
   return {
@@ -53,6 +56,11 @@ export async function POST(req: NextRequest) {
 
   const hh = String(hour).padStart(2, "0");
   const iso = `${date}T${hh}:00:00-03:00`;
+
+  if (new Date(iso).getTime() < Date.now() + MIN_LEAD_HOURS * 3600 * 1000) {
+    return NextResponse.json({ ok: false, error: "too_soon" }, { status: 400 });
+  }
+
   const headers = notionHeaders(notionToken);
 
   try {
