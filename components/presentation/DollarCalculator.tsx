@@ -132,7 +132,7 @@ export default function DollarCalculator() {
       <div className="relative">
         <span className="flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.14em] text-white/50">
           <Calculator size={13} className="text-[var(--color-accent)]" />
-          Cerrando en vivo
+          Calculadora en vivo
         </span>
         <h2 className="mt-3 text-[1.5rem] font-black leading-[1.1] tracking-tight text-white md:text-[1.8rem]">
           ¿Cuánto es en pesos?
