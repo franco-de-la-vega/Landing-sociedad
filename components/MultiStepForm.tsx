@@ -340,7 +340,7 @@ export default function MultiStepForm() {
           {submitting
             ? "Enviando..."
             : step === TOTAL_STEPS - 1
-            ? "Enviar aplicación"
+            ? "Elegir horario"
             : "Continuar"}
           <ArrowRight size={15} strokeWidth={2} />
         </button>
