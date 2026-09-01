@@ -147,6 +147,36 @@ textarea.form-input {
   min-height: 120px;
 }
 
+/* Slider dorado de la calculadora de dólar en /presentacion (panel oscuro) */
+.calculator-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+  outline: none;
+}
+.calculator-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  border: 3px solid #0a0b0d;
+  box-shadow: 0 0 0 2px var(--color-accent);
+  cursor: pointer;
+}
+.calculator-slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  border: 3px solid #0a0b0d;
+  box-shadow: 0 0 0 2px var(--color-accent);
+  cursor: pointer;
+}
+
 /* Retrato del equipo: en blanco y negro solo en dispositivos con hover real (mouse).
    En touch (mobile) se muestra a color directamente, sin efecto que nunca se dispara. */
 @media (hover: hover) and (pointer: fine) {

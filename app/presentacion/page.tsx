@@ -19,6 +19,7 @@ import FAQSection from "@/components/presentation/FAQSection";
 import PricingLadderSection from "@/components/presentation/PricingLadderSection";
 import PlanComparisonSection from "@/components/presentation/PlanComparisonSection";
 import PricingSection from "@/components/presentation/PricingSection";
+import DollarCalculatorSection from "@/components/presentation/DollarCalculatorSection";
 
 export const metadata: Metadata = {
   title: "Instituto Latinoamericano de Formación Comercial — Presentación",
@@ -49,6 +50,7 @@ export default function PresentacionPage() {
         <PlanComparisonSection />
         <FAQSection />
         <PricingSection />
+        <DollarCalculatorSection />
       </main>
     </div>
   );

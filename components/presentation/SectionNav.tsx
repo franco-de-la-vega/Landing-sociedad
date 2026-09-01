@@ -20,6 +20,7 @@ const labels = [
   "Comparación",
   "FAQ",
   "Precios",
+  "Calculadora",
 ];
 
 export default function SectionNav() {
