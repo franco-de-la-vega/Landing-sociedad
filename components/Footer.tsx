@@ -6,9 +6,9 @@ export default function Footer() {
           Instituto Latinoamericano de Formación Comercial
         </span>
 
-        {/* TODO: agregar razón social / número de identificación fiscal
-            (PF o PJ) apenas Franco lo confirme, para cumplir el requisito
-            de dLocal Go de que la info legal figure en el sitio. */}
+        <span className="text-[12px] text-[var(--color-text-muted)]">
+          Andres Felipe Herrera · NIT 1110510711-7 (Colombia)
+        </span>
 
         <a
           href="mailto:ilfcformacion@gmail.com"
