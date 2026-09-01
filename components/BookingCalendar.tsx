@@ -100,14 +100,20 @@ export default function BookingCalendar({
           {visibleDays.map((d) => {
             const active = selectedDate && toDateKey(d) === toDateKey(selectedDate);
             const isPastDay = toDateKey(d) < todayArgentinaKey;
+            // si ninguna hora del día cumple la anticipación mínima (ej: ya
+            // es tarde y quedan menos de MIN_LEAD_HOURS hasta medianoche),
+            // no tiene sentido dejar seleccionar el día para mostrar una
+            // grilla vacía.
+            const hasNoBookableHour = HORAS.every((h) => slotInstant(d, h).getTime() < minBookableInstant);
+            const disabled = isPastDay || hasNoBookableHour;
             return (
               <button
                 key={toDateKey(d)}
                 type="button"
-                disabled={isPastDay}
+                disabled={disabled}
                 onClick={() => setSelectedDate(d)}
                 className={`flex flex-col items-center gap-0.5 rounded-lg border px-1 py-2 transition-colors sm:rounded-xl sm:px-2 sm:py-3 ${
-                  isPastDay
+                  disabled
                     ? "cursor-not-allowed border-[var(--color-border)] opacity-35"
                     : active
                       ? "border-[var(--color-accent)] bg-[var(--color-accent-muted)]"
