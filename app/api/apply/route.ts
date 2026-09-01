@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { alertFailure } from "@/lib/alert";
 
 const NOTION_VERSION = "2022-06-28";
 const LEADS_DATABASE_ID = "3cd3d284-28ee-81be-9295-e958618d1190"; // "Leads Web (formlat.com)"
@@ -39,12 +40,20 @@ export async function POST(req: NextRequest) {
     if (!res.ok) {
       const errorBody = await res.text();
       console.error("Error creando lead en Notion:", errorBody);
+      await alertFailure(
+        "Falló un lead de la portada",
+        `Nombre: ${nombre}\nWhatsApp: ${whatsapp}\nEmail: ${email}\n\n${errorBody.slice(0, 300)}`
+      );
       return NextResponse.json({ ok: false, error: "notion_error" }, { status: 502 });
     }
 
     return NextResponse.json({ ok: true });
   } catch (err) {
     console.error("Error de red enviando lead a Notion:", err);
+    await alertFailure(
+      "Falló un lead de la portada (red)",
+      `Nombre: ${nombre}\nWhatsApp: ${whatsapp}\nEmail: ${email}`
+    );
     return NextResponse.json({ ok: false, error: "network_error" }, { status: 502 });
   }
 }

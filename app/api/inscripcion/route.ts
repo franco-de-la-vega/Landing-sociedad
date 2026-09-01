@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { alertFailure } from "@/lib/alert";
 
 const NOTION_VERSION = "2022-06-28";
 const ALUMNOS_DATABASE_ID = "3ca3d284-28ee-81e3-8343-f71a7bea47b5";
@@ -123,6 +124,10 @@ export async function POST(req: NextRequest) {
 
     if (!res.ok) {
       const errorBody = await res.text();
+      await alertFailure(
+        "Falló una inscripción",
+        `Nombre: ${nombreCompleto}\nWhatsApp: ${whatsapp}\n\n${errorBody.slice(0, 300)}`
+      );
       return NextResponse.json({ ok: false, error: errorBody }, { status: 500 });
     }
 
@@ -144,11 +149,19 @@ export async function POST(req: NextRequest) {
           `SYNC_ALUMNOS_FALLO_DEFINITIVO para "${nombreCompleto}" (revisar manualmente en Alumnos):`,
           secondErr
         );
+        await alertFailure(
+          "No se pudo sincronizar con Alumnos",
+          `"${nombreCompleto}" quedó bien en Inscripciones ILFC, pero falló al copiarse a Alumnos. Agregala a mano.\nContacto: ${whatsapp} / ${email}`
+        );
       }
     }
 
     return NextResponse.json({ ok: true }, { status: 200 });
   } catch (err) {
+    await alertFailure(
+      "Falló una inscripción (red)",
+      `Nombre: ${nombreCompleto}\nWhatsApp: ${whatsapp}`
+    );
     return NextResponse.json(
       { ok: false, error: err instanceof Error ? err.message : "network_error" },
       { status: 500 }
