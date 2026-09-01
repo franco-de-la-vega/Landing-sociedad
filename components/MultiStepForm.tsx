@@ -31,6 +31,13 @@ const initialData: FormData = {
 
 const TOTAL_STEPS = 4;
 
+// Evita respuestas de una palabra ("si", "no", "ingreso estable"). No es
+// perfecto, pero fuerza a que haya algo real para leer antes de la llamada.
+const MIN_ANSWER_LENGTH = 20;
+function hasEnoughDetail(text: string) {
+  return text.trim().length >= MIN_ANSWER_LENGTH;
+}
+
 export default function MultiStepForm() {
   const [step, setStep] = useState(0);
   const [data, setData] = useState<FormData>(initialData);
@@ -51,9 +58,9 @@ export default function MultiStepForm() {
     setData((d) => ({ ...d, [field]: value }));
 
   const canAdvance = () => {
-    if (step === 0) return data.situacion.trim().length > 0;
-    if (step === 1) return data.experiencia.trim().length > 0;
-    if (step === 2) return data.busqueda.trim().length > 0;
+    if (step === 0) return hasEnoughDetail(data.situacion);
+    if (step === 1) return hasEnoughDetail(data.experiencia);
+    if (step === 2) return hasEnoughDetail(data.busqueda);
     if (step === 3)
       return (
         data.nombre.trim().length > 0 &&
@@ -210,6 +217,13 @@ export default function MultiStepForm() {
         ))}
       </div>
 
+      {step < 3 && (
+        <p className="mb-5 text-[12.5px] leading-relaxed text-text-muted">
+          Leemos cada respuesta antes de la llamada, así que contanos en
+          serio — no hace falta que sea largo, pero que diga algo de vos.
+        </p>
+      )}
+
       <div className="relative min-h-[220px] overflow-hidden">
         <StepWrap key={step} direction={direction}>
             {step === 0 && (
@@ -221,6 +235,7 @@ export default function MultiStepForm() {
                   value={data.situacion}
                   onChange={(e) => update("situacion", e.target.value)}
                 />
+                <CharHint text={data.situacion} />
               </Field>
             )}
 
@@ -233,6 +248,7 @@ export default function MultiStepForm() {
                   value={data.experiencia}
                   onChange={(e) => update("experiencia", e.target.value)}
                 />
+                <CharHint text={data.experiencia} />
               </Field>
             )}
 
@@ -245,6 +261,7 @@ export default function MultiStepForm() {
                   value={data.busqueda}
                   onChange={(e) => update("busqueda", e.target.value)}
                 />
+                <CharHint text={data.busqueda} />
               </Field>
             )}
 
@@ -332,6 +349,16 @@ export default function MultiStepForm() {
         </button>
       </div>
     </div>
+  );
+}
+
+function CharHint({ text }: { text: string }) {
+  const remaining = MIN_ANSWER_LENGTH - text.trim().length;
+  if (remaining <= 0) return null;
+  return (
+    <p className="mt-2 text-[12px] text-text-muted">
+      Un poco más de detalle y seguimos ({remaining} caracteres).
+    </p>
   );
 }
 
