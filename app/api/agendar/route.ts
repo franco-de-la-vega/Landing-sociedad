@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json();
-  const { nombre, whatsapp, mensaje, date, hour, vendedor, sitioWeb } = body as {
+  const { nombre, whatsapp, mensaje, date, hour, vendedor, sitioWeb, situacion, busqueda, disponibilidad, email } = body as {
     nombre: string;
     whatsapp: string;
     mensaje?: string;
@@ -34,6 +34,13 @@ export async function POST(req: NextRequest) {
     hour: number; // 10-21
     vendedor?: string; // opcional: link personal, si no viene se auto-asigna
     sitioWeb?: string; // honeypot
+    // presentes solo cuando el booking viene del flujo fusionado de la
+    // portada (preguntas + agenda en un solo paso): se vuelcan en Notas
+    // para que quede todo junto en la misma base donde cae la agenda.
+    situacion?: string;
+    busqueda?: string;
+    disponibilidad?: string;
+    email?: string;
   };
 
   // Honeypot: un bot completa este campo invisible, una persona no lo ve.
@@ -128,6 +135,30 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    // Si viene del flujo fusionado de la portada, las respuestas del form se
+    // vuelcan como contenido dentro de la página (no en la propiedad Notas),
+    // para que al abrir el lead se vean directo, prolijas, sin cruzar con
+    // otra base.
+    type NotionBlock = Record<string, unknown>;
+    const respuestasBlocks: NotionBlock[] = [];
+    const heading = (text: string): NotionBlock => ({
+      object: "block",
+      type: "heading_3",
+      heading_3: { rich_text: [{ text: { content: text } }] },
+    });
+    const paragraph = (text: string): NotionBlock => ({
+      object: "block",
+      type: "paragraph",
+      paragraph: { rich_text: [{ text: { content: text } }] },
+    });
+    if (situacion || busqueda || disponibilidad || email) {
+      respuestasBlocks.push(heading("Respuestas del formulario"));
+      if (email) respuestasBlocks.push(paragraph(`Email: ${email}`));
+      if (situacion) respuestasBlocks.push(paragraph(`¿A qué se dedica hoy?: ${situacion}`));
+      if (busqueda) respuestasBlocks.push(paragraph(`¿Por qué le interesa ahora?: ${busqueda}`));
+      if (disponibilidad) respuestasBlocks.push(paragraph(`Disponibilidad: ${disponibilidad}`));
+    }
+
     const createRes = await fetch("https://api.notion.com/v1/pages", {
       method: "POST",
       headers,
@@ -144,6 +175,7 @@ export async function POST(req: NextRequest) {
           "Fecha y hora de llamada": { date: { start: iso } },
           ...(mensaje ? { Notas: { rich_text: [{ text: { content: mensaje } }] } } : {}),
         },
+        ...(respuestasBlocks.length > 0 ? { children: respuestasBlocks } : {}),
       }),
     });
 

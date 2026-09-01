@@ -84,6 +84,11 @@ export default function BookingCalendar({
         </select>
       </div>
 
+      <p className="mb-3 text-[12.5px] leading-relaxed text-[var(--color-text-muted)] sm:mb-4 sm:text-[13.5px]">
+        Por una cuestión operativa, solo mostramos horarios con al menos{" "}
+        {MIN_LEAD_HOURS} horas de anticipación desde este momento.
+      </p>
+
       {/* selector de día */}
       <div className="flex items-center gap-1.5 sm:gap-2">
         <button
@@ -191,6 +196,11 @@ export default function BookingCalendar({
               );
             })}
           </div>
+        )}
+        {selectedDate && !loadingHours && HORAS.every((h) => bookedHours.includes(h) || slotInstant(selectedDate, h).getTime() < minBookableInstant) && (
+          <p className="mt-3 text-[13px] text-[var(--color-text-muted)] sm:text-[14px]">
+            No queda ningún horario disponible ese día. Probá con otro.
+          </p>
         )}
       </div>
 

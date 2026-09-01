@@ -111,6 +111,10 @@ export default function MultiStepForm() {
           sitioWeb: data.sitioWeb,
           date: toDateKey(sel.date),
           hour: sel.hour,
+          email: data.email.trim(),
+          situacion: data.situacion.trim(),
+          busqueda: data.busqueda.trim(),
+          disponibilidad: data.disponibilidad.trim(),
         }),
       });
       if (res.status === 409) {
@@ -337,10 +341,16 @@ export default function MultiStepForm() {
 
 function CharHint({ text }: { text: string }) {
   const remaining = MIN_ANSWER_LENGTH - text.trim().length;
-  if (remaining <= 0) return null;
+  if (remaining <= 0) {
+    return (
+      <p className="mt-2 flex items-center gap-1.5 text-[13.5px] font-medium text-accent">
+        <Check size={13} strokeWidth={2.5} /> Listo, ya podés continuar.
+      </p>
+    );
+  }
   return (
-    <p className="mt-2 text-[13.5px] text-text-muted">
-      Un poco más de detalle y seguimos ({remaining} caracteres).
+    <p className="mt-2 text-[13.5px] font-medium text-text-secondary">
+      Faltan {remaining} caracteres para poder continuar.
     </p>
   );
 }
