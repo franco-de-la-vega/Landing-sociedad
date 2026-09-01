@@ -197,7 +197,7 @@ export default function DollarCalculator() {
                   value={montoArs}
                   onChange={(e) => setMontoArs(e.target.value)}
                   placeholder="Ej: 50000"
-                  className="w-full rounded-lg border border-white/15 bg-white/[0.06] px-4 py-3 text-[15px] text-white outline-none transition-colors focus:border-[var(--color-accent)]"
+                  className="no-spinner w-full rounded-lg border border-white/15 bg-white/[0.06] px-4 py-3 text-[15px] text-white outline-none transition-colors focus:border-[var(--color-accent)]"
                 />
                 <span className="shrink-0 text-[12px] font-semibold text-white/40">ARS</span>
               </div>
