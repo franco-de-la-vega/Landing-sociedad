@@ -35,6 +35,16 @@ export const MES_LABEL = [
   "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic",
 ];
 
+// Solo dígitos, espacios y "+". Se usa tanto para sanitizar mientras se
+// escribe (bloquea letras) como para validar antes de dejar avanzar.
+export function sanitizeWhatsapp(value: string) {
+  return value.replace(/[^0-9+ ]/g, "");
+}
+
+export function isValidWhatsapp(value: string) {
+  return value.replace(/[^0-9]/g, "").length >= 8;
+}
+
 export function detectDefaultTz(): string {
   try {
     const guess = Intl.DateTimeFormat().resolvedOptions().timeZone;

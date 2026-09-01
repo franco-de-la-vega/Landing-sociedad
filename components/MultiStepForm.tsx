@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, CalendarPlus, Check, ChevronLeft, Loader2 } from "lucide-react";
 import { EASE_OUT } from "@/lib/motion";
 import BookingCalendar, { type BookingSelection } from "@/components/BookingCalendar";
-import { DIA_LABEL, MES_LABEL, PAISES, convertSlot, googleCalendarLink, toDateKey } from "@/lib/booking";
+import { DIA_LABEL, MES_LABEL, PAISES, convertSlot, googleCalendarLink, isValidWhatsapp, sanitizeWhatsapp, toDateKey } from "@/lib/booking";
 
 type FormData = {
   situacion: string;
@@ -58,7 +58,7 @@ export default function MultiStepForm() {
       return (
         data.nombre.trim().length > 0 &&
         data.email.trim().length > 0 &&
-        data.whatsapp.trim().length > 0 &&
+        isValidWhatsapp(data.whatsapp) &&
         data.disponibilidad.trim().length > 0
       );
     return false;
@@ -300,7 +300,7 @@ export default function MultiStepForm() {
                     className="form-input"
                     placeholder="+54 9 11 0000 0000"
                     value={data.whatsapp}
-                    onChange={(e) => update("whatsapp", e.target.value)}
+                    onChange={(e) => update("whatsapp", sanitizeWhatsapp(e.target.value))}
                   />
                 </Field>
                 <Field label="Disponibilidad de tiempo">

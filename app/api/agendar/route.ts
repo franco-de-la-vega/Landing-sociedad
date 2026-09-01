@@ -46,6 +46,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "missing_fields" }, { status: 400 });
   }
 
+  if (whatsapp.replace(/[^0-9]/g, "").length < 8) {
+    return NextResponse.json({ ok: false, error: "invalid_whatsapp" }, { status: 400 });
+  }
+
   if (date > MAX_BOOKING_DATE) {
     return NextResponse.json({ ok: false, error: "date_out_of_range" }, { status: 400 });
   }

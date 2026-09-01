@@ -22,6 +22,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true });
   }
 
+  if (!whatsapp || String(whatsapp).replace(/[^0-9]/g, "").length < 8) {
+    return NextResponse.json({ ok: false, error: "invalid_whatsapp" }, { status: 400 });
+  }
+
   try {
     if (await hasRecentDuplicate(notionToken, LEADS_DATABASE_ID, "WhatsApp", whatsapp)) {
       return NextResponse.json({ ok: true });

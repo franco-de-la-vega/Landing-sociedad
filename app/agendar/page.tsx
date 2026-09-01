@@ -7,7 +7,7 @@ import { CalendarPlus, Check, ChevronLeft, Loader2 } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import Logo from "@/components/Logo";
 import BookingCalendar, { type BookingSelection } from "@/components/BookingCalendar";
-import { DIA_LABEL, MES_LABEL, convertSlot, googleCalendarLink, toDateKey, PAISES } from "@/lib/booking";
+import { DIA_LABEL, MES_LABEL, convertSlot, googleCalendarLink, isValidWhatsapp, sanitizeWhatsapp, toDateKey, PAISES } from "@/lib/booking";
 
 type Spark = { id: number; angle: number; distance: number; size: number; delay: number };
 
@@ -68,7 +68,7 @@ function AgendarFlow() {
   const [slotTaken, setSlotTaken] = useState(false);
 
   async function handleSubmit() {
-    if (!selection || !nombre.trim() || !whatsapp.trim()) return;
+    if (!selection || !nombre.trim() || !isValidWhatsapp(whatsapp)) return;
     setSubmitting(true);
     setSubmitError(false);
     setSlotTaken(false);
@@ -222,7 +222,7 @@ function AgendarFlow() {
                   </label>
                   <input
                     value={whatsapp}
-                    onChange={(e) => setWhatsapp(e.target.value)}
+                    onChange={(e) => setWhatsapp(sanitizeWhatsapp(e.target.value))}
                     placeholder="+54 9 11 1234 5678"
                     className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] px-4 py-3 text-[15.5px] outline-none transition-colors focus:border-[var(--color-accent)]"
                   />
@@ -253,7 +253,7 @@ function AgendarFlow() {
 
               <button
                 type="button"
-                disabled={!nombre.trim() || !whatsapp.trim() || submitting}
+                disabled={!nombre.trim() || !isValidWhatsapp(whatsapp) || submitting}
                 onClick={handleSubmit}
                 className="mt-8 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--color-accent)] px-6 py-3.5 text-[16px] font-semibold text-white transition-opacity hover:bg-[var(--color-accent-hover)] disabled:cursor-not-allowed disabled:opacity-40"
               >
