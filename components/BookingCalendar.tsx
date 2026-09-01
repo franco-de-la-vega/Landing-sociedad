@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Globe, Loader2 } from "lucide-react";
 import {
   ARGENTINA_TZ,
@@ -39,6 +39,7 @@ export default function BookingCalendar({
   const [selectedHour, setSelectedHour] = useState<number | null>(null);
   const [bookedHours, setBookedHours] = useState<number[]>([]);
   const [loadingHours, setLoadingHours] = useState(false);
+  const confirmBtnRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!selectedDate) return;
@@ -177,7 +178,16 @@ export default function BookingCalendar({
                   key={h}
                   type="button"
                   disabled={disabled}
-                  onClick={() => setSelectedHour(h)}
+                  onClick={() => {
+                    setSelectedHour(h);
+                    // Asegura que el botón de confirmar quede visible: en
+                    // mobile, si el teclado sigue abierto o el grid es
+                    // largo, puede quedar tapado/off-screen y parecer que
+                    // el flujo no deja avanzar.
+                    requestAnimationFrame(() => {
+                      confirmBtnRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+                    });
+                  }}
                   className={`flex flex-col items-center rounded-lg border px-2 py-2.5 text-[14.5px] font-semibold transition-colors sm:rounded-xl sm:px-3 sm:py-3 sm:text-[16px] ${
                     disabled
                       ? "cursor-not-allowed border-[var(--color-border)] text-[var(--color-text-muted)] opacity-40 line-through"
@@ -190,6 +200,11 @@ export default function BookingCalendar({
                   {dayDiff !== 0 && (
                     <span className="text-[9px] font-normal opacity-70">
                       {dayDiff > 0 ? "día siguiente" : "día anterior"}
+                    </span>
+                  )}
+                  {disabled && (
+                    <span className="text-[9px] font-normal opacity-70">
+                      {taken ? "ocupado" : "muy pronto"}
                     </span>
                   )}
                 </button>
@@ -205,6 +220,7 @@ export default function BookingCalendar({
       </div>
 
       <button
+        ref={confirmBtnRef}
         type="button"
         disabled={!selectedDate || selectedHour === null}
         onClick={() => selectedDate && selectedHour !== null && onContinue({ date: selectedDate, hour: selectedHour, tz })}

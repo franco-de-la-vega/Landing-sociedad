@@ -80,6 +80,10 @@ export default function MultiStepForm() {
           body: JSON.stringify(data),
         });
         if (!res.ok) throw new Error("submit_failed");
+        // Cierra el teclado del celular al pasar al calendario: si queda
+        // abierto, puede tapar el botón de confirmar y parecer que el
+        // flujo "no deja" avanzar.
+        (document.activeElement as HTMLElement | null)?.blur();
         setFlowStep("booking");
       } catch {
         setSubmitError(true);
