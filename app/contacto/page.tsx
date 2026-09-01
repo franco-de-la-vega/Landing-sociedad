@@ -122,11 +122,11 @@ export default function ContactoPage() {
 
           <Reveal delay={0.12} className="mt-8">
             <a
-              href="mailto:franco.dlv77@gmail.com"
+              href="mailto:ilfcformacion@gmail.com"
               className="inline-flex items-center gap-2 text-[14px] font-medium text-text-secondary transition-colors hover:text-accent"
             >
               <Mail size={15} strokeWidth={2} />
-              franco.dlv77@gmail.com
+              ilfcformacion@gmail.com
             </a>
           </Reveal>
         </div>

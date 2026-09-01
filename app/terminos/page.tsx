@@ -72,8 +72,8 @@ export default function TerminosPage() {
               plan contratado (por ejemplo, falta de acceso al contenido o al
               acompañamiento incluido en el programa), el alumno puede
               solicitar la revisión de su caso escribiendo a{" "}
-              <a href="mailto:franco.dlv77@gmail.com" className="text-accent hover:underline">
-                franco.dlv77@gmail.com
+              <a href="mailto:ilfcformacion@gmail.com" className="text-accent hover:underline">
+                ilfcformacion@gmail.com
               </a>{" "}
               o a través del{" "}
               <a href="/contacto" className="text-accent hover:underline">
@@ -96,8 +96,8 @@ export default function TerminosPage() {
             <p>
               Ante cualquier consulta sobre estos Términos y Condiciones o
               sobre el servicio contratado, podés escribirnos a{" "}
-              <a href="mailto:franco.dlv77@gmail.com" className="text-accent hover:underline">
-                franco.dlv77@gmail.com
+              <a href="mailto:ilfcformacion@gmail.com" className="text-accent hover:underline">
+                ilfcformacion@gmail.com
               </a>{" "}
               o completar el{" "}
               <a href="/contacto" className="text-accent hover:underline">

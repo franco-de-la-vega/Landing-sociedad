@@ -11,10 +11,10 @@ export default function Footer() {
             de dLocal Go de que la info legal figure en el sitio. */}
 
         <a
-          href="mailto:franco.dlv77@gmail.com"
+          href="mailto:ilfcformacion@gmail.com"
           className="text-[12.5px] text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-accent)]"
         >
-          franco.dlv77@gmail.com
+          ilfcformacion@gmail.com
         </a>
 
         <nav className="flex items-center gap-4 text-[12.5px] text-[var(--color-text-muted)]">
