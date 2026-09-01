@@ -76,19 +76,18 @@ export default function FoundersSection() {
               )}
             </TiltCard>
 
-            {/* el nombre irrumpe fuera del marco, sobre el borde inferior */}
-            <div className="relative z-20 -mt-8 pl-2 text-left">
+            <div className="relative z-20 mt-6 text-left">
               <h3 className="text-2xl font-semibold leading-none tracking-tight text-[var(--color-text-primary)]">
                 {f.name}
               </h3>
-              <p className="mt-2 text-[13px] leading-relaxed text-[var(--color-text-secondary)]">
+              <p className="mt-3 text-[13px] leading-relaxed text-[var(--color-text-secondary)]">
                 <span className="font-semibold text-[var(--color-text-primary)]">{f.role}</span>
                 {" — "}
                 {f.fullTitle}
               </p>
             </div>
 
-            <p className="mt-5 pl-2 text-sm leading-relaxed text-[var(--color-text-secondary)]">
+            <p className="mt-5 text-sm leading-relaxed text-[var(--color-text-secondary)]">
               {f.body}
             </p>
           </RevealItem>

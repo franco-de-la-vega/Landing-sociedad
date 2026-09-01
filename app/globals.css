@@ -99,7 +99,11 @@ body.theme-light::after {
 
 /* Panel glassmorphism: borde semitransparente 1px, usado en cards/bento/form */
 .glass-panel {
-  background: color-mix(in srgb, var(--color-bg-elevated) 70%, transparent);
+  /* color-mix() con un custom property acá queda "congelado" en build time
+     por el pipeline de CSS (usa el valor de :root, no el de .theme-light en
+     runtime) — por eso va fijo en rgba, ya que el sitio corre solo en tema
+     claro (--color-bg-elevated: #ffffff). */
+  background: rgba(255, 255, 255, 0.7);
   border: 1px solid var(--color-border);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -121,11 +125,13 @@ body.theme-light::after {
 
 .form-input {
   width: 100%;
-  background-color: color-mix(in srgb, var(--color-bg-elevated-2) 80%, transparent);
+  /* mismo motivo que en .glass-panel: fijo en rgba en vez de color-mix()
+     con var(), que el build congela con el valor equivocado. */
+  background-color: rgba(241, 238, 231, 0.8);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-control);
-  padding: 12px 16px;
-  font-size: 14px;
+  padding: 14px 16px;
+  font-size: 16px;
   color: var(--color-text-primary);
   transition: border-color 0.2s ease;
   outline: none;
@@ -138,7 +144,7 @@ body.theme-light::after {
 }
 textarea.form-input {
   resize: vertical;
-  min-height: 90px;
+  min-height: 120px;
 }
 
 /* Retrato del equipo: en blanco y negro solo en dispositivos con hover real (mouse).

@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { Crosshair, Users, Link2 } from "lucide-react";
 import RevealGroup from "./RevealGroup";
 import RevealItem from "./RevealItem";
 import Reveal from "./Reveal";
@@ -9,16 +10,19 @@ import Watermark from "./Watermark";
 
 const steps = [
   {
+    icon: Crosshair,
     label: "Simulación",
-    title: "Entrená bajo presión real",
-    body: "Entorno real de estrés y evaluación bajo condiciones de mercado, con feedback estructurado en cada intento.",
+    title: "Practicás antes de vender de verdad",
+    body: "Llamadas de venta simuladas, con feedback inmediato después de cada intento, hasta que la técnica te sale natural.",
   },
   {
+    icon: Users,
     label: "Mentoría",
     title: "Guía de practicantes activos",
     body: "Acompañamiento directo de profesionales activos en el mercado remoto, no tutores genéricos leyendo un guion.",
   },
   {
+    icon: Link2,
     label: "Conexión",
     title: "Puente a empresas reales",
     body: "Puente directo hacia redes de contratación internacional según tu desempeño evaluado.",
@@ -54,22 +58,27 @@ export default function BentoSection() {
           />
         </Reveal>
 
-        <RevealGroup stagger={0.14} className="flex flex-col divide-y divide-black/10 border-t border-b border-black/10">
+        <RevealGroup stagger={0.12} className="grid grid-cols-1 gap-5 md:grid-cols-3">
           {steps.map((s) => (
             <RevealItem key={s.label}>
-              <div className="group grid grid-cols-1 gap-3 py-10 transition-colors duration-300 md:grid-cols-[minmax(0,220px)_1fr] md:items-baseline md:gap-10">
-                <span className="font-serif-display text-2xl italic leading-none text-[var(--color-text-muted)] transition-colors duration-300 group-hover:text-[var(--color-accent)]">
-                  {s.label}
-                </span>
-                <div>
-                  <h3 className="relative inline-block text-xl font-semibold text-[var(--color-text-primary)] transition-transform duration-300 group-hover:translate-x-1">
-                    {s.title}
-                    <span className="absolute -bottom-1 left-0 h-px w-0 bg-[var(--color-accent)] transition-all duration-500 group-hover:w-full" />
-                  </h3>
-                  <p className="mt-3 max-w-lg text-sm leading-relaxed text-[var(--color-text-secondary)]">
-                    {s.body}
-                  </p>
+              <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-black/10 bg-[var(--color-bg-elevated)] p-7 transition-all duration-300 hover:-translate-y-1.5 hover:border-[var(--color-accent)]/30 hover:shadow-[0_24px_48px_-16px_rgba(0,0,0,0.12)]">
+                <div className="relative flex items-center gap-3">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[var(--color-accent)]/30 bg-[var(--color-accent)]/[0.08] text-[var(--color-accent-hover)] transition-colors duration-300 group-hover:bg-[var(--color-accent)]/[0.14]">
+                    <s.icon size={18} strokeWidth={1.75} />
+                  </span>
+                  <span className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-muted)] transition-colors duration-300 group-hover:text-[var(--color-accent)]">
+                    {s.label}
+                  </span>
                 </div>
+
+                <h3 className="relative mt-6 text-xl font-semibold leading-snug text-[var(--color-text-primary)]">
+                  {s.title}
+                </h3>
+                <p className="relative mt-3 text-sm leading-relaxed text-[var(--color-text-secondary)]">
+                  {s.body}
+                </p>
+
+                <span className="relative mt-6 block h-px w-0 bg-[var(--color-accent)] transition-all duration-500 group-hover:w-12" />
               </div>
             </RevealItem>
           ))}

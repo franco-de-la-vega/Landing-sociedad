@@ -6,7 +6,6 @@
 
 type LeadAnswers = {
   situacion: string;
-  experiencia: string;
   busqueda: string;
   disponibilidad: string;
 };
@@ -71,8 +70,8 @@ function includesAny(text: string, keywords: string[]) {
 
 export function scoreLead(a: LeadAnswers): "Caliente" | "Tibio" | "Frío" {
   let score = 0;
-  if (includesAny(a.experiencia, VENTAS_KEYWORDS)) score += 2;
-  if (includesAny(a.experiencia, REMOTO_KEYWORDS)) score += 1;
+  if (includesAny(a.situacion, VENTAS_KEYWORDS)) score += 2;
+  if (includesAny(a.situacion, REMOTO_KEYWORDS)) score += 1;
   if (includesAny(a.disponibilidad, DISPONIBILIDAD_ALTA)) score += 2;
   if (includesAny(a.disponibilidad, DISPONIBILIDAD_BAJA)) score -= 1;
   if (includesAny(a.situacion, URGENCIA_KEYWORDS)) score += 1;

@@ -9,7 +9,6 @@ import { DIA_LABEL, MES_LABEL, PAISES, convertSlot, googleCalendarLink, isValidW
 
 type FormData = {
   situacion: string;
-  experiencia: string;
   busqueda: string;
   nombre: string;
   email: string;
@@ -20,7 +19,6 @@ type FormData = {
 
 const initialData: FormData = {
   situacion: "",
-  experiencia: "",
   busqueda: "",
   nombre: "",
   email: "",
@@ -29,7 +27,7 @@ const initialData: FormData = {
   sitioWeb: "",
 };
 
-const TOTAL_STEPS = 4;
+const TOTAL_STEPS = 3;
 
 // Evita respuestas de una palabra ("si", "no", "ingreso estable"). No es
 // perfecto, pero fuerza a que haya algo real para leer antes de la llamada.
@@ -59,9 +57,8 @@ export default function MultiStepForm() {
 
   const canAdvance = () => {
     if (step === 0) return hasEnoughDetail(data.situacion);
-    if (step === 1) return hasEnoughDetail(data.experiencia);
-    if (step === 2) return hasEnoughDetail(data.busqueda);
-    if (step === 3)
+    if (step === 1) return hasEnoughDetail(data.busqueda);
+    if (step === 2)
       return (
         data.nombre.trim().length > 0 &&
         data.email.trim().length > 0 &&
@@ -134,26 +131,26 @@ export default function MultiStepForm() {
 
   if (flowStep === "done" && selection) {
     return (
-      <div className="glass-panel relative overflow-hidden rounded-[var(--radius-panel)] p-10 text-center sm:p-14">
+      <div className="glass-panel relative overflow-hidden rounded-[var(--radius-panel)] p-10 text-center shadow-[0_40px_90px_-24px_rgba(0,0,0,0.7)] sm:p-14">
         <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-accent">
           <Check size={18} strokeWidth={2} className="text-accent" />
         </span>
-        <p className="mt-6 text-[17px] font-medium tracking-tight">
+        <p className="mt-6 text-[19px] font-medium tracking-tight sm:text-[21px]">
           ¡Listo, {data.nombre.trim().split(" ")[0]}! Quedó agendado.
         </p>
-        <p className="mt-2 text-[14px] text-text-secondary">
+        <p className="mt-2 text-[15.5px] text-text-secondary sm:text-[16.5px]">
           {DIA_LABEL[selection.date.getDay()]} {selection.date.getDate()} de{" "}
           {MES_LABEL[selection.date.getMonth()]} a las {convertSlot(selection.date, selection.hour, selection.tz).time}hs
           {" "}({PAISES.find((p) => p.tz === selection.tz)?.label})
         </p>
-        <p className="mt-4 text-[13px] text-text-muted">
+        <p className="mt-4 text-[14px] text-text-muted sm:text-[15px]">
           Te vamos a escribir por WhatsApp con el link para la llamada.
         </p>
         <a
           href={googleCalendarLink(selection.date, selection.hour)}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-5 inline-flex items-center gap-2 rounded-[var(--radius-control)] border border-[var(--color-border)] px-4 py-2.5 text-[13px] font-semibold tracking-tight transition-colors hover:border-accent"
+          className="mt-5 inline-flex items-center gap-2 rounded-[var(--radius-control)] border border-[var(--color-border)] px-5 py-3 text-[14.5px] font-semibold tracking-tight transition-colors hover:border-accent"
         >
           <CalendarPlus size={15} className="text-accent" />
           Agregar a mi calendario
@@ -164,18 +161,18 @@ export default function MultiStepForm() {
 
   if (flowStep === "booking") {
     return (
-      <div className="glass-panel rounded-[var(--radius-panel)] p-7 text-left sm:p-10">
+      <div className="glass-panel relative rounded-[var(--radius-panel)] p-7 text-left shadow-[0_40px_90px_-24px_rgba(0,0,0,0.7)] sm:p-10">
         <button
           type="button"
           onClick={() => setFlowStep("questions")}
-          className="mb-5 inline-flex items-center gap-1.5 text-[13px] font-medium text-text-muted transition-colors hover:text-text-primary"
+          className="mb-5 inline-flex items-center gap-1.5 text-[14.5px] font-medium text-text-muted transition-colors hover:text-text-primary"
         >
           <ChevronLeft size={14} strokeWidth={2} /> Atrás
         </button>
-        <p className="text-[17px] font-medium tracking-tight">
+        <p className="text-[19px] font-medium tracking-tight sm:text-[21px]">
           Gracias, {data.nombre.trim().split(" ")[0]}. Ya diste el primer paso.
         </p>
-        <p className="mt-2 text-[14px] text-text-secondary">
+        <p className="mt-2 text-[15.5px] text-text-secondary sm:text-[16.5px]">
           Elegí cuándo te llamamos para conocerte mejor y contarte cómo sigue.
         </p>
 
@@ -184,17 +181,17 @@ export default function MultiStepForm() {
         </div>
 
         {slotTaken && (
-          <p className="mt-4 text-[13px] font-medium text-red-500">
+          <p className="mt-4 text-[14.5px] font-medium text-red-500">
             Justo se ocupó ese horario. Elegí otro de la lista.
           </p>
         )}
         {bookingError && (
-          <p className="mt-4 text-[13px] font-medium text-red-500">
+          <p className="mt-4 text-[14.5px] font-medium text-red-500">
             Hubo un error al confirmar. Probá de nuevo en un momento.
           </p>
         )}
         {booking && (
-          <div className="mt-4 flex items-center gap-2 text-[13px] text-text-secondary">
+          <div className="mt-4 flex items-center gap-2 text-[14.5px] text-text-secondary">
             <Loader2 size={14} className="animate-spin" /> Agendando tu llamada...
           </div>
         )}
@@ -217,8 +214,8 @@ export default function MultiStepForm() {
         ))}
       </div>
 
-      {step < 3 && (
-        <p className="mb-5 text-[12.5px] leading-relaxed text-text-muted">
+      {step < 2 && (
+        <p className="mb-5 text-[14px] leading-relaxed text-text-muted sm:text-[15px]">
           Leemos cada respuesta antes de la llamada, así que contanos en
           serio — no hace falta que sea largo, pero que diga algo de vos.
         </p>
@@ -227,7 +224,7 @@ export default function MultiStepForm() {
       <div className="relative min-h-[220px] overflow-hidden">
         <StepWrap key={step} direction={direction}>
             {step === 0 && (
-              <Field label="¿Cuál es tu situación actual?">
+              <Field label="¿A qué te dedicás hoy?">
                 <textarea
                   className="form-input"
                   placeholder="Contanos en qué estás hoy: trabajando, buscando un cambio, estudiando..."
@@ -239,20 +236,7 @@ export default function MultiStepForm() {
             )}
 
             {step === 1 && (
-              <Field label="¿Tenés experiencia previa en ventas o en trabajo remoto?">
-                <textarea
-                  autoFocus
-                  className="form-input"
-                  placeholder="Contanos qué experiencia tenés, aunque sea poca o ninguna."
-                  value={data.experiencia}
-                  onChange={(e) => update("experiencia", e.target.value)}
-                />
-                <CharHint text={data.experiencia} />
-              </Field>
-            )}
-
-            {step === 2 && (
-              <Field label="¿Qué estás buscando lograr?">
+              <Field label="¿Por qué te interesa esto ahora?">
                 <textarea
                   autoFocus
                   className="form-input"
@@ -264,7 +248,7 @@ export default function MultiStepForm() {
               </Field>
             )}
 
-            {step === 3 && (
+            {step === 2 && (
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 {/* honeypot: oculto para personas, los bots de autocompletado lo llenan igual */}
                 <input
@@ -320,7 +304,7 @@ export default function MultiStepForm() {
       </div>
 
       {submitError && (
-        <p className="mt-4 text-[13px] font-medium text-red-500">
+        <p className="mt-4 text-[14.5px] font-medium text-red-500">
           No pudimos enviar tu aplicación. Probá de nuevo en unos segundos.
         </p>
       )}
@@ -329,22 +313,22 @@ export default function MultiStepForm() {
         <button
           onClick={back}
           disabled={step === 0}
-          className="inline-flex items-center gap-2 rounded-[var(--radius-control)] border border-[var(--color-border)] px-4 py-2.5 text-[13px] font-medium tracking-tight text-text-secondary transition-colors duration-300 hover:border-accent/40 hover:text-text-primary disabled:opacity-0"
+          className="inline-flex items-center gap-2 rounded-[var(--radius-control)] border border-[var(--color-border)] px-4 py-3 text-[15px] font-medium tracking-tight text-text-secondary transition-colors duration-300 hover:border-accent/40 hover:text-text-primary disabled:opacity-0"
         >
-          <ArrowLeft size={14} strokeWidth={2} />
+          <ArrowLeft size={15} strokeWidth={2} />
           Atrás
         </button>
         <button
           onClick={next}
           disabled={!canAdvance() || submitting}
-          className="inline-flex items-center gap-2 rounded-[var(--radius-control)] bg-accent px-6 py-3 text-[14px] font-semibold tracking-tight text-white transition-all duration-300 hover:bg-accent-hover hover:shadow-[0_8px_28px_-8px_rgba(255,42,68,0.6)] disabled:cursor-not-allowed disabled:opacity-40"
+          className="inline-flex items-center gap-2 rounded-[var(--radius-control)] bg-accent px-6 py-3.5 text-[15.5px] font-semibold tracking-tight text-white transition-all duration-300 hover:bg-accent-hover hover:shadow-[0_8px_28px_-8px_rgba(255,42,68,0.6)] disabled:cursor-not-allowed disabled:opacity-40"
         >
           {submitting
             ? "Enviando..."
             : step === TOTAL_STEPS - 1
             ? "Elegir horario"
             : "Continuar"}
-          <ArrowRight size={15} strokeWidth={2} />
+          <ArrowRight size={16} strokeWidth={2} />
         </button>
       </div>
     </div>
@@ -355,7 +339,7 @@ function CharHint({ text }: { text: string }) {
   const remaining = MIN_ANSWER_LENGTH - text.trim().length;
   if (remaining <= 0) return null;
   return (
-    <p className="mt-2 text-[12px] text-text-muted">
+    <p className="mt-2 text-[13.5px] text-text-muted">
       Un poco más de detalle y seguimos ({remaining} caracteres).
     </p>
   );
@@ -370,7 +354,7 @@ function Field({
 }) {
   return (
     <div>
-      <label className="mb-3 block text-[15px] font-medium tracking-tight">
+      <label className="mb-3 block text-[16px] font-medium tracking-tight sm:text-[17px]">
         {label}
       </label>
       {children}

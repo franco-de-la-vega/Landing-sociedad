@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json();
-  const { situacion, experiencia, busqueda, nombre, email, whatsapp, disponibilidad, sitioWeb } = body;
+  const { situacion, busqueda, nombre, email, whatsapp, disponibilidad, sitioWeb } = body;
 
   // Honeypot: un bot completa este campo invisible, una persona no lo ve.
   // Respondemos ok igual para no darle pistas de que fue detectado.
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true });
     }
 
-    const prioridad = scoreLead({ situacion, experiencia, busqueda, disponibilidad });
+    const prioridad = scoreLead({ situacion, busqueda, disponibilidad });
     const res = await fetch("https://api.notion.com/v1/pages", {
       method: "POST",
       headers: {
@@ -46,7 +46,6 @@ export async function POST(req: NextRequest) {
           Email: { email },
           WhatsApp: { phone_number: whatsapp },
           Situación: { rich_text: [{ text: { content: situacion } }] },
-          Experiencia: { rich_text: [{ text: { content: experiencia } }] },
           "Qué busca": { rich_text: [{ text: { content: busqueda } }] },
           Disponibilidad: { rich_text: [{ text: { content: disponibilidad } }] },
           Estado: { select: { name: "Nuevo" } },

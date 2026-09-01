@@ -40,7 +40,7 @@ const levels = [
 ];
 
 export default function LevelsSection() {
-  const [open, setOpen] = useState(0);
+  const [open, setOpen] = useState(-1);
 
   return (
     <section className="relative z-10 mx-auto max-w-7xl border-t border-black/10 px-6 py-24 md:px-12">
@@ -75,7 +75,14 @@ export default function LevelsSection() {
             const isOpen = open === i;
             return (
               <RevealItem key={l.code}>
-                <div>
+                <div className="relative">
+                  {isOpen && (
+                    <motion.span
+                      layoutId="levelAccent"
+                      className="absolute -left-4 top-0 hidden h-full w-px bg-gradient-to-b from-[var(--color-accent)] via-[var(--color-accent)]/40 to-transparent lg:block"
+                      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                    />
+                  )}
                   <button
                     onClick={() => setOpen(isOpen ? -1 : i)}
                     className="group flex w-full items-center justify-between gap-6 py-6 text-left"

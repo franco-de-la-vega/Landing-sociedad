@@ -68,13 +68,13 @@ export default function BookingCalendar({
   return (
     <div>
       <div className="mb-4 sm:mb-6">
-        <label className="mb-1.5 flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-[0.05em] text-[var(--color-text-muted)] sm:text-[13px]">
+        <label className="mb-1.5 flex items-center gap-1.5 text-[13px] font-semibold uppercase tracking-[0.05em] text-[var(--color-text-muted)] sm:text-[13.5px]">
           <Globe size={13} /> Tu país
         </label>
         <select
           value={tz}
           onChange={(e) => setTz(e.target.value)}
-          className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] px-4 py-2.5 text-[14.5px] outline-none transition-colors focus:border-[var(--color-accent)] sm:py-3 sm:text-[15.5px]"
+          className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] px-4 py-3 text-[15.5px] outline-none transition-colors focus:border-[var(--color-accent)] sm:py-3 sm:text-[16px]"
         >
           {PAISES.map((p) => (
             <option key={p.tz} value={p.tz}>
@@ -120,17 +120,17 @@ export default function BookingCalendar({
                       : "border-[var(--color-border)] bg-[var(--color-bg-elevated)] hover:border-[var(--color-accent)]/40"
                 }`}
               >
-                <span className="text-[9.5px] font-semibold uppercase tracking-[0.04em] text-[var(--color-text-muted)] sm:text-[11px] sm:tracking-[0.06em]">
+                <span className="text-[10.5px] font-semibold uppercase tracking-[0.04em] text-[var(--color-text-muted)] sm:text-[12px] sm:tracking-[0.06em]">
                   {DIA_LABEL[d.getDay()]}
                 </span>
                 <span
-                  className={`text-[15px] font-bold sm:text-[18px] ${
+                  className={`text-[16.5px] font-bold sm:text-[19px] ${
                     active ? "text-[var(--color-accent-hover)]" : "text-[var(--color-text-primary)]"
                   }`}
                 >
                   {d.getDate()}
                 </span>
-                <span className="text-[9px] text-[var(--color-text-muted)] sm:text-[10.5px]">{MES_LABEL[d.getMonth()]}</span>
+                <span className="text-[10px] text-[var(--color-text-muted)] sm:text-[11.5px]">{MES_LABEL[d.getMonth()]}</span>
               </button>
             );
           })}
@@ -150,7 +150,7 @@ export default function BookingCalendar({
       {/* selector de hora */}
       <div className="mt-4 min-h-[150px] sm:mt-6 sm:min-h-[180px]">
         {!selectedDate && (
-          <p className="mt-8 text-center text-[14px] text-[var(--color-text-muted)] sm:mt-10 sm:text-[15px]">
+          <p className="mt-8 text-center text-[15px] text-[var(--color-text-muted)] sm:mt-10 sm:text-[16px]">
             Elegí un día para ver los horarios disponibles.
           </p>
         )}
@@ -173,7 +173,7 @@ export default function BookingCalendar({
                   type="button"
                   disabled={disabled}
                   onClick={() => setSelectedHour(h)}
-                  className={`flex flex-col items-center rounded-lg border px-2 py-2 text-[13px] font-semibold transition-colors sm:rounded-xl sm:px-3 sm:py-2.5 sm:text-[15px] ${
+                  className={`flex flex-col items-center rounded-lg border px-2 py-2.5 text-[14.5px] font-semibold transition-colors sm:rounded-xl sm:px-3 sm:py-3 sm:text-[16px] ${
                     disabled
                       ? "cursor-not-allowed border-[var(--color-border)] text-[var(--color-text-muted)] opacity-40 line-through"
                       : active
@@ -198,7 +198,7 @@ export default function BookingCalendar({
         type="button"
         disabled={!selectedDate || selectedHour === null}
         onClick={() => selectedDate && selectedHour !== null && onContinue({ date: selectedDate, hour: selectedHour, tz })}
-        className="mt-6 w-full rounded-xl bg-[var(--color-accent)] px-6 py-3 text-[15px] font-semibold text-white transition-opacity hover:bg-[var(--color-accent-hover)] disabled:cursor-not-allowed disabled:opacity-40 sm:mt-8 sm:py-3.5 sm:text-[16px]"
+        className="mt-6 w-full rounded-xl bg-[var(--color-accent)] px-6 py-3.5 text-[16px] font-semibold text-white transition-opacity hover:bg-[var(--color-accent-hover)] disabled:cursor-not-allowed disabled:opacity-40 sm:mt-8 sm:py-4 sm:text-[17px]"
       >
         {continueLabel}
       </button>
