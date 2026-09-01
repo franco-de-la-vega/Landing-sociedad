@@ -195,33 +195,19 @@ export default function MultiStepForm() {
     );
   }
 
-  const progress = ((step + 1) / TOTAL_STEPS) * 100;
-
   return (
     <div className="glass-panel rounded-[var(--radius-panel)] p-7 text-left sm:p-10">
-      <div className="mb-10">
-        <div className="mb-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
-              <span
-                key={i}
-                className={`h-1.5 w-1.5 rounded-full transition-colors duration-300 ${
-                  i <= step ? "bg-accent" : "bg-white/15"
-                }`}
-              />
-            ))}
+      <div className="mb-10 flex gap-1.5">
+        {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
+          <div key={i} className="h-1 flex-1 overflow-hidden rounded-full bg-[var(--color-border)]">
+            <motion.div
+              className="h-full rounded-full bg-accent"
+              initial={false}
+              animate={{ width: i <= step ? "100%" : "0%" }}
+              transition={{ duration: 0.4, ease: EASE_OUT }}
+            />
           </div>
-          <span className="font-mono text-[11px] tracking-[0.1em] text-text-muted">
-            {String(step + 1).padStart(2, "0")} / {String(TOTAL_STEPS).padStart(2, "0")}
-          </span>
-        </div>
-        <div className="h-[2px] w-full overflow-hidden rounded-full bg-white/10">
-          <motion.div
-            className="h-full rounded-full bg-accent"
-            animate={{ width: `${progress}%` }}
-            transition={{ duration: 0.5, ease: EASE_OUT }}
-          />
-        </div>
+        ))}
       </div>
 
       <div className="relative min-h-[220px] overflow-hidden">
@@ -327,7 +313,7 @@ export default function MultiStepForm() {
         <button
           onClick={back}
           disabled={step === 0}
-          className="inline-flex items-center gap-2 rounded-[var(--radius-control)] border border-[var(--color-border)] px-4 py-2.5 text-[13px] font-medium tracking-tight text-text-secondary transition-colors duration-300 hover:border-white/25 hover:text-text-primary disabled:opacity-0"
+          className="inline-flex items-center gap-2 rounded-[var(--radius-control)] border border-[var(--color-border)] px-4 py-2.5 text-[13px] font-medium tracking-tight text-text-secondary transition-colors duration-300 hover:border-accent/40 hover:text-text-primary disabled:opacity-0"
         >
           <ArrowLeft size={14} strokeWidth={2} />
           Atrás
