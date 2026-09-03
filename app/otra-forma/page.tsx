@@ -374,23 +374,51 @@ function NuevaForma() {
         <H>El mundo del trabajo también está cambiando</H>
         <Lead>Hoy existen empresas que necesitan profesionales capaces de:</Lead>
       </Reveal>
-      <div className="mt-6 flex flex-wrap gap-2">
+
+      <RevealGroup stagger={0.05} className="mt-7 flex flex-wrap gap-2.5">
         {skills.map((s) => (
-          <span key={s} className="rounded-full px-3.5 py-1.5 text-[13px] font-medium text-[var(--color-text-secondary)]" style={{ border: "1px solid var(--color-border-strong)" }}>
-            {s}
-          </span>
+          <RevealItem key={s}>
+            <motion.span
+              whileHover={{ y: -3, borderColor: "var(--color-accent)", color: "var(--color-accent-secondary)" }}
+              transition={{ duration: 0.2 }}
+              className="inline-block cursor-default rounded-full px-4 py-2 text-[13px] font-medium text-[var(--color-text-secondary)]"
+              style={{ border: "1px solid var(--color-border-strong)" }}
+            >
+              {s}
+            </motion.span>
+          </RevealItem>
         ))}
-      </div>
-      <Reveal delay={0.25} className="mt-10">
-        <div className="flex flex-wrap items-center gap-2.5">
-          {pasos.map((p, i) => (
-            <span key={p} className="flex items-center gap-2.5">
-              <span className="font-mono text-[14px] font-semibold" style={{ color: i === pasos.length - 1 ? "var(--color-accent-secondary)" : "var(--color-text-primary)" }}>
-                {p}
-              </span>
-              {i < pasos.length - 1 && <span className="text-[var(--color-text-muted)]">→</span>}
-            </span>
-          ))}
+      </RevealGroup>
+
+      {/* Pipeline animado: un pulso dorado recorre el camino de punta a
+          punta en loop — no es solo una fila de palabras con flechas. */}
+      <Reveal delay={0.2} className="mt-14">
+        <div className="relative w-full overflow-x-auto pb-2">
+          <div className="relative flex min-w-max items-center gap-0 pt-2">
+            <div className="absolute left-0 right-0 top-[19px] h-px" style={{ background: "var(--color-border-strong)" }} />
+            <motion.div
+              className="absolute top-[19px] h-px"
+              style={{ background: "linear-gradient(90deg, transparent, var(--color-accent), transparent)", width: "22%" }}
+              animate={{ left: ["-22%", "100%"] }}
+              transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+            />
+            {pasos.map((p, i) => (
+              <div key={p} className="relative flex items-center">
+                <div className="flex flex-col items-center gap-2.5 px-7">
+                  <span
+                    className="h-[9px] w-[9px] rounded-full"
+                    style={{ background: i === pasos.length - 1 ? "var(--color-accent)" : "var(--color-bg-elevated)", border: "1.5px solid var(--color-accent)" }}
+                  />
+                  <span
+                    className="whitespace-nowrap font-mono text-[13.5px] font-semibold"
+                    style={{ color: i === pasos.length - 1 ? "var(--color-accent-secondary)" : "var(--color-text-primary)" }}
+                  >
+                    {p}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </Reveal>
     </Section>
@@ -399,26 +427,68 @@ function NuevaForma() {
 
 // ─────────────── 08 · El mercado internacional ───────────────
 
+const PAISES = [
+  { label: "México", top: "6%", left: "12%" },
+  { label: "Colombia", top: "58%", left: "2%" },
+  { label: "Argentina", top: "88%", left: "22%" },
+  { label: "España", top: "2%", left: "68%" },
+  { label: "Chile", top: "78%", left: "78%" },
+  { label: "Perú", top: "40%", left: "88%" },
+  { label: "Estados Unidos", top: "22%", left: "40%" },
+];
+
 function MercadoInternacional() {
   return (
-    <Section>
-      <Reveal>
-        <Kicker>Tu mercado es más grande de lo que pensás</Kicker>
-        <H>Tu mercado no tiene por qué terminar en tu ciudad</H>
-        <Lead>
-          Un profesional comercial puede encontrar oportunidades en empresas de distintos mercados y países —
-          especialmente dentro del ecosistema hispanohablante.
-        </Lead>
-        <Lead>
-          Para determinadas posiciones internacionales existen empresas que trabajan con profesionales remotos bajo
-          esquemas de salario fijo, variable y/o comisiones.
-        </Lead>
-      </Reveal>
-      <Reveal delay={0.2}>
-        <p className="mt-8 text-[13px] leading-relaxed text-[var(--color-text-muted)]">
-          Las condiciones dependen de cada empresa, posición, experiencia, mercado y modalidad de contratación.
-        </p>
-      </Reveal>
+    <Section className="overflow-visible">
+      <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[1fr_320px]">
+        <Reveal>
+          <Kicker>Tu mercado es más grande de lo que pensás</Kicker>
+          <H>Tu mercado no tiene por qué terminar en tu ciudad</H>
+          <Lead>
+            Un profesional comercial puede encontrar oportunidades en empresas de distintos mercados y países —
+            especialmente dentro del ecosistema hispanohablante.
+          </Lead>
+          <Lead>
+            Para determinadas posiciones internacionales existen empresas que trabajan con profesionales remotos bajo
+            esquemas de salario fijo, variable y/o comisiones.
+          </Lead>
+          <p className="mt-8 text-[13px] leading-relaxed text-[var(--color-text-muted)]">
+            Las condiciones dependen de cada empresa, posición, experiencia, mercado y modalidad de contratación.
+          </p>
+        </Reveal>
+
+        {/* Señal expandiéndose + países en constelación: el mercado no es un
+            párrafo, es un alcance que se ve. */}
+        <Reveal delay={0.2} className="relative mx-auto hidden aspect-square w-full max-w-[300px] sm:block">
+          <div className="relative h-full w-full">
+            {[0, 1, 2].map((i) => (
+              <motion.span
+                key={i}
+                className="absolute left-1/2 top-1/2 rounded-full"
+                style={{ border: "1px solid var(--color-accent)" }}
+                initial={{ width: 16, height: 16, x: "-50%", y: "-50%", opacity: 0.7 }}
+                animate={{ width: 300, height: 300, opacity: 0 }}
+                transition={{ duration: 3.6, repeat: Infinity, ease: "easeOut", delay: i * 1.2 }}
+              />
+            ))}
+            <span
+              className="absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full"
+              style={{ background: "var(--color-accent)" }}
+            />
+            {PAISES.map((p, i) => (
+              <motion.span
+                key={p.label}
+                className="absolute -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-full px-3 py-1.5 text-[12px] font-medium text-[var(--color-accent-secondary)]"
+                style={{ top: p.top, left: p.left, background: "var(--color-accent-muted)" }}
+                animate={{ y: [0, -6, 0] }}
+                transition={{ duration: 3 + (i % 3), repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
+              >
+                {p.label}
+              </motion.span>
+            ))}
+          </div>
+        </Reveal>
+      </div>
     </Section>
   );
 }
@@ -427,6 +497,7 @@ function MercadoInternacional() {
 
 function Comisiones() {
   const items = ["Salario base + variable", "Comisiones", "Bonificaciones por resultados", "Esquemas de compensación por desempeño"];
+  const rot = [-4, 2, -2, 3];
   return (
     <Section>
       <Reveal>
@@ -434,8 +505,44 @@ function Comisiones() {
         <H>En ventas, tu ingreso puede estar relacionado con el valor que generás</H>
         <Lead>En determinados roles comerciales existen:</Lead>
       </Reveal>
-      <List items={items} />
-      <Reveal delay={0.3}>
+
+      {/* Mazo apilado: cada componente de compensación es una capa más, no
+          una línea más de una lista. En mobile se apilan en columna simple. */}
+      <div className="relative mt-14 flex flex-col items-center gap-3 sm:block sm:h-[280px]">
+        {items.map((it, i) => (
+          <Reveal key={it} delay={i * 0.12} className="sm:absolute sm:left-1/2 sm:top-0 sm:w-[380px]">
+            {/* Reveal ya anima su propio fade/translateY — el transform de
+                apilado (posición/rotación) va en ESTE div, aparte, para que
+                no compita por la misma propiedad CSS. El lift de hover va
+                en el motion.div de más adentro, tercera capa. */}
+            <div
+              className="sm:[transform:translate(-50%,var(--stack-y))_rotate(var(--stack-r))]"
+              style={{ "--stack-y": `${i * 46}px`, "--stack-r": `${rot[i]}deg` } as React.CSSProperties}
+            >
+              <motion.div
+                whileHover={{ y: -10, scale: 1.03 }}
+                transition={{ duration: 0.25 }}
+                style={{
+                  background: "var(--color-bg-elevated)",
+                  border: "1px solid var(--color-border)",
+                  boxShadow: "0 16px 34px -12px rgba(20,18,14,0.18)",
+                }}
+                className="relative z-0 flex w-full max-w-[380px] items-center gap-3 rounded-[var(--radius-panel)] px-5 py-4 hover:z-10"
+              >
+                <span
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full font-mono text-[13px] font-bold"
+                  style={{ background: "var(--color-accent-muted)", color: "var(--color-accent-secondary)" }}
+                >
+                  {i + 1}
+                </span>
+                <span className="text-[15px] font-medium text-[var(--color-text-primary)]">{it}</span>
+              </motion.div>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+
+      <Reveal delay={0.55} className="mt-10 sm:mt-16">
         <Bold>
           No solamente intercambiás tiempo por dinero. Tu capacidad de generar resultados también puede formar parte
           de tu compensación.
@@ -507,14 +614,37 @@ function NoSolo() {
         <H>Cambiar tu vida profesional también necesita compañía</H>
         <Lead>También necesitás:</Lead>
       </Reveal>
-      <div className="mt-6 flex flex-wrap gap-2">
-        {items.map((it) => (
-          <span key={it} className="rounded-full px-3.5 py-1.5 text-[13px] font-medium text-[var(--color-text-secondary)]" style={{ border: "1px solid var(--color-border-strong)" }}>
-            {it}
-          </span>
+
+      {/* Cluster de círculos superpuestos: la sensación de "hay gente ahí",
+          no una lista de palabras sueltas. */}
+      <RevealGroup stagger={0.08} className="mt-10 flex flex-wrap items-center">
+        {items.map((it, i) => (
+          <RevealItem key={it}>
+            <motion.div
+              whileHover={{ y: -6, zIndex: 20 }}
+              className="group relative flex flex-col items-center"
+              style={{ marginLeft: i === 0 ? 0 : -18, zIndex: items.length - i }}
+            >
+              <span
+                className="flex h-14 w-14 items-center justify-center rounded-full text-[13px] font-bold uppercase"
+                style={{
+                  background: "var(--color-accent-muted)",
+                  color: "var(--color-accent-secondary)",
+                  border: "3px solid var(--color-bg-base)",
+                  boxShadow: "0 6px 16px -6px rgba(20,18,14,0.22)",
+                }}
+              >
+                {it.slice(0, 2)}
+              </span>
+              <span className="pointer-events-none absolute -bottom-7 whitespace-nowrap rounded-md px-2 py-1 text-[11px] font-medium opacity-0 transition-opacity group-hover:opacity-100" style={{ background: "var(--color-text-primary)", color: "var(--color-bg-base)" }}>
+                {it}
+              </span>
+            </motion.div>
+          </RevealItem>
         ))}
-      </div>
-      <Reveal delay={0.25}>
+      </RevealGroup>
+
+      <Reveal delay={0.25} className="mt-14">
         <Bold>
           A veces no necesitás que alguien te diga qué hacer. Necesitás una comunidad que te ayude a no abandonar
           cuando hacerlo solo se vuelve difícil.
