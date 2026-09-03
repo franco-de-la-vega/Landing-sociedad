@@ -76,6 +76,26 @@ body.theme-light::after {
   }
 }
 
+/* Ticker horizontal infinito — usado en /otra-forma para la lista de rutina.
+   Dos copias idénticas una al lado de la otra, se desliza -50% y arranca de
+   nuevo: sin salto visible. */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  animation: marquee 26s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
+
 ::selection {
   background-color: var(--color-accent);
   color: var(--color-text-primary);
