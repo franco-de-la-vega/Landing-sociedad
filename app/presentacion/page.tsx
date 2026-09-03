@@ -18,7 +18,6 @@ import SuccessStoriesSection from "@/components/presentation/SuccessStoriesSecti
 import FAQSection from "@/components/presentation/FAQSection";
 import PricingLadderSection from "@/components/presentation/PricingLadderSection";
 import PlanComparisonSection from "@/components/presentation/PlanComparisonSection";
-import PricingSection from "@/components/presentation/PricingSection";
 import DollarCalculatorSection from "@/components/presentation/DollarCalculatorSection";
 
 export const metadata: Metadata = {
@@ -49,7 +48,6 @@ export default function PresentacionPage() {
         <PricingLadderSection />
         <PlanComparisonSection />
         <FAQSection />
-        <PricingSection />
         <DollarCalculatorSection />
       </main>
     </div>
