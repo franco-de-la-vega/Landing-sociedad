@@ -54,7 +54,7 @@ interface Plan {
   features: Feature[];
 }
 
-// Cuotas (2026-09-03): Junior 2 (1 hoy + 1 a 30 días), High Ticket 3, Carrera 3.
+// Cuotas del resto (2026-09-03): 3 en los tres planes.
 // Nota interna: High Ticket en cuotas lleva ~10% de recargo por inflación — NO
 // se calcula acá a propósito, lo ajusta el closer en la llamada (lo cubre el
 // aviso de "sujeto a aprobación").
@@ -66,7 +66,7 @@ const PLANES: Plan[] = [
     tag: "Tu puerta de entrada a las ventas remotas.",
     duracion: "2 meses",
     priceUSD: 397,
-    maxCuotas: 2,
+    maxCuotas: 3,
     tier: "base",
     highlights: [
       "Sesiones grupales, 2 por semana",
