@@ -5,7 +5,7 @@
  * Notion.
  *
  * Config en Vercel (proyecto landing):
- *   SUPABASE_URL              = https://zxxcmgfhtwxqjikcycvx.supabase.co
+ *   SUPABASE_URL              = https://opvutzdvkuefkebkbuff.supabase.co
  *   SUPABASE_SERVICE_ROLE_KEY = (Supabase → Project Settings → API → service_role)
  */
 
@@ -13,7 +13,7 @@ const SB_URL = process.env.SUPABASE_URL;
 const SB_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 /** Empresa ILFC en el CRM (única por ahora). */
-const EMPRESA_ID = "e9987427-73ea-4c66-b5f2-a342e8cc1869";
+const EMPRESA_ID = "3e520c7a-5429-41b5-a43d-0b7f50fec333";
 
 /** El equipo está en Argentina. */
 export const TZ_OFFSET = "-03:00";
