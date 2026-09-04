@@ -197,16 +197,18 @@ function planDePago(total: number, cuotas: number, sena: number): { pagos: Pago[
   }
   const n = Math.max(1, cuotas);
   if (sena > 0) {
-    const cuota = (total - sena) / n;
+    // El total se divide en `n` cuotas iguales COMO SI no hubiera seña — la
+    // seña no es un pago aparte que se suma, es un adelanto de la primera
+    // cuota. Ej: $600.000 en 3 cuotas = $200.000 c/u; con $50.000 de seña,
+    // la 1ª cuota queda en $150.000 (200.000 - 50.000) y las otras dos
+    // siguen en $200.000 — no se reparte la seña entre todas.
+    const cuota = total / n;
+    const primeraCuota = Math.max(0, cuota - sena);
+    const pagos: Pago[] = [{ label: "Hoy (seña)", monto: sena }];
     // La 1ª cuota (después de la seña) es SIEMPRE antes de arrancar el
     // cursado, no "a los 30 días" — el resto sí se espacia cada 30 días
-    // desde ahí. Pedido de Franco: la seña no es una cuota más, es la
-    // reserva del lugar; la plata de verdad tiene que estar antes de
-    // empezar a cursar.
-    const pagos: Pago[] = [
-      { label: "Hoy (seña)", monto: sena },
-      { label: "Antes de arrancar la formación", monto: cuota },
-    ];
+    // desde ahí.
+    if (primeraCuota > 0) pagos.push({ label: "Antes de arrancar la formación", monto: primeraCuota });
     for (let i = 1; i < n; i++) pagos.push({ label: `${i * 30} días después`, monto: cuota });
     return { pagos, recurrente: cuota, cubierto: false };
   }
@@ -553,10 +555,14 @@ export default function DollarCalculator() {
                                 : cuotas === 1 && montoNum === 0
                                   ? "Pago único de"
                                   : montoNum > 0
-                                    ? `Después de la seña, ${cuotas} ${cuotas === 1 ? "cuota" : "cuotas"} de`
+                                    ? "Plan de pago con seña"
                                     : `${cuotas} cuotas de`}
                             </span>
-                            {!cubreTodo && (
+                            {/* La seña se descuenta de la 1ª cuota, no se reparte entre
+                                todas — así que con seña las cuotas no son todas iguales
+                                (ver detalle abajo). El número grande solo tiene sentido
+                                cuando de verdad son todas iguales. */}
+                            {!cubreTodo && montoNum === 0 && (
                               <span className="mt-2 block text-center text-[2.5rem] font-black leading-none tracking-tight text-[var(--color-accent)] md:text-[2.9rem]">
                                 {money(pdp.recurrente ?? total)}
                               </span>
