@@ -10,8 +10,17 @@ export const ARGENTINA_TZ = "America/Argentina/Buenos_Aires";
 // hace falta) antes de la llamada.
 export const MIN_LEAD_HOURS = 12;
 
-// Se agenda de lunes a sábado. Tope: jueves 17/9 (el viernes 18 arranca el cohort).
-export const MAX_BOOKING_DATE = "2026-09-17";
+// Se agenda de lunes a sábado, hasta MAX_BOOKING_DIAS días para adelante
+// (ventana rodante — antes era una fecha fija por el cohort).
+export const MAX_BOOKING_DIAS = 30;
+
+/** "YYYY-MM-DD" del último día agendable (hoy + MAX_BOOKING_DIAS). */
+export function maxBookingDateKey(): string {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  d.setDate(d.getDate() + MAX_BOOKING_DIAS);
+  return toDateKey(d);
+}
 
 export const PAISES = [
   { label: "Argentina", tz: "America/Argentina/Buenos_Aires" },
@@ -101,7 +110,7 @@ export function businessDaysByWeek(): Date[] {
   const diffToMonday = (today.getDay() + 6) % 7; // Lun=0 ... Dom=6
   monday.setDate(monday.getDate() - diffToMonday);
 
-  const maxDate = new Date(`${MAX_BOOKING_DATE}T00:00:00`);
+  const maxDate = new Date(`${maxBookingDateKey()}T00:00:00`);
   const cursor = new Date(monday);
   while (cursor <= maxDate) {
     if (cursor.getDay() !== 0) days.push(new Date(cursor)); // excluye domingo
