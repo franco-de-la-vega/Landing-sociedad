@@ -198,8 +198,16 @@ function planDePago(total: number, cuotas: number, sena: number): { pagos: Pago[
   const n = Math.max(1, cuotas);
   if (sena > 0) {
     const cuota = (total - sena) / n;
-    const pagos: Pago[] = [{ label: "Hoy (seña)", monto: sena }];
-    for (let i = 1; i <= n; i++) pagos.push({ label: `${i * 30} días`, monto: cuota });
+    // La 1ª cuota (después de la seña) es SIEMPRE antes de arrancar el
+    // cursado, no "a los 30 días" — el resto sí se espacia cada 30 días
+    // desde ahí. Pedido de Franco: la seña no es una cuota más, es la
+    // reserva del lugar; la plata de verdad tiene que estar antes de
+    // empezar a cursar.
+    const pagos: Pago[] = [
+      { label: "Hoy (seña)", monto: sena },
+      { label: "Antes de arrancar la formación", monto: cuota },
+    ];
+    for (let i = 1; i < n; i++) pagos.push({ label: `${i * 30} días después`, monto: cuota });
     return { pagos, recurrente: cuota, cubierto: false };
   }
   const cuota = total / n;
