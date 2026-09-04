@@ -226,6 +226,104 @@ export async function upsertLead(datos: {
   return filas[0].id;
 }
 
+/** Usuario del CRM por nombre (case-insensitive). `null` si no está. */
+async function buscarUsuarioPorNombre(nombre: string): Promise<{ id: string; duracion_min: number } | null> {
+  const usuarios = await getJson<{ id: string; nombre: string }[]>(
+    `usuarios?select=id,nombre&empresa_id=eq.${EMPRESA_ID}&activo=eq.true`
+  );
+  const u = usuarios.find((x) => x.nombre.toLowerCase() === nombre.toLowerCase());
+  if (!u) return null;
+  const cfg = await getJson<{ duracion_min: number }[]>(
+    `agenda_config?select=duracion_min&usuario_id=eq.${u.id}`
+  );
+  return { id: u.id, duracion_min: cfg[0]?.duracion_min ?? 40 };
+}
+
+interface FormBody {
+  nombre: string;
+  whatsapp: string;
+  date: string;
+  hour: number;
+  situacion?: string;
+  busqueda?: string;
+  disponibilidad?: string;
+  email?: string;
+  mensaje?: string;
+}
+
+/**
+ * Espeja en el CRM una reserva que ya se escribió en Notion, con el mismo
+ * closer que Notion asignó. Best-effort: si algo falla, tira y el llamador lo
+ * loguea sin romper la respuesta al lead. Idempotente por el índice único
+ * (closer + inicio) — un doble POST no duplica.
+ */
+export async function espejarReservaEnCrm(body: FormBody, asignadoNombre: string | null): Promise<void> {
+  if (!asignadoNombre || !body?.nombre || !body?.whatsapp || !body?.date || body?.hour === undefined) return;
+
+  const closer = await buscarUsuarioPorNombre(asignadoNombre);
+  if (!closer) return; // el closer de Notion no existe en el CRM todavía
+
+  const iso = `${body.date}T${String(body.hour).padStart(2, "0")}:00:00${TZ_OFFSET}`;
+  const inicio = new Date(iso);
+  const fin = new Date(inicio.getTime() + closer.duracion_min * 60_000);
+
+  const leadId = await upsertLead({
+    nombre: body.nombre,
+    whatsapp: body.whatsapp,
+    email: body.email,
+    situacion: body.situacion,
+    que_busca: body.busqueda,
+    disponibilidad: body.disponibilidad,
+  });
+
+  try {
+    await rest(`reuniones`, {
+      method: "POST",
+      body: JSON.stringify({
+        empresa_id: EMPRESA_ID,
+        lead_id: leadId,
+        closer_id: closer.id,
+        agendada_por: null,
+        origen: "formulario",
+        inicio: inicio.toISOString(),
+        fin: fin.toISOString(),
+        notas: body.mensaje?.trim() || null,
+      }),
+    });
+  } catch (e) {
+    // slot ya espejado -> ok, no es un error real
+    if (e instanceof Error && (e.message.includes("23505") || e.message.includes("crm_409"))) return;
+    throw e;
+  }
+
+  await rest(`leads?id=eq.${leadId}`, {
+    method: "PATCH",
+    body: JSON.stringify({
+      etapa: "agendado",
+      dueno_id: closer.id,
+      fecha_proximo_paso: inicio.toISOString(),
+      proximo_paso: `Llamada con ${asignadoNombre}`,
+    }),
+  });
+
+  await rest(`actividad`, {
+    method: "POST",
+    body: JSON.stringify({
+      empresa_id: EMPRESA_ID,
+      lead_id: leadId,
+      usuario_id: null,
+      tipo: "reunion",
+      texto: `El lead se autoagendó una llamada con ${asignadoNombre} para el ${inicio.toLocaleString("es-AR", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        hour: "2-digit",
+        minute: "2-digit",
+      })}.`,
+    }),
+  });
+}
+
 /** Crea la reunión + pasa el lead a "agendado". `code 23505` = slot ocupado. */
 export async function crearReunionFormulario(opts: {
   leadId: string;
