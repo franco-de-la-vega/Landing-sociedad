@@ -18,8 +18,35 @@ const SB_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 /** Empresa ILFC en el CRM (única por ahora). */
 const EMPRESA_ID = "3e520c7a-5429-41b5-a43d-0b7f50fec333";
 
-/** El equipo está en Argentina. */
+/** Los horarios que ve el visitante en la landing son SIEMPRE Argentina — es
+ * el público al que le habla el formulario. Lo que puede variar es la zona
+ * horaria de CADA closer (ej. Sandra en Colombia), que se usa solo para
+ * interpretar SUS tramos de disponibilidad (`agenda_horario`), no para lo
+ * que ve el visitante. */
 export const TZ_OFFSET = "-03:00";
+
+/** Offset ISO ("-05:00") de una zona horaria en un instante dado — igual al
+ * de `src/lib/crm/zonaHoraria.ts` del CRM (repo separado, sin código
+ * compartido entre los dos). */
+function offsetIso(zona: string, referencia: Date): string {
+  const partes = new Intl.DateTimeFormat("en-US", { timeZone: zona, timeZoneName: "shortOffset" }).formatToParts(referencia);
+  const crudo = partes.find((p) => p.type === "timeZoneName")?.value ?? "GMT+0";
+  const m = crudo.match(/GMT([+-])(\d{1,2})(?::(\d{2}))?/);
+  if (!m) return "+00:00";
+  const [, signo, hh, mm = "00"] = m;
+  return `${signo}${hh.padStart(2, "0")}:${mm}`;
+}
+
+/** Fecha "YYYY-MM-DD" y día de la semana (0-6) tal como se ven en una zona, para un instante dado. */
+function fechaEnZona(instanteMs: number, zona: string): { fecha: string; dow: number } {
+  const partes = new Intl.DateTimeFormat("en-CA", { timeZone: zona, year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(
+    new Date(instanteMs)
+  );
+  const val = (t: string) => partes.find((p) => p.type === t)?.value ?? "";
+  const fecha = `${val("year")}-${val("month")}-${val("day")}`;
+  const dow = new Date(Number(val("year")), Number(val("month")) - 1, Number(val("day"))).getDay();
+  return { fecha, dow };
+}
 
 export const agendaCrmConfigurado = Boolean(SB_URL && SB_KEY);
 
@@ -54,6 +81,8 @@ export interface CloserPool {
   duracion_min: number;
   buffer_min: number;
   max_por_dia: number | null;
+  /** Zona horaria DEL CLOSER — sus tramos de `horarios` son SU hora local. */
+  zona_horaria: string;
   horarios: { dia_semana: number; desde: string; hasta: string }[];
 }
 
@@ -76,9 +105,9 @@ export async function cargarPool(vendedorNombre?: string | null): Promise<Closer
       duracion_min: number;
       buffer_min: number;
       max_por_dia: number | null;
-      usuarios: { nombre: string } | null;
+      usuarios: { nombre: string; zona_horaria: string } | null;
     }[]
-  >(`agenda_config?select=usuario_id,en_pool,activo,prioridad,duracion_min,buffer_min,max_por_dia,usuarios(nombre)`);
+  >(`agenda_config?select=usuario_id,en_pool,activo,prioridad,duracion_min,buffer_min,max_por_dia,usuarios(nombre,zona_horaria)`);
 
   const horarios = await getJson<{ usuario_id: string; dia_semana: number; desde: string; hasta: string }[]>(
     `agenda_horario?select=usuario_id,dia_semana,desde,hasta`
@@ -96,6 +125,7 @@ export async function cargarPool(vendedorNombre?: string | null): Promise<Closer
       duracion_min: c.duracion_min,
       buffer_min: c.buffer_min,
       max_por_dia: c.max_por_dia,
+      zona_horaria: c.usuarios!.zona_horaria || "America/Argentina/Buenos_Aires",
       horarios: horarios.filter((h) => h.usuario_id === c.usuario_id),
     }));
 }
@@ -134,23 +164,25 @@ export async function cargaFuturaPorForm(closerIds: string[]): Promise<Record<st
 const hhmm = (t: string) => t.slice(0, 5);
 
 /** ¿El closer está libre para una llamada que arranca en `inicioMs`? */
-export function closerLibre(
-  closer: CloserPool,
-  fecha: string,
-  inicioMs: number,
-  reuniones: Reunion[]
-): boolean {
+export function closerLibre(closer: CloserPool, inicioMs: number, reuniones: Reunion[]): boolean {
   if (closer.max_por_dia != null && reuniones.length >= closer.max_por_dia) return false;
 
-  const dow = new Date(`${fecha}T12:00:00${TZ_OFFSET}`).getDay();
+  // El slot pedido (`inicioMs`) es hora Argentina — lo que ve el visitante de
+  // la landing. El tramo del closer ("10:00 a 19:00") es SU hora local (la
+  // que cargó en /admin/agenda), así que el día y las 10:00/19:00 se
+  // interpretan en SU zona — derivada del instante pedido, no de la fecha
+  // de Argentina, para no romperse cerca de la medianoche. Se comparan
+  // siempre como instantes absolutos, nada se convierte a mano.
+  const offsetCloser = offsetIso(closer.zona_horaria, new Date(inicioMs));
+  const { fecha: fechaCloser, dow } = fechaEnZona(inicioMs, closer.zona_horaria);
   const durMs = closer.duracion_min * 60_000;
   const bufMs = closer.buffer_min * 60_000;
   const finMs = inicioMs + durMs;
 
   const enHorario = closer.horarios.some((h) => {
     if (h.dia_semana !== dow) return false;
-    const d = new Date(`${fecha}T${hhmm(h.desde)}:00${TZ_OFFSET}`).getTime();
-    const f = new Date(`${fecha}T${hhmm(h.hasta)}:00${TZ_OFFSET}`).getTime();
+    const d = new Date(`${fechaCloser}T${hhmm(h.desde)}:00${offsetCloser}`).getTime();
+    const f = new Date(`${fechaCloser}T${hhmm(h.hasta)}:00${offsetCloser}`).getTime();
     return inicioMs >= d && finMs <= f;
   });
   if (!enHorario) return false;
@@ -443,7 +475,7 @@ export async function agendarCrm(body: AgendarBody): Promise<Respuesta> {
       pool.map((c) => c.usuario_id),
       date
     );
-    const libres = pool.filter((c) => closerLibre(c, date, inicioMs, reunionesPorCloser.get(c.usuario_id) ?? []));
+    const libres = pool.filter((c) => closerLibre(c, inicioMs, reunionesPorCloser.get(c.usuario_id) ?? []));
     if (libres.length === 0) return { status: 409, body: { ok: false, error: "slot_taken" } };
 
     const cargaForm = await cargaFuturaPorForm(libres.map((c) => c.usuario_id));
@@ -491,7 +523,7 @@ export async function availabilidadCrm(date: string, vendedor: string | null): P
     const bookedHours = HORAS.filter((hour) => {
       const hh = String(hour).padStart(2, "0");
       const inicioMs = new Date(`${date}T${hh}:00:00${TZ_OFFSET}`).getTime();
-      return !pool.some((c) => closerLibre(c, date, inicioMs, reunionesPorCloser.get(c.usuario_id) ?? []));
+      return !pool.some((c) => closerLibre(c, inicioMs, reunionesPorCloser.get(c.usuario_id) ?? []));
     });
 
     return { status: 200, body: { ok: true, bookedHours } };
