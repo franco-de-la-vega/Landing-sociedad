@@ -2,17 +2,18 @@ import { NextRequest, NextResponse } from "next/server";
 import { alertFailure } from "@/lib/alert";
 import { hasRecentDuplicate, isHoneypotFilled } from "@/lib/antiSpam";
 import { scoreLead } from "@/lib/leadScore";
+import { agendaCrmConfigurado, upsertLead } from "@/lib/agendaCrm";
 
 const NOTION_VERSION = "2022-06-28";
 const LEADS_DATABASE_ID = "3cd3d284-28ee-81be-9295-e958618d1190"; // "Leads Web (formlat.com)"
 
+const TEMPERATURA_DE: Record<string, "caliente" | "tibio" | "frio"> = {
+  Caliente: "caliente",
+  Tibio: "tibio",
+  Frío: "frio",
+};
+
 export async function POST(req: NextRequest) {
-  const notionToken = process.env.NOTION_TOKEN;
-
-  if (!notionToken) {
-    return NextResponse.json({ ok: false, error: "missing_notion_config" }, { status: 500 });
-  }
-
   const body = await req.json();
   const { situacion, busqueda, nombre, email, whatsapp, disponibilidad, sitioWeb } = body;
 
@@ -24,6 +25,40 @@ export async function POST(req: NextRequest) {
 
   if (!whatsapp || String(whatsapp).replace(/[^0-9]/g, "").length < 8) {
     return NextResponse.json({ ok: false, error: "invalid_whatsapp" }, { status: 400 });
+  }
+
+  // Camino nuevo: cae directo en el CRM (Supabase) en cuanto
+  // `agendaCrmConfigurado` esté en `true`. `upsertLead` ya dedupea por
+  // nombre+whatsapp, no hace falta `hasRecentDuplicate` (eso era solo para
+  // Notion). El lead queda en "nuevo" — recién se agenda si completa el paso
+  // de reserva (que es un segundo POST, a /api/agendar).
+  if (agendaCrmConfigurado) {
+    try {
+      const prioridad = scoreLead({ situacion, busqueda, disponibilidad });
+      await upsertLead({
+        nombre,
+        whatsapp,
+        email,
+        situacion,
+        que_busca: busqueda,
+        disponibilidad,
+        origen: "Landing formlat.com",
+        temperatura: TEMPERATURA_DE[prioridad] ?? null,
+      });
+      return NextResponse.json({ ok: true });
+    } catch (err) {
+      console.error("Error creando lead en el CRM:", err);
+      await alertFailure(
+        "Falló un lead de la portada (CRM)",
+        `Nombre: ${nombre}\nWhatsApp: ${whatsapp}\nEmail: ${email}\n\n${err instanceof Error ? err.message : String(err)}`
+      );
+      return NextResponse.json({ ok: false, error: "crm_error" }, { status: 502 });
+    }
+  }
+
+  const notionToken = process.env.NOTION_TOKEN;
+  if (!notionToken) {
+    return NextResponse.json({ ok: false, error: "missing_notion_config" }, { status: 500 });
   }
 
   try {

@@ -9,6 +9,9 @@
  *   SUPABASE_SERVICE_ROLE_KEY = (Supabase → Project Settings → API → service_role)
  */
 
+import { alertFailure } from "@/lib/alert";
+import { HORAS, MIN_LEAD_HOURS, maxBookingDateKey } from "@/lib/booking";
+
 const SB_URL = process.env.SUPABASE_URL;
 const SB_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
@@ -197,6 +200,8 @@ export async function upsertLead(datos: {
   situacion?: string | null;
   que_busca?: string | null;
   disponibilidad?: string | null;
+  origen?: string;
+  temperatura?: "caliente" | "tibio" | "frio" | null;
 }): Promise<string> {
   const tel = normTel(datos.whatsapp);
   const existentes = await getJson<{ id: string; nombre: string; whatsapp: string | null }[]>(
@@ -215,10 +220,11 @@ export async function upsertLead(datos: {
       nombre: datos.nombre,
       whatsapp: datos.whatsapp,
       email: datos.email ?? null,
-      origen: "Autoagendado",
+      origen: datos.origen ?? "Autoagendado",
       situacion: datos.situacion ?? null,
       que_busca: datos.que_busca ?? null,
       disponibilidad: datos.disponibilidad ?? null,
+      temperatura: datos.temperatura ?? null,
       etapa: "nuevo",
     }),
   });
@@ -384,4 +390,112 @@ export async function crearReunionFormulario(opts: {
       })}.`,
     }),
   });
+}
+
+// ─────────────── Orquestador: camino nuevo de /api/agendar ───────────────
+
+type Respuesta = { status: number; body: Record<string, unknown> };
+
+/**
+ * Cuando no se pide un vendedor puntual, el auto-reparto de la landing SIEMPRE
+ * cae en Sandra (setter) — ella hace el primer contacto/calificación por
+ * WhatsApp, no es un round-robin entre closers. Pedido explícito de Franco,
+ * 2026-09-07. Los links personales (`?vendedor=Andres`, etc.) siguen andando
+ * igual que siempre, sin pasar por acá.
+ */
+const VENDEDOR_POR_DEFECTO = "Sandra";
+
+interface AgendarBody {
+  nombre: string;
+  whatsapp: string;
+  mensaje?: string;
+  date: string;
+  hour: number;
+  vendedor?: string;
+  situacion?: string;
+  busqueda?: string;
+  disponibilidad?: string;
+  email?: string;
+}
+
+/** Camino nuevo de /api/agendar: todo cae directo en el CRM (Supabase), nada en Notion. */
+export async function agendarCrm(body: AgendarBody): Promise<Respuesta> {
+  const { nombre, whatsapp, mensaje, date, hour, situacion, busqueda, disponibilidad, email } = body;
+  const vendedor = body.vendedor || VENDEDOR_POR_DEFECTO;
+
+  if (!nombre || !whatsapp || !date || hour === undefined) return { status: 400, body: { ok: false, error: "missing_fields" } };
+  if (whatsapp.replace(/[^0-9]/g, "").length < 8) return { status: 400, body: { ok: false, error: "invalid_whatsapp" } };
+  if (date > maxBookingDateKey()) return { status: 400, body: { ok: false, error: "date_out_of_range" } };
+  if (new Date(`${date}T12:00:00${TZ_OFFSET}`).getDay() === 0) return { status: 400, body: { ok: false, error: "sunday_not_bookable" } };
+
+  const hh = String(hour).padStart(2, "0");
+  const iso = `${date}T${hh}:00:00${TZ_OFFSET}`;
+  const inicioMs = new Date(iso).getTime();
+  if (inicioMs < Date.now() + MIN_LEAD_HOURS * 3600 * 1000) {
+    return { status: 400, body: { ok: false, error: "too_soon" } };
+  }
+
+  try {
+    const pool = await cargarPool(vendedor);
+    if (pool.length === 0) return { status: 409, body: { ok: false, error: "slot_taken" } };
+
+    const reunionesPorCloser = await reunionesDelDia(
+      pool.map((c) => c.usuario_id),
+      date
+    );
+    const libres = pool.filter((c) => closerLibre(c, date, inicioMs, reunionesPorCloser.get(c.usuario_id) ?? []));
+    if (libres.length === 0) return { status: 409, body: { ok: false, error: "slot_taken" } };
+
+    const cargaForm = await cargaFuturaPorForm(libres.map((c) => c.usuario_id));
+    const asignado = elegirCloser(libres, cargaForm);
+    if (!asignado) return { status: 409, body: { ok: false, error: "slot_taken" } };
+
+    const leadId = await upsertLead({
+      nombre,
+      whatsapp,
+      email,
+      situacion,
+      que_busca: busqueda,
+      disponibilidad,
+      origen: "Landing formlat.com",
+    });
+
+    try {
+      await crearReunionFormulario({ leadId, closer: asignado, inicioISO: iso, notas: mensaje });
+    } catch (e) {
+      if (e instanceof Error && e.name === "SlotTaken") return { status: 409, body: { ok: false, error: "slot_taken" } };
+      throw e;
+    }
+
+    return { status: 200, body: { ok: true, vendedor: asignado.nombre } };
+  } catch (err) {
+    await alertFailure(
+      "Falló una reserva de agenda (CRM)",
+      `Nombre: ${nombre}\nWhatsApp: ${whatsapp}\nFecha: ${date} ${hh}:00\n\n${err instanceof Error ? err.message : String(err)}`
+    );
+    return { status: 502, body: { ok: false, error: err instanceof Error ? err.message : "network_error" } };
+  }
+}
+
+/** Camino nuevo de /api/agendar/availability: qué horas ya no tienen a nadie libre. */
+export async function availabilidadCrm(date: string, vendedor: string | null): Promise<Respuesta> {
+  try {
+    const pool = await cargarPool(vendedor || VENDEDOR_POR_DEFECTO);
+    if (pool.length === 0) return { status: 200, body: { ok: true, bookedHours: [] } };
+
+    const reunionesPorCloser = await reunionesDelDia(
+      pool.map((c) => c.usuario_id),
+      date
+    );
+
+    const bookedHours = HORAS.filter((hour) => {
+      const hh = String(hour).padStart(2, "0");
+      const inicioMs = new Date(`${date}T${hh}:00:00${TZ_OFFSET}`).getTime();
+      return !pool.some((c) => closerLibre(c, date, inicioMs, reunionesPorCloser.get(c.usuario_id) ?? []));
+    });
+
+    return { status: 200, body: { ok: true, bookedHours } };
+  } catch (err) {
+    return { status: 502, body: { ok: false, error: err instanceof Error ? err.message : "network_error" } };
+  }
 }
