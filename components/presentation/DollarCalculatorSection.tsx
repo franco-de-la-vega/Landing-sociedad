@@ -1,7 +1,8 @@
 import DollarCalculator from "./DollarCalculator";
 
-// Cierre de la presentación: los 3 planes con precio fijo en USD, y debajo
-// una calculadora de seña/cuotas (también en USD, sin conversión de moneda).
+// Cierre de la presentación y único lugar donde aparecen los precios: el lead
+// elige su país y recién ahí se abren los 3 planes en su moneda + la
+// calculadora de seña. Hasta que no elige, la página termina acá.
 export default function DollarCalculatorSection() {
   return (
     <section
