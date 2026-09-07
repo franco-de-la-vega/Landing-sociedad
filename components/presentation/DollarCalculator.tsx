@@ -35,7 +35,9 @@ interface Plan {
   features: Feature[];
 }
 
-// Cuotas del resto (2026-09-03): 3 en los tres planes.
+// Cuotas del resto (2026-09-07): Junior sin cuotas (pago único), High Ticket
+// hasta 2, Carrera hasta 3. Cualquier otra combinación queda "sujeta a
+// aprobación" (aviso fijo debajo de la calculadora).
 // Nota interna: High Ticket en cuotas lleva ~10% de recargo por inflación — NO
 // se calcula acá a propósito, lo ajusta el closer en la llamada (lo cubre el
 // aviso de "sujeto a aprobación").
@@ -47,7 +49,7 @@ const PLANES: Plan[] = [
     tag: "Tu puerta de entrada a las ventas remotas.",
     duracion: "2 meses",
     priceUSD: 397,
-    maxCuotas: 3,
+    maxCuotas: 1,
     tier: "base",
     highlights: [
       "Sesiones grupales, 2 por semana",
@@ -70,7 +72,7 @@ const PLANES: Plan[] = [
     tag: "Subí la complejidad. Subí tu nivel.",
     duracion: "3 meses",
     priceUSD: 497,
-    maxCuotas: 3,
+    maxCuotas: 2,
     tier: "mid",
     highlights: [
       "Todo lo incluido en Comercial Junior",
@@ -289,24 +291,28 @@ export default function DollarCalculator() {
               />
             </div>
 
-            <label className="mb-3 mt-7 block text-[13px] font-semibold uppercase tracking-wide text-[var(--color-text-secondary)]">
-              {montoNum > 0 ? "¿El resto en cuántas cuotas?" : "¿En cuántas cuotas?"}
-            </label>
-            <div className="flex flex-wrap gap-2.5">
-              {Array.from({ length: plan.maxCuotas }, (_, i) => i + 1).map((n) => (
-                <button
-                  key={n}
-                  onClick={() => setCuotas(n)}
-                  className={`rounded-full border px-4 py-2 text-[13px] font-semibold transition-colors ${
-                    cuotas === n
-                      ? "border-[var(--color-accent)] bg-[var(--color-accent-muted)] text-[var(--color-accent)]"
-                      : "border-[var(--color-border-strong)] text-[var(--color-text-secondary)] hover:border-[var(--color-accent)]/50"
-                  }`}
-                >
-                  {n === 1 ? "1 cuota" : `${n} cuotas`}
-                </button>
-              ))}
-            </div>
+            {plan.maxCuotas > 1 && (
+              <>
+                <label className="mb-3 mt-7 block text-[13px] font-semibold uppercase tracking-wide text-[var(--color-text-secondary)]">
+                  {montoNum > 0 ? "¿El resto en cuántas cuotas?" : "¿En cuántas cuotas?"}
+                </label>
+                <div className="flex flex-wrap gap-2.5">
+                  {Array.from({ length: plan.maxCuotas }, (_, i) => i + 1).map((n) => (
+                    <button
+                      key={n}
+                      onClick={() => setCuotas(n)}
+                      className={`rounded-full border px-4 py-2 text-[13px] font-semibold transition-colors ${
+                        cuotas === n
+                          ? "border-[var(--color-accent)] bg-[var(--color-accent-muted)] text-[var(--color-accent)]"
+                          : "border-[var(--color-border-strong)] text-[var(--color-text-secondary)] hover:border-[var(--color-accent)]/50"
+                      }`}
+                    >
+                      {n === 1 ? "1 cuota" : `${n} cuotas`}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
 
             <p className="mt-6 text-[14px] leading-relaxed text-[var(--color-text-secondary)]">
               {plan.label}: <span className="font-bold text-[var(--color-text-primary)]">{money(total)}</span> en total.
