@@ -15,6 +15,35 @@ import { HORAS, MIN_LEAD_HOURS, maxBookingDateKey } from "@/lib/booking";
 const SB_URL = process.env.SUPABASE_URL;
 const SB_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
+/**
+ * Puente al Google Calendar/Gmail del closer asignado (CRM, 2026-09-09):
+ * apenas se crea la reunión, le avisa al CRM para que arme el evento con
+ * Meet en el calendario del closer (si lo conectó) + mande el mail de
+ * confirmación desde su Gmail. Antes de esto, una reserva de la landing NO
+ * generaba Meet ni mail — quedaba solo en la agenda interna hasta que
+ * alguien la agendaba de nuevo a mano desde el CRM.
+ *
+ * `LANDING_AGENDA_SECRET` tiene que ser EL MISMO valor en Vercel de este
+ * proyecto y del CRM (`instituto-plataforma`) — es lo que reemplaza a la
+ * sesión de staff que un lead autoagendándose obviamente no tiene.
+ * Fire-and-forget: si falla, la reunión ya quedó guardada igual, no rompe la
+ * respuesta al lead.
+ */
+const CRM_URL = process.env.CRM_URL || "https://campus.formlat.com";
+const LANDING_AGENDA_SECRET = process.env.LANDING_AGENDA_SECRET;
+
+function sincronizarGoogleDelCrm(reunionId: string): void {
+  if (!LANDING_AGENDA_SECRET) return;
+  fetch(`${CRM_URL}/api/agenda/google-publico`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${LANDING_AGENDA_SECRET}` },
+    body: JSON.stringify({ reunionId }),
+  }).catch(() => {
+    // Best-effort — el CRM ya tiene su propio log de errores del lado
+    // servidor (logServidor). Acá no hay nada más que hacer.
+  });
+}
+
 /** Empresa ILFC en el CRM (única por ahora). */
 const EMPRESA_ID = "3e520c7a-5429-41b5-a43d-0b7f50fec333";
 
@@ -315,8 +344,9 @@ export async function espejarReservaEnCrm(body: FormBody, asignadoNombre: string
   });
 
   try {
-    await rest(`reuniones`, {
+    const res = await rest(`reuniones`, {
       method: "POST",
+      headers: { Prefer: "return=representation" },
       body: JSON.stringify({
         empresa_id: EMPRESA_ID,
         lead_id: leadId,
@@ -328,6 +358,8 @@ export async function espejarReservaEnCrm(body: FormBody, asignadoNombre: string
         notas: body.mensaje?.trim() || null,
       }),
     });
+    const filas = (await res.json()) as { id: string }[];
+    if (filas[0]?.id) sincronizarGoogleDelCrm(filas[0].id);
   } catch (e) {
     // slot ya espejado -> ok, no es un error real
     if (e instanceof Error && (e.message.includes("23505") || e.message.includes("crm_409"))) return;
@@ -373,8 +405,9 @@ export async function crearReunionFormulario(opts: {
   const fin = new Date(inicio.getTime() + opts.closer.duracion_min * 60_000);
 
   try {
-    await rest(`reuniones`, {
+    const res = await rest(`reuniones`, {
       method: "POST",
+      headers: { Prefer: "return=representation" },
       body: JSON.stringify({
         empresa_id: EMPRESA_ID,
         lead_id: opts.leadId,
@@ -386,6 +419,8 @@ export async function crearReunionFormulario(opts: {
         notas: opts.notas?.trim() || null,
       }),
     });
+    const filas = (await res.json()) as { id: string }[];
+    if (filas[0]?.id) sincronizarGoogleDelCrm(filas[0].id);
   } catch (e) {
     const msg = e instanceof Error ? e.message : "";
     if (msg.includes("23505") || msg.includes("crm_409")) {
