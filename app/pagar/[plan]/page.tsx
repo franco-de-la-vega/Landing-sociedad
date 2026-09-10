@@ -32,16 +32,24 @@ export default async function PagarPage({ params }: { params: Promise<{ plan: st
   if (!data) notFound();
 
   return (
-    <div className="flex min-h-screen flex-col items-center bg-[#0b0c0e] px-6 py-16 text-center">
-      <img src="/icon.png" alt="" className="mb-8 h-10 w-10 rounded-full" />
-      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#b8935a]">Instituto Latinoamericano de Formación Comercial</p>
-      <h1 className="mt-3 text-[28px] font-black tracking-tight text-white">{data.nombre}</h1>
-      <p className="mt-1 text-[16px] font-semibold text-[#b8935a]">{data.monto}</p>
-      <p className="mt-6 max-w-sm text-[13px] leading-relaxed text-white/60">
-        Completá el pago con tu tarjeta abajo. Esta pestaña es solo para vos.
-      </p>
-      <div className="mt-8 w-full max-w-sm">
-        <CheckoutDlocal snippet={data.snippet} />
+    <div className="flex min-h-screen items-center justify-center bg-[#0b0c0e] px-6 py-16">
+      <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-white/[0.03] px-8 py-10 text-center shadow-[0_30px_60px_-30px_rgba(0,0,0,0.6)]">
+        <img src="/icon.png" alt="" className="mx-auto h-10 w-10 rounded-full" />
+        <p className="mt-6 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#b8935a]">Instituto Latinoamericano de Formación Comercial</p>
+        <h1 className="mt-3 text-[26px] font-black tracking-tight text-white">{data.nombre}</h1>
+
+        <div className="mt-5 rounded-xl border border-white/10 bg-white/[0.04] px-5 py-4">
+          <p className="text-[11px] font-semibold uppercase tracking-widest text-white/40">Total a pagar</p>
+          <p className="mt-1 text-[30px] font-black tracking-tight text-white">{data.monto}</p>
+        </div>
+
+        <p className="mt-6 text-[12.5px] leading-relaxed text-white/50">
+          Pagás con tu tarjeta en el siguiente paso. Esta pestaña es solo tuya.
+        </p>
+
+        <div className="mt-7">
+          <CheckoutDlocal snippet={data.snippet} />
+        </div>
       </div>
     </div>
   );
