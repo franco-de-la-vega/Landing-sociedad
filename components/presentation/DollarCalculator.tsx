@@ -210,6 +210,26 @@ function DlocalGoButton({ html }: { html: string }) {
       for (let i = 0; i < 100 && !(window as unknown as { DlocalGo?: unknown }).DlocalGo; i++) {
         await new Promise((r) => setTimeout(r, 50));
       }
+
+      // dLocal Go renderiza su botón con SU paleta (rosa) — acá se
+      // sobreescribe en línea para que combine con la página (dorado sobre
+      // fondo oscuro, mismo pill/mayúsculas que el resto de los botones).
+      // No toca el comportamiento ni el destino del pago, solo el color.
+      for (let i = 0; i < 60 && !cancelado; i++) {
+        const boton = host.querySelector("button");
+        if (boton) {
+          boton.style.setProperty("background-color", "var(--color-accent)", "important");
+          boton.style.setProperty("background-image", "none", "important");
+          boton.style.setProperty("color", "#0B0C0E", "important");
+          boton.style.setProperty("border", "none", "important");
+          boton.style.setProperty("border-radius", "9999px", "important");
+          boton.style.setProperty("font-weight", "700", "important");
+          boton.style.setProperty("letter-spacing", "0.05em", "important");
+          boton.style.setProperty("text-transform", "uppercase", "important");
+          break;
+        }
+        await new Promise((r) => setTimeout(r, 100));
+      }
     });
     colaMontajeDlocal = tarea.catch(() => {});
 
@@ -218,7 +238,7 @@ function DlocalGoButton({ html }: { html: string }) {
     };
   }, [html]);
 
-  return <div ref={ref} className="mt-3" />;
+  return <div ref={ref} />;
 }
 
 // ─────────────── Helpers ───────────────
@@ -656,6 +676,12 @@ export default function DollarCalculator() {
                             Precio de hoy — válido {VALIDEZ_DIAS} días.
                           </p>
 
+                          {DLOCAL_SNIPPETS[plan.key] && (
+                            <div className="mt-4 flex justify-center">
+                              <DlocalGoButton html={DLOCAL_SNIPPETS[plan.key]!} />
+                            </div>
+                          )}
+
                           <button
                             onClick={copiarResumen}
                             className="mt-3 flex items-center justify-center gap-2 rounded-full border border-[var(--color-border-strong)] py-3 text-[13px] font-semibold uppercase tracking-widest text-[var(--color-text-secondary)] transition-colors hover:border-[var(--color-accent)]/60 hover:text-[var(--color-text-primary)]"
@@ -826,7 +852,6 @@ function PlanCard({
             "Armar el pago"
           )}
         </button>
-        {DLOCAL_SNIPPETS[p.key] && <DlocalGoButton html={DLOCAL_SNIPPETS[p.key]!} />}
       </div>
     </div>
   );
