@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+<title>Franco | Negocios B2B Remoto</title>
+<meta name="robots" content="noindex" />
+
+<!-- ===== Fuente: Inter, igual que el resto del sitio ===== -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+  /* ===== Tokens: paleta del sitio (dorado sobre carbón profundo) ===== */
+  :root {
+    --bg: #08090a;
+    --bg-elevated: #121316;
+    --border: rgba(255, 255, 255, 0.09);
+    --border-strong: rgba(255, 255, 255, 0.16);
+
+    --text-primary: #f5f3ef;
+    --text-secondary: #a3a09a;
+    --text-muted: #605d57;
+
+    --accent: #c99a52;
+    --accent-bright: #e8bd77;
+    --accent-dim: #7a5f34;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+
+  body {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* ===== Ambient glow: sigue el puntero en desktop, fijo en mobile ===== */
+  .glow {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(600px circle at var(--mx, 50%) var(--my, 22%), rgba(201, 154, 82, 0.16), transparent 55%),
+      radial-gradient(900px circle at 50% 100%, rgba(201, 154, 82, 0.06), transparent 60%);
+    transition: background 0.4s ease;
+  }
+
+  /* Grano fílmico, mismo lenguaje visual que globals.css */
+  .grain {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ===== Contenedor principal ===== */
+  .page {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 460px;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 48px 24px calc(28px + env(safe-area-inset-bottom, 0px));
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal {
+    opacity: 0;
+    animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  /* ===== Badge de estado ===== */
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: rgba(201, 154, 82, 0.06);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-bright);
+    margin-bottom: 22px;
+    animation-delay: 0.05s;
+  }
+
+  .status .dot {
+    position: relative;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-bright);
+    flex-shrink: 0;
+  }
+  .status .dot::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    background: var(--accent-bright);
+    animation: ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+  @keyframes ping {
+    0% { transform: scale(1); opacity: 0.55; }
+    100% { transform: scale(2.4); opacity: 0; }
+  }
+
+  /* ===== Avatar con anillo giratorio ===== */
+  .avatar-wrap {
+    position: relative;
+    flex-shrink: 0;
+    width: 96px;
+    height: 96px;
+    margin-bottom: 20px;
+    animation-delay: 0.12s;
+  }
+
+  .avatar-ring {
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-bright), var(--accent-dim));
+  }
+
+  .avatar {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--bg-elevated);
+    border: 3px solid var(--bg);
+    overflow: hidden;
+  }
+
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ===== Marca y bio ===== */
+  .brand {
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-align: center;
+    margin-bottom: 12px;
+    animation-delay: 0.18s;
+  }
+
+  .brand .sep {
+    color: var(--text-muted);
+    font-weight: 400;
+    margin: 0 2px;
+  }
+
+  .brand .accent-word {
+    color: var(--accent-bright);
+  }
+
+  .bio {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    text-align: center;
+    max-width: 300px;
+    margin-bottom: 22px;
+    animation-delay: 0.24s;
+  }
+
+  /* ===== Prueba social: texto chico, discreto, no es un badge ===== */
+  .social-proof {
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.01em;
+    margin-bottom: 10px;
+    animation-delay: 0.34s;
+  }
+
+  /* ===== Redes ===== */
+  .socials {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 28px;
+    animation-delay: 0.3s;
+  }
+
+  .social-link {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.02);
+    transition: color 0.25s ease, border-color 0.25s ease, transform 0.2s ease, background 0.25s ease;
+  }
+
+  .social-link:hover {
+    color: var(--accent-bright);
+    border-color: var(--accent-dim);
+    background: rgba(201, 154, 82, 0.08);
+    transform: translateY(-2px);
+  }
+
+  .social-link svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* ===== Botones ===== */
+  .links {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    animation-delay: 0.36s;
+  }
+
+  .btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 58px;
+    padding: 16px 20px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-align: center;
+    overflow: hidden;
+    transition: transform 0.15s ease, border-color 0.25s ease, background 0.25s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .btn:active { transform: scale(0.97); }
+
+  /* Botón principal: dorado sólido con barrido de brillo al pasar el mouse */
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent-bright), var(--accent));
+    color: #14100a;
+  }
+
+  .btn-primary::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.65s ease;
+  }
+
+  .btn-primary:hover::before { left: 130%; }
+
+  .btn-primary:hover {
+    box-shadow: 0 10px 32px -10px rgba(201, 154, 82, 0.55);
+  }
+
+  /* Botón secundario: contorno, se ilumina al hover */
+  .btn-secondary {
+    background: rgba(255, 255, 255, 0.02);
+    color: var(--text-primary);
+    border: 1px solid var(--border-strong);
+  }
+
+  .btn-secondary::after {
+    content: "→";
+    margin-left: 8px;
+    display: inline-block;
+    transition: transform 0.25s ease;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--accent);
+    background: rgba(201, 154, 82, 0.07);
+    color: var(--accent-bright);
+  }
+
+  .btn-secondary:hover::after { transform: translateX(3px); }
+
+  /* ===== Footer ===== */
+  .footer {
+    margin-top: auto;
+    padding-top: 28px;
+    font-size: 11px;
+    color: var(--text-muted);
+    text-align: center;
+    letter-spacing: 0.04em;
+    animation-delay: 0.42s;
+  }
+</style>
+</head>
+<body>
+
+  <div class="glow" id="glow"></div>
+  <div class="grain"></div>
+
+  <div class="page">
+
+    <!-- ===== Badge de estado ===== -->
+    <div class="status reveal">
+      <span class="dot"></span>
+      Disponible para hablar
+    </div>
+
+    <!-- ===== Avatar con anillo animado ===== -->
+    <div class="avatar-wrap reveal">
+      <div class="avatar-ring"></div>
+      <div class="avatar">
+        <img src="avatar.jpg" alt="Franco" />
+      </div>
+    </div>
+
+    <!-- ===== Marca y bio ===== -->
+    <div class="brand reveal">Franco <span class="sep">|</span> <span class="accent-word">Negocios B2B Remoto</span></div>
+    <p class="bio reveal">Construí mi vida remota B2B.<br>Te muestro cómo se logra y cómo se sostiene en el tiempo.</p>
+
+    <!-- ===== Redes sociales ===== -->
+    <div class="socials reveal">
+      <a class="social-link" href="https://www.instagram.com/franco.de.la.vega/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect x="3" y="3" width="18" height="18" rx="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+      </a>
+      <a class="social-link" href="https://tiktok.com/@TU_USUARIO" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M16.6 5.8c-.9-.6-1.5-1.6-1.6-2.8h-3v12.4c0 1.3-1 2.3-2.3 2.3-1.3 0-2.3-1-2.3-2.3s1-2.3 2.3-2.3c.2 0 .5 0 .7.1v-3.1c-.2 0-.5 0-.7 0-3 0-5.4 2.4-5.4 5.4S7.7 20.9 10.7 20.9s5.4-2.4 5.4-5.4V9.1c1.1.8 2.5 1.3 4 1.3V7.4c-1.3 0-2.4-.6-3.5-1.6z"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- ===== Prueba social: discreta, no compite con el botón ===== -->
+    <p class="social-proof reveal">+300 personas formadas</p>
+
+    <!-- ===== Botones de acción ===== -->
+    <div class="links reveal">
+      <a class="btn btn-primary" href="https://wa.me/5492617733373" target="_blank" rel="noopener noreferrer">
+        Escribime
+      </a>
+      <!-- TODO: acá va el link a la página de info del programa (qué es, para quién, qué incluye).
+           Todavía no está lista — por ahora el botón no lleva a ningún lado (placeholder "#")
+           para no duplicar el link de agendar del botón de WhatsApp. -->
+      <a class="btn btn-secondary" href="#" onclick="return false;" aria-disabled="true">
+        Descubrí de qué se trata
+      </a>
+    </div>
+
+    <div class="footer reveal">Franco de la Vega © 2026</div>
+
+  </div>
+
+  <script>
+    // Glow ambiental: sigue el mouse en desktop; en touch queda fijo arriba-centro.
+    (function () {
+      var glow = document.getElementById('glow');
+      var supportsHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+      if (!supportsHover) return;
+      window.addEventListener('pointermove', function (e) {
+        var x = (e.clientX / window.innerWidth) * 100;
+        var y = (e.clientY / window.innerHeight) * 100;
+        glow.style.setProperty('--mx', x + '%');
+        glow.style.setProperty('--my', y + '%');
+      });
+    })();
+  </script>
+
+</body>
+</html>
