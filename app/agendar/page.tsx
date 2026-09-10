@@ -57,6 +57,10 @@ function AgendarFlow() {
   const searchParams = useSearchParams();
   const vendedorFijo = searchParams.get("vendedor") || undefined;
 
+  useEffect(() => {
+    document.title = "Agendar llamada — ILFC";
+  }, []);
+
   const [step, setStep] = useState<"slot" | "form" | "done">("slot");
   const [selection, setSelection] = useState<BookingSelection | null>(null);
   const [nombre, setNombre] = useState("");

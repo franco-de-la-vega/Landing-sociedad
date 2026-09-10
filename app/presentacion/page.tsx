@@ -21,7 +21,9 @@ import PlanComparisonSection from "@/components/presentation/PlanComparisonSecti
 import DollarCalculatorSection from "@/components/presentation/DollarCalculatorSection";
 
 export const metadata: Metadata = {
-  title: "Instituto Latinoamericano de Formación Comercial — Presentación",
+  // Lo específico primero: con varias pestañas del Instituto abiertas juntas,
+  // todas empezando "Instituto Latinoamericano..." se veían idénticas.
+  title: "Presentación — ILFC",
   description: "Presentación técnica para llamadas de venta en vivo.",
 };
 

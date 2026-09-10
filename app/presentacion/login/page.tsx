@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import Logo from "@/components/Logo";
@@ -9,6 +9,10 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get("next") || "/presentacion";
+
+  useEffect(() => {
+    document.title = "Ingresar a Presentación — ILFC";
+  }, []);
 
   const [user, setUser] = useState("");
   const [pass, setPass] = useState("");
