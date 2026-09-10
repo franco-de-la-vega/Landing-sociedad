@@ -161,6 +161,66 @@ const tierCard: Record<Plan["tier"], string> = {
   vip: "border-[var(--color-accent)]/50 bg-[var(--color-accent-muted)] lg:-translate-y-3",
 };
 
+// ─────────────── Botón de pago dLocal Go ───────────────
+// Pedido de Franco (2026-09-10): pegar el snippet TAL CUAL lo genera dLocal
+// Go, uno por plan — nada custom. Cada snippet trae su propio <script> que
+// se auto-inserta un <div> al lado y arma el botón de pago ahí. Ese <script>
+// viene como texto (vía dangerouslySetInnerHTML no lo ejecutaría el
+// navegador), así que se recrea a mano con document.createElement("script")
+// — la única forma de que un script insertado dinámicamente corra de verdad.
+const DLOCAL_SNIPPETS: Partial<Record<Plan["key"], string>> = {
+  junior: `<script data-reference-id="c8168fac-f028-4149-96aa-0e57dc77f6b7">(function(){const z=!!window.DlocalGo,s=z?document.querySelector('script[src="https://static.dlocalgo.com/dlocalgo.min.js"]'):document.createElement("script");z||(s.src="https://static.dlocalgo.com/dlocalgo.min.js",s.async=!0,document.body.appendChild(s));s.addEventListener("load",()=>{const e=document.querySelector('script[data-reference-id="c8168fac-f028-4149-96aa-0e57dc77f6b7"]'),t=e.parentNode,n="dp-btn-c8168fac-f028-4149-96aa-0e57dc77f6b7",c=document.createElement("div");c.id=n,t.insertBefore(c,e);new DlocalGo("tOGnvMhyDfKcqEZDTGQFvyVnzIFwrfTd").createCheckout(n,{subType:"BUTTON",country:"",currency:"USD",amount:"397",lang:"",text:"LO QUIERO"})});})()</script>`,
+  "high-ticket": `<script data-reference-id="a7ce158a-a26b-49f1-bf92-2a236bf6dd3b">(function(){const z=!!window.DlocalGo,s=z?document.querySelector('script[src="https://static.dlocalgo.com/dlocalgo.min.js"]'):document.createElement("script");z||(s.src="https://static.dlocalgo.com/dlocalgo.min.js",s.async=!0,document.body.appendChild(s));s.addEventListener("load",()=>{const e=document.querySelector('script[data-reference-id="a7ce158a-a26b-49f1-bf92-2a236bf6dd3b"]'),t=e.parentNode,n="dp-btn-a7ce158a-a26b-49f1-bf92-2a236bf6dd3b",c=document.createElement("div");c.id=n,t.insertBefore(c,e);new DlocalGo("tOGnvMhyDfKcqEZDTGQFvyVnzIFwrfTd").createCheckout(n,{subType:"BUTTON",country:"",currency:"USD",amount:"497",lang:"",text:"LO QUIERO"})});})()</script>`,
+  carrera: `<script data-reference-id="b0488bcb-fd81-4d8e-a365-e2e6cc953829">(function(){const z=!!window.DlocalGo,s=z?document.querySelector('script[src="https://static.dlocalgo.com/dlocalgo.min.js"]'):document.createElement("script");z||(s.src="https://static.dlocalgo.com/dlocalgo.min.js",s.async=!0,document.body.appendChild(s));s.addEventListener("load",()=>{const e=document.querySelector('script[data-reference-id="b0488bcb-fd81-4d8e-a365-e2e6cc953829"]'),t=e.parentNode,n="dp-btn-b0488bcb-fd81-4d8e-a365-e2e6cc953829",c=document.createElement("div");c.id=n,t.insertBefore(c,e);new DlocalGo("tOGnvMhyDfKcqEZDTGQFvyVnzIFwrfTd").createCheckout(n,{subType:"BUTTON",country:"",currency:"USD",amount:"1429",lang:"",text:"LO QUIERO"})});})()</script>`,
+};
+
+// Cada snippet de dLocal Go trae su propio loader del SDK externo con un
+// guard "si ya está cargado, no lo cargues de nuevo" — pero con 3 botones
+// en la misma página (uno por plan), los 3 montan casi al mismo tiempo:
+// todos arrancan ANTES de que el primero termine de cargar el script, y
+// chocan (el navegador tira "Identifier 'DlocalGo' has already been
+// declared" al cargar la clase dos veces). Se serializa el montaje acá —
+// el contenido de cada snippet queda intacto, tal cual lo pegó Franco.
+let colaMontajeDlocal: Promise<void> = Promise.resolve();
+
+function DlocalGoButton({ html }: { html: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const host = ref.current;
+    if (!host) return;
+    host.innerHTML = "";
+    let cancelado = false;
+
+    const tarea = colaMontajeDlocal.then(async () => {
+      if (cancelado || !host.isConnected) return;
+
+      const temp = document.createElement("div");
+      temp.innerHTML = html;
+      const original = temp.querySelector("script");
+      if (!original) return;
+
+      const script = document.createElement("script");
+      for (const attr of Array.from(original.attributes)) script.setAttribute(attr.name, attr.value);
+      script.text = original.textContent ?? "";
+      host.appendChild(script);
+
+      // No deja pasar al siguiente botón hasta que el SDK esté disponible
+      // (o hasta 5s, por si algo falla — no bloquear el resto para siempre).
+      for (let i = 0; i < 100 && !(window as unknown as { DlocalGo?: unknown }).DlocalGo; i++) {
+        await new Promise((r) => setTimeout(r, 50));
+      }
+    });
+    colaMontajeDlocal = tarea.catch(() => {});
+
+    return () => {
+      cancelado = true;
+    };
+  }, [html]);
+
+  return <div ref={ref} className="mt-3" />;
+}
+
 // ─────────────── Helpers ───────────────
 
 function fmt(n: number, locale: string) {
@@ -766,6 +826,7 @@ function PlanCard({
             "Armar el pago"
           )}
         </button>
+        {DLOCAL_SNIPPETS[p.key] && <DlocalGoButton html={DLOCAL_SNIPPETS[p.key]!} />}
       </div>
     </div>
   );
