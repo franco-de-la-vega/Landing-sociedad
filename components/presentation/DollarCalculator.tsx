@@ -14,6 +14,12 @@ const VALIDEZ_DIAS = 7;
 /** Promo de Carrera Completa. Poné la fecha real de fin. */
 const PROMO = { descuento: 20, hasta: "2026-09-30" };
 
+/** Link de pago abierto de dLocal Go — el cliente carga el monto que se
+ * acordó en la llamada (seña, cuota, lo que sea). Para eso está la
+ * calculadora arriba: le muestra al closer el número exacto a decirle
+ * antes de mandar este link. Pedido de Franco, 2026-09-10. */
+const DLOCAL_OPEN_CHECKOUT_URL = "https://checkout.dlocalgo.com/open-checkout/b3Blbl9saW5rOm1pZDoyMzg5NzA=";
+
 /**
  * Cotización de respaldo — SOLO se usa si el usuario aprieta "usar respaldo"
  * cuando la API en vivo está caída. No se muestra sola en ningún lado.
@@ -717,6 +723,19 @@ export default function DollarCalculator() {
 
                           <p className="mt-3 text-center text-[12px] text-[var(--color-text-muted)]">
                             Precio de hoy — válido {VALIDEZ_DIAS} días.
+                          </p>
+
+                          <a
+                            href={DLOCAL_OPEN_CHECKOUT_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-4 flex items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] py-3.5 text-[13px] font-bold uppercase tracking-widest text-[#0B0C0E] transition-transform hover:scale-[1.02] hover:bg-[var(--color-accent-hover)]"
+                          >
+                            Pagar ahora
+                          </a>
+                          <p className="mt-2 text-center text-[11px] leading-relaxed text-[var(--color-text-muted)]">
+                            Abre el link de pago — decile al cliente el monto de &ldquo;{pdp.pagos[0]?.label ?? "Hoy"}&rdquo; de arriba
+                            ({money(pdp.pagos[0]?.monto ?? total)} {pais.moneda}) para que lo cargue él mismo.
                           </p>
 
                           <button
