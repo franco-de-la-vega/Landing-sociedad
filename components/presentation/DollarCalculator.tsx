@@ -719,12 +719,6 @@ export default function DollarCalculator() {
                             Precio de hoy — válido {VALIDEZ_DIAS} días.
                           </p>
 
-                          {DLOCAL_SNIPPETS[plan.key] && (
-                            <div className="mt-4 flex justify-center">
-                              <DlocalGoButton html={DLOCAL_SNIPPETS[plan.key]!} />
-                            </div>
-                          )}
-
                           <button
                             onClick={copiarResumen}
                             className="mt-3 flex items-center justify-center gap-2 rounded-full border border-[var(--color-border-strong)] py-3 text-[13px] font-semibold uppercase tracking-widest text-[var(--color-text-secondary)] transition-colors hover:border-[var(--color-accent)]/60 hover:text-[var(--color-text-primary)]"
@@ -895,6 +889,17 @@ function PlanCard({
             "Armar el pago"
           )}
         </button>
+
+        {DLOCAL_SNIPPETS[p.key] && (
+          <>
+            <p className="mt-4 text-center text-[11px] font-semibold uppercase tracking-widest text-[var(--color-text-muted)]">
+              — o si ya decidió —
+            </p>
+            <div className="mt-3 flex justify-center">
+              <DlocalGoButton html={DLOCAL_SNIPPETS[p.key]!} />
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
