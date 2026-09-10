@@ -175,26 +175,87 @@ const DLOCAL_SNIPPETS: Partial<Record<Plan["key"], string>> = {
 };
 
 // Cada snippet de dLocal Go trae su propio loader del SDK externo con un
-// guard "si ya está cargado, no lo cargues de nuevo" — pero con 3 botones
-// en la misma página (uno por plan), los 3 montan casi al mismo tiempo:
-// todos arrancan ANTES de que el primero termine de cargar el script, y
-// chocan (el navegador tira "Identifier 'DlocalGo' has already been
-// declared" al cargar la clase dos veces). Se serializa el montaje acá —
-// el contenido de cada snippet queda intacto, tal cual lo pegó Franco.
+// guard "si ya está cargado, no lo cargues de nuevo" — pero acá se montan
+// MUCHAS veces: los 3 botones al abrir la página, y de nuevo cada vez que
+// alguien cambia de país (React desmonta y remonta el panel de "Armá el
+// pago"). El snippet de dLocal está pensado para una página estática que
+// carga una sola vez, no para esto:
+//   1. Con varios botones montando juntos, todos arrancan antes de que el
+//      primero termine de cargar el SDK y chocan ("Identifier DlocalGo has
+//      already been declared"). Se serializa el montaje con una cola.
+//   2. Si el SDK YA está cargado (alguien ya vio un botón antes), el propio
+//      snippet reutiliza el <script> viejo y espera su evento "load" — pero
+//      ese evento ya pasó hace rato y nunca vuelve a disparar, así que el
+//      checkout no se crea y el botón desaparece. Por eso lo llamamos
+//      directo con el SDK ya cargado, sin volver a correr el snippet.
+// El monto/texto/id de cada botón sale del snippet tal cual lo generó
+// dLocal — no se inventa ni se cambia ningún valor de pago.
 let colaMontajeDlocal: Promise<void> = Promise.resolve();
+
+type DlocalGoCtor = new (apiKey: string) => { createCheckout: (elId: string, cfg: Record<string, string>) => void };
+
+function pintarBoton(el: HTMLButtonElement) {
+  el.style.setProperty("background-color", "var(--color-accent)", "important");
+  el.style.setProperty("background-image", "none", "important");
+  el.style.setProperty("color", "#0B0C0E", "important");
+  el.style.setProperty("border", "none", "important");
+  el.style.setProperty("border-radius", "9999px", "important");
+  el.style.setProperty("font-weight", "700", "important");
+  el.style.setProperty("letter-spacing", "0.05em", "important");
+  el.style.setProperty("text-transform", "uppercase", "important");
+}
 
 function DlocalGoButton({ html }: { html: string }) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const host = ref.current;
-    if (!host) return;
+    const hostMaybeNull = ref.current;
+    if (!hostMaybeNull) return;
+    const host: HTMLDivElement = hostMaybeNull;
     host.innerHTML = "";
     let cancelado = false;
+
+    const refId = html.match(/data-reference-id="([^"]+)"/)?.[1];
+    const merchantKey = html.match(/new DlocalGo\("([^"]+)"\)/)?.[1];
+    const amount = html.match(/amount:"(\d+)"/)?.[1];
+    const texto = html.match(/text:"([^"]*)"/)?.[1] ?? "LO QUIERO";
+    const elId = refId ? `dp-btn-${refId}` : undefined;
+
+    async function esperarBoton() {
+      for (let i = 0; i < 60 && !cancelado; i++) {
+        const boton = host.querySelector("button");
+        if (boton) {
+          pintarBoton(boton);
+          return;
+        }
+        await new Promise((r) => setTimeout(r, 100));
+      }
+    }
 
     const tarea = colaMontajeDlocal.then(async () => {
       if (cancelado || !host.isConnected) return;
 
+      const w = window as unknown as { DlocalGo?: DlocalGoCtor };
+
+      if (w.DlocalGo && elId && merchantKey && amount) {
+        // El SDK ya está en la página (otro botón ya lo trajo) — se crea el
+        // checkout directo, sin re-ejecutar el snippet (ver comentario arriba).
+        const div = document.createElement("div");
+        div.id = elId;
+        host.appendChild(div);
+        new w.DlocalGo(merchantKey).createCheckout(elId, {
+          subType: "BUTTON",
+          country: "",
+          currency: "USD",
+          amount,
+          lang: "",
+          text: texto,
+        });
+        await esperarBoton();
+        return;
+      }
+
+      // Primera vez en la página: corre el snippet tal cual lo generó dLocal.
       const temp = document.createElement("div");
       temp.innerHTML = html;
       const original = temp.querySelector("script");
@@ -211,25 +272,7 @@ function DlocalGoButton({ html }: { html: string }) {
         await new Promise((r) => setTimeout(r, 50));
       }
 
-      // dLocal Go renderiza su botón con SU paleta (rosa) — acá se
-      // sobreescribe en línea para que combine con la página (dorado sobre
-      // fondo oscuro, mismo pill/mayúsculas que el resto de los botones).
-      // No toca el comportamiento ni el destino del pago, solo el color.
-      for (let i = 0; i < 60 && !cancelado; i++) {
-        const boton = host.querySelector("button");
-        if (boton) {
-          boton.style.setProperty("background-color", "var(--color-accent)", "important");
-          boton.style.setProperty("background-image", "none", "important");
-          boton.style.setProperty("color", "#0B0C0E", "important");
-          boton.style.setProperty("border", "none", "important");
-          boton.style.setProperty("border-radius", "9999px", "important");
-          boton.style.setProperty("font-weight", "700", "important");
-          boton.style.setProperty("letter-spacing", "0.05em", "important");
-          boton.style.setProperty("text-transform", "uppercase", "important");
-          break;
-        }
-        await new Promise((r) => setTimeout(r, 100));
-      }
+      await esperarBoton();
     });
     colaMontajeDlocal = tarea.catch(() => {});
 
