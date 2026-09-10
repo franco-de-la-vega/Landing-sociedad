@@ -608,7 +608,7 @@ export default function DollarCalculator() {
                             rel="noopener noreferrer"
                             className="mt-4 flex items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] py-3.5 text-[13px] font-bold uppercase tracking-widest text-[#0B0C0E] transition-transform hover:scale-[1.02] hover:bg-[var(--color-accent-hover)]"
                           >
-                            Pagar ahora
+                            Avanzar
                           </a>
                           <p className="mt-2 text-center text-[11px] leading-relaxed text-[var(--color-text-muted)]">
                             Abre el link de pago — decile al cliente el monto de &ldquo;{pdp.pagos[0]?.label ?? "Hoy"}&rdquo; de arriba
@@ -617,17 +617,17 @@ export default function DollarCalculator() {
 
                           <button
                             onClick={copiarResumen}
-                            className="mt-3 flex items-center justify-center gap-2 rounded-full border border-[var(--color-border-strong)] py-3 text-[13px] font-semibold uppercase tracking-widest text-[var(--color-text-secondary)] transition-colors hover:border-[var(--color-accent)]/60 hover:text-[var(--color-text-primary)]"
+                            className="mt-3 flex items-center justify-center gap-1.5 py-1 text-[12px] font-semibold text-[var(--color-text-muted)] underline-offset-4 transition-colors hover:text-[var(--color-accent)] hover:underline"
                           >
                             {copiado ? (
                               <>
-                                <Check size={14} className="text-emerald-600" /> Presupuesto copiado
+                                <Check size={13} className="text-emerald-600" /> Presupuesto copiado
                               </>
                             ) : copiarError ? (
                               <span className="text-red-600">No se pudo copiar</span>
                             ) : (
                               <>
-                                <Copy size={13} /> Copiar presupuesto completo
+                                <Copy size={12} /> Copiar presupuesto completo
                               </>
                             )}
                           </button>
@@ -769,37 +769,32 @@ function PlanCard({
       )}
 
       <div className="mt-auto pt-7">
-        <button
-          onClick={onElegir}
-          className={`flex w-full items-center justify-center gap-2 rounded-full py-3.5 text-[13px] font-bold uppercase tracking-widest transition-colors ${
-            elegido
-              ? "bg-[var(--color-accent)] text-[#0B0C0E]"
-              : "border border-[var(--color-accent)]/45 text-[var(--color-accent)] hover:bg-[var(--color-accent)]/[0.08]"
-          }`}
-        >
-          {elegido ? (
-            <>
-              <Check size={14} strokeWidth={3} /> Elegido
-            </>
-          ) : (
-            "Armar el pago"
-          )}
-        </button>
-
-        <p className="mt-4 text-center text-[11px] font-semibold uppercase tracking-widest text-[var(--color-text-muted)]">
-          — o si ya decidió —
-        </p>
         <a
-          href={DLOCAL_OPEN_CHECKOUT_URL}
+          href={`/pagar/${p.key}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-3 flex items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] py-3.5 text-[13px] font-bold uppercase tracking-widest text-[#0B0C0E] transition-transform hover:scale-[1.02] hover:bg-[var(--color-accent-hover)]"
+          className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] py-3.5 text-[13px] font-bold uppercase tracking-widest text-[#0B0C0E] transition-transform hover:scale-[1.02] hover:bg-[var(--color-accent-hover)]"
         >
           Pagar ahora
         </a>
         <p className="mt-2 text-center text-[11px] leading-relaxed text-[var(--color-text-muted)]">
-          Abre en pestaña nueva — decile que cargue {precio !== null ? money(precio) : `US$${p.priceUSD}`} {pais.moneda}.
+          Abre en pestaña nueva — pago fijo de US${p.priceUSD}, listo para compartir.
         </p>
+
+        <button
+          onClick={onElegir}
+          className={`mt-3 flex w-full items-center justify-center gap-1.5 py-1 text-[12px] font-semibold underline-offset-4 transition-colors ${
+            elegido ? "text-[var(--color-accent)] underline" : "text-[var(--color-text-muted)] hover:text-[var(--color-accent)] hover:underline"
+          }`}
+        >
+          {elegido ? (
+            <>
+              <Check size={13} strokeWidth={3} /> Armando el pago abajo ↓
+            </>
+          ) : (
+            "¿Seña y cuotas? Armar el pago ↓"
+          )}
+        </button>
       </div>
     </div>
   );
