@@ -418,6 +418,23 @@
     transform: rotate(90deg);
   }
 
+  /* ===== Verificación: link chico, no compite con los botones ===== */
+  .verify-link {
+    margin-top: 18px;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    text-decoration: none;
+    text-align: center;
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease;
+    animation-delay: 0.4s;
+  }
+
+  .verify-link:hover {
+    color: var(--text-secondary);
+    border-color: var(--border-strong);
+  }
+
   /* ===== Footer ===== */
   .footer {
     margin-top: auto;
@@ -476,13 +493,22 @@
 
     <!-- ===== Botones de acción ===== -->
     <div class="links reveal">
-      <a class="btn btn-primary" href="https://wa.me/5492617733373" target="_blank" rel="noopener noreferrer">
-        Escribime
+      <a class="btn btn-primary" href="https://wa.me/573181496980" target="_blank" rel="noopener noreferrer">
+        Hablar con el equipo
       </a>
       <a class="btn btn-secondary" href="https://www.formlat.com/agendar" target="_blank" rel="noopener noreferrer">
         Descubrí de qué se trata
       </a>
     </div>
+
+    <!-- ===== Verificación: alguien de mi equipo está usando este WhatsApp
+         corporativo hace poco tiempo, aparecieron perfiles falsos haciéndose
+         pasar por mí. Si hay dudas de si es real, este es mi WhatsApp
+         personal para confirmarlo — a propósito discreto, no es el CTA
+         principal. Pedido de Franco, 2026-09-11. ===== -->
+    <a class="verify-link reveal" href="https://wa.me/5492615336300" target="_blank" rel="noopener noreferrer">
+      ¿Dudas si es real? Escribime a mi WhatsApp personal
+    </a>
 
     <div class="footer reveal">Franco de la Vega © 2026</div>
 
