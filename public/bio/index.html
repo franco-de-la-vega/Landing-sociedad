@@ -418,22 +418,32 @@
     transform: rotate(90deg);
   }
 
-  /* ===== Verificación: link chico, no compite con los botones ===== */
+  /* ===== Línea personal: botón chico, discreto, no compite con los principales ===== */
   .verify-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     margin-top: 18px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.02);
     font-size: 12.5px;
+    font-weight: 600;
     color: var(--text-muted);
     text-decoration: none;
     text-align: center;
-    border-bottom: 1px solid transparent;
-    transition: color 0.2s ease, border-color 0.2s ease;
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
     animation-delay: 0.4s;
   }
 
   .verify-link:hover {
     color: var(--text-secondary);
     border-color: var(--border-strong);
+    background: rgba(255, 255, 255, 0.05);
   }
+
+  .verify-link:active { transform: scale(0.97); }
 
   /* ===== Footer ===== */
   .footer {
