@@ -445,6 +445,39 @@
 
   .verify-link:active { transform: scale(0.97); }
 
+  /* ===== Aviso de navegador embebido (TikTok/Instagram bloquean el salto
+     directo a WhatsApp) — solo aparece si detectamos ese navegador. ===== */
+  .webview-notice {
+    display: none;
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid var(--border-strong);
+    background: rgba(201, 154, 82, 0.07);
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    text-align: center;
+    animation-delay: 0.06s;
+  }
+
+  .webview-notice.is-visible { display: block; }
+
+  .webview-notice b { color: var(--accent-bright); }
+
+  .webview-notice button {
+    margin-top: 8px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border-strong);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-primary);
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
   /* ===== Footer ===== */
   .footer {
     margin-top: auto;
@@ -463,6 +496,14 @@
   <div class="grain"></div>
 
   <div class="page">
+
+    <!-- ===== Aviso: solo se muestra si el navegador es el embebido de
+         TikTok/Instagram, que bloquea abrir WhatsApp directo. ===== -->
+    <div class="webview-notice reveal" id="webviewNotice">
+      Para que el botón abra WhatsApp, tocá los <b>•••</b> arriba a la derecha y elegí <b>«Abrir en navegador»</b>.
+      <br />
+      <button type="button" id="copyNumberBtn">Copiar el número</button>
+    </div>
 
     <!-- ===== Badge de estado ===== -->
     <div class="status reveal">
@@ -536,6 +577,25 @@
   </div>
 
   <script>
+    // Detecta el navegador embebido de TikTok/Instagram/Facebook — ahí el
+    // salto directo a WhatsApp queda bloqueado por la app, así que avisamos
+    // con la instrucción de "Abrir en navegador" en vez de dejar que falle
+    // en silencio. Pedido de Franco, 2026-09-11.
+    (function () {
+      var ua = navigator.userAgent || '';
+      var esWebviewEmbebido = /TikTok|BytedanceWebview|musical_ly|Instagram|FBAN|FBAV/i.test(ua);
+      if (!esWebviewEmbebido) return;
+      document.getElementById('webviewNotice').classList.add('is-visible');
+
+      var copyBtn = document.getElementById('copyNumberBtn');
+      copyBtn.addEventListener('click', function () {
+        navigator.clipboard.writeText('+57 318 149 6980').then(function () {
+          copyBtn.textContent = '¡Copiado!';
+          setTimeout(function () { copyBtn.textContent = 'Copiar el número'; }, 2000);
+        });
+      });
+    })();
+
     // Glow ambiental: sigue el mouse en desktop; en touch queda fijo arriba-centro.
     (function () {
       var glow = document.getElementById('glow');
