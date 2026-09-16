@@ -1,9 +1,9 @@
 "use client";
 
-import { Suspense, useEffect, useState, type CSSProperties } from "react";
+import { Suspense, useEffect, useRef, useState, type CSSProperties } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { CalendarPlus, Check, ChevronLeft, Loader2, Play } from "lucide-react";
+import { CalendarPlus, Check, ChevronLeft, Loader2, Pause, Play, Volume2, VolumeX } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import Logo from "@/components/Logo";
 import BookingCalendar, { type BookingSelection } from "@/components/BookingCalendar";
@@ -71,6 +71,10 @@ function AgendarFlow() {
   const [submitError, setSubmitError] = useState(false);
   const [slotTaken, setSlotTaken] = useState(false);
   const [videoListo, setVideoListo] = useState(false);
+  const [videoPlaying, setVideoPlaying] = useState(false);
+  const [videoMuted, setVideoMuted] = useState(false);
+  const [videoProgress, setVideoProgress] = useState(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   async function handleSubmit() {
     if (!selection || !nombre.trim() || !isValidWhatsapp(whatsapp)) return;
@@ -287,15 +291,85 @@ function AgendarFlow() {
                   </span>
                 </button>
               ) : (
-                <video
-                  controls
-                  autoPlay
-                  playsInline
-                  className="h-full w-full object-cover"
-                  poster="/videos/vsl-poster.jpg"
+                <div
+                  className="group/player relative h-full w-full"
+                  onContextMenu={(e) => e.preventDefault()}
                 >
-                  <source src="/videos/vsl-web.mp4" type="video/mp4" />
-                </video>
+                  <video
+                    ref={videoRef}
+                    autoPlay
+                    playsInline
+                    controlsList="nodownload noremoteplayback noplaybackrate"
+                    disablePictureInPicture
+                    disableRemotePlayback
+                    onContextMenu={(e) => e.preventDefault()}
+                    onDragStart={(e) => e.preventDefault()}
+                    onClick={() => {
+                      const el = videoRef.current;
+                      if (!el) return;
+                      if (el.paused) el.play();
+                      else el.pause();
+                    }}
+                    onPlay={() => setVideoPlaying(true)}
+                    onPause={() => setVideoPlaying(false)}
+                    onTimeUpdate={(e) => {
+                      const el = e.currentTarget;
+                      setVideoProgress(el.duration ? el.currentTime / el.duration : 0);
+                    }}
+                    className="h-full w-full select-none object-cover [-webkit-touch-callout:none]"
+                    poster="/videos/vsl-poster.jpg"
+                  >
+                    <source src="/videos/vsl-web.mp4" type="video/mp4" />
+                  </video>
+
+                  {/* marca de agua quemada en el DOM (además de la que va
+                      grabada en los píxeles del archivo) — capa extra si
+                      alguien intenta recortarla en un editor rápido */}
+                  <span className="pointer-events-none absolute right-3 top-3 rounded-full bg-black/35 px-2.5 py-1 text-[10.5px] font-semibold tracking-wide text-white/70 backdrop-blur-sm">
+                    @franco.delavegaa
+                  </span>
+
+                  {/* controles propios: nada de menú nativo del navegador
+                      (clic derecho → guardar video no aparece), sin botón de
+                      descarga. No frena a quien abre devtools, pero sí al
+                      99% que solo prueba clic derecho. */}
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-center gap-3 bg-gradient-to-t from-black/70 to-transparent px-4 pb-4 pt-10 opacity-0 transition-opacity duration-200 group-hover/player:opacity-100">
+                    <button
+                      type="button"
+                      aria-label={videoPlaying ? "Pausar" : "Reproducir"}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const el = videoRef.current;
+                        if (!el) return;
+                        if (el.paused) el.play();
+                        else el.pause();
+                      }}
+                      className="pointer-events-auto flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur-sm transition-colors hover:bg-white/25"
+                    >
+                      {videoPlaying ? <Pause size={15} /> : <Play size={15} className="ml-0.5" />}
+                    </button>
+                    <div className="h-1 flex-1 overflow-hidden rounded-full bg-white/20">
+                      <div
+                        className="h-full rounded-full bg-[var(--color-accent)]"
+                        style={{ width: `${videoProgress * 100}%` }}
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      aria-label={videoMuted ? "Activar sonido" : "Silenciar"}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const el = videoRef.current;
+                        if (!el) return;
+                        el.muted = !el.muted;
+                        setVideoMuted(el.muted);
+                      }}
+                      className="pointer-events-auto flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur-sm transition-colors hover:bg-white/25"
+                    >
+                      {videoMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
+                    </button>
+                  </div>
+                </div>
               )}
             </div>
           </div>
