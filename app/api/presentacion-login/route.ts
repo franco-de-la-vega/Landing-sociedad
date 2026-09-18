@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const USER = process.env.PRESENTACION_USER || "ilfc";
-const PASS = process.env.PRESENTACION_PASS || "ILFC2026equipo";
+const USER = process.env.PRESENTACION_USER || "ilfc_2026";
+const PASS = process.env.PRESENTACION_PASS || "zI3g9Sbtp7Awg2";
 const COOKIE_NAME = "ilfc_pres_auth";
 
 export async function POST(req: NextRequest) {
