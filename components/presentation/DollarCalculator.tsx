@@ -253,7 +253,7 @@ export default function DollarCalculator() {
 
       <div className="mt-6 grid grid-cols-1 items-stretch gap-6 pt-3 lg:grid-cols-3 lg:gap-7 lg:pt-3">
         {PLANES.map((p) => (
-          <PlanCard key={p.key} p={p} elegido={planKey === p.key} onElegir={() => elegirPlan(p.key)} />
+          <PlanCard key={p.key} p={p} elegido={mostrarCalculadora && planKey === p.key} onElegir={() => elegirPlan(p.key)} />
         ))}
       </div>
 
