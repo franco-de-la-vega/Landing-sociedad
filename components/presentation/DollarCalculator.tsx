@@ -173,6 +173,10 @@ export default function DollarCalculator() {
   const [cuotas, setCuotas] = useState(1);
   const [copiado, setCopiado] = useState(false);
   const [copiarError, setCopiarError] = useState(false);
+  // Oculta por defecto: no todos los leads necesitan ver seña/cuotas. El
+  // closer la muestra solo si el caso lo pide, desde "Armar el pago" en la
+  // card elegida (pedido de Franco, 2026-09-21).
+  const [mostrarCalculadora, setMostrarCalculadora] = useState(false);
 
   const calcRef = useRef<HTMLDivElement>(null);
   const plan = PLANES.find((p) => p.key === planKey)!;
@@ -183,6 +187,7 @@ export default function DollarCalculator() {
 
   function elegirPlan(key: string) {
     setPlanKey(key);
+    setMostrarCalculadora(true);
     requestAnimationFrame(() => calcRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }));
   }
 
@@ -250,10 +255,23 @@ export default function DollarCalculator() {
         ))}
       </div>
 
-      {/* ─── Calculadora de seña ─── */}
+      {/* ─── Calculadora de seña: oculta por defecto, la muestra el closer según el caso ─── */}
+      {!mostrarCalculadora && (
+        <button
+          onClick={() => {
+            setMostrarCalculadora(true);
+            requestAnimationFrame(() => calcRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }));
+          }}
+          className="mt-10 flex items-center gap-1.5 text-[13px] font-semibold text-[var(--color-text-muted)] underline underline-offset-4"
+        >
+          ¿Necesitás armar seña y cuotas con el lead? Mostrar calculadora ↓
+        </button>
+      )}
       <div
         ref={calcRef}
-        className="mt-14 scroll-mt-24 rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-7 md:p-9"
+        className={`scroll-mt-24 rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-7 md:p-9 ${
+          mostrarCalculadora ? "mt-10" : "hidden"
+        }`}
       >
         <span className="text-[12px] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
           Armá el pago · {plan.label}

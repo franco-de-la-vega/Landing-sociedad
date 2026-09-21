@@ -98,7 +98,7 @@ export default function EmployabilitySection() {
         >
           {items.map((s) => (
             <RevealItem key={s.title}>
-              <div className="flex h-full flex-col gap-5 border-b-2 border-transparent px-2 py-6 transition-colors duration-300 hover:border-[var(--color-accent)]">
+              <div className="flex h-full flex-col gap-5 border-b-2 border-transparent px-2 py-6">
                 <span className="flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-accent)]/[0.07]">
                   <s.icon />
                 </span>

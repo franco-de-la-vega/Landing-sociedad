@@ -104,8 +104,8 @@ export default function MarketNeedsSection() {
         <RevealGroup stagger={0.06} className="mt-16 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
           {cards.map((c) => (
             <RevealItem key={c.title}>
-              <div className="group flex h-full flex-col items-center gap-5 border-b-2 border-transparent px-6 py-12 transition-colors duration-300 hover:border-[var(--color-accent)]">
-                <span className="flex h-24 w-24 items-center justify-center rounded-full bg-[var(--color-accent)]/[0.06] transition-colors duration-300 group-hover:bg-[var(--color-accent)]/[0.1] md:h-28 md:w-28">
+              <div className="flex h-full flex-col items-center gap-5 border-b-2 border-transparent px-6 py-12">
+                <span className="flex h-24 w-24 items-center justify-center rounded-full bg-[var(--color-accent)]/[0.06] md:h-28 md:w-28">
                   <c.icon />
                 </span>
                 <div>
