@@ -503,9 +503,9 @@ function PlanCard({
         <p className={`mt-2 text-[14.5px] leading-relaxed ${T.muted}`}>{p.tag}</p>
         <span className={`mt-3 block text-[12.5px] font-semibold uppercase tracking-wide ${T.secondary}`}>{p.duracion}</span>
 
-        {/* ─── Precio: el mensual es el número grande (ancla psicológica), pero "A razón de" pegado a
-             él deja clarísimo que es una tasa, no un cargo recurrente. El total real va justo abajo,
-             legible, no una letra chica que nadie puede leer. ─── */}
+        {/* ─── Precio: arriba solo la tasa mensual, como ancla de "no es tan caro".
+             El total real se muestra después, cerca del botón, con presencia moderada
+             — se nota pero no compite como si fueran dos precios distintos. ─── */}
         <div className={`mt-5 border-t pt-5 ${T.border}`}>
           {p.listaUSD !== undefined && (
             <span className={`block text-[15px] font-medium line-through decoration-1 ${T.muted}`}>
@@ -521,9 +521,6 @@ function PlanCard({
             </span>
             <span className={`text-[15px] font-semibold ${T.muted}`}>USD /mes</span>
           </div>
-          <p className={`mt-2.5 text-[16px] font-bold ${T.secondary}`}>
-            Total, pago único: <span className={T.primary}>{money(p.priceUSD)}</span>
-          </p>
         </div>
 
         {/* ─── Apartado 1 a 1: el diferencial de marca. Franja con borde lateral, no un botón. ─── */}
@@ -547,6 +544,10 @@ function PlanCard({
         </ul>
 
         <div className={`mt-auto border-t pt-5 ${T.border}`}>
+          <p className={`mb-4 text-center text-[16px] font-bold ${T.secondary}`}>
+            Total, pago único: <span className={T.primary}>{money(p.priceUSD)}</span>
+          </p>
+
           <a
             href={`/pagar/${p.key}`}
             target="_blank"
