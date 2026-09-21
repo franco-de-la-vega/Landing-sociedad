@@ -75,13 +75,27 @@ export default function TimelineSection() {
 
         <Reveal delay={0.2} className="mt-20">
           <svg viewBox="0 0 1000 260" className="h-auto w-full overflow-visible">
+            {/* riel de fondo, siempre visible */}
             <path
               d={path}
               fill="none"
-              stroke="var(--color-border-strong)"
+              stroke="var(--color-border)"
               strokeWidth="3"
               strokeDasharray="1 9"
               strokeLinecap="round"
+            />
+            {/* el camino se dibuja solo al entrar en pantalla, refuerza "recorrer" la evolución */}
+            <motion.path
+              d={path}
+              fill="none"
+              stroke="var(--color-accent)"
+              strokeWidth="3"
+              strokeDasharray="1 9"
+              strokeLinecap="round"
+              initial={{ pathLength: 0 }}
+              whileInView={{ pathLength: 1 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 3.2, ease: "linear" }}
             />
             {markers.map((m, i) => {
               const s = steps[i];

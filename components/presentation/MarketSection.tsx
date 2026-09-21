@@ -2,88 +2,65 @@
 
 import CountUp from "./CountUp";
 
+const señales = [
+  {
+    value: 161,
+    prefix: "+",
+    suffix: "%",
+    claim: "La demanda no bajó nunca. Se aceleró.",
+    detail:
+      "Crecimiento en contratación remota de empresas de EE.UU. hacia Latinoamérica en 2023.",
+    fuente: "Nearshore Americas",
+  },
+  {
+    value: 45,
+    suffix: "%",
+    claim: "Dejó de ser marginal. Ya es casi la mitad del sector.",
+    detail: "Casi la mitad de los roles comerciales B2B ya se cubren en remoto, sin oficina.",
+    fuente: "Accountmakers, 2026",
+  },
+  {
+    value: 1,
+    prefix: "#",
+    claim: "La negociación remota dejó de ser un nicho.",
+    detail:
+      "Account Executive es el puesto remoto más buscado en 2026, superando a software engineer.",
+    fuente: "Dailyremote, 2026",
+  },
+];
+
 export default function MarketSection() {
   return (
-    <section className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden border-t border-[var(--color-border)] bg-[#FAF9F5] px-12">
+    <section className="relative flex min-h-screen items-center border-t border-[var(--color-border)] bg-[var(--color-bg-elevated-2)] px-6 py-24 md:px-10 md:py-32">
       <div className="mx-auto w-full max-w-6xl">
-        {/* ENCABEZADO */}
-        <div className="mb-14">
-          <span className="mb-2 block text-[13px] font-bold uppercase tracking-[0.2em] text-[#A37B3E]">
-            MARKET INTELLIGENCE
-          </span>
-          <h2 className="mb-3 text-6xl font-black tracking-tight text-neutral-900">
-            El mercado paga por performance.
-          </h2>
-          <p className="text-xl font-normal text-neutral-500">
-            Tres señales concretas de por qué el timing importa más que la
-            intención.
-          </p>
-        </div>
+        <span className="text-[13px] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
+          Market intelligence
+        </span>
+        <h2 className="mt-3 max-w-2xl text-[2.4rem] font-black leading-[1.1] tracking-tight text-[var(--color-text-primary)] md:text-[3.2rem]">
+          El mercado paga por performance.
+        </h2>
+        <p className="mt-4 max-w-xl text-[17px] leading-relaxed text-[var(--color-text-secondary)]">
+          Tres señales concretas de por qué el timing importa más que la
+          intención.
+        </p>
 
-        {/* ASIMETRÍA: un dato protagonista + dos secundarios apilados */}
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.3fr_1fr]">
-          {/* Protagonista */}
-          <div className="flex flex-col justify-between rounded-2xl border border-neutral-200/80 bg-white p-10 shadow-sm">
-            <div>
-              <span className="mb-5 block text-[12px] font-bold uppercase tracking-widest text-neutral-400">
-                DATO DE MERCADO
-              </span>
-              <div className="mb-5 text-[7rem] font-bold leading-none tracking-tight text-[#A37B3E] md:text-[9rem]">
-                <CountUp value={161} prefix="+" suffix="%" />
+        <div className="mt-16 grid grid-cols-1 gap-x-10 gap-y-12 md:grid-cols-3">
+          {señales.map((s) => (
+            <div key={s.claim} className="border-t-2 border-[var(--color-accent)] pt-6">
+              <div className="text-[3.2rem] font-black leading-none tracking-tight text-[var(--color-accent)]">
+                <CountUp value={s.value} prefix={s.prefix} suffix={s.suffix} />
               </div>
-              <p className="max-w-sm text-lg font-medium leading-relaxed text-neutral-600">
-                Crecimiento en contratación remota de empresas de EE.UU.
-                hacia Latinoamérica en 2023.
+              <p className="mt-4 text-[17px] font-bold leading-snug text-[var(--color-text-primary)]">
+                {s.claim}
               </p>
-            </div>
-            <div className="mt-8 border-t border-neutral-100 pt-4">
-              <p className="mb-1 text-base font-bold text-neutral-900">
-                La demanda no bajó nunca. Se aceleró.
+              <p className="mt-2 text-[14.5px] leading-relaxed text-[var(--color-text-secondary)]">
+                {s.detail}
               </p>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-neutral-400">
-                FUENTE: NEARSHORE AMERICAS
+              <span className="mt-4 block text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-muted)]">
+                Fuente: {s.fuente}
               </span>
             </div>
-          </div>
-
-          {/* Secundarios, apilados */}
-          <div className="flex flex-col gap-6">
-            <div className="flex flex-1 items-center justify-between gap-6 rounded-2xl border border-neutral-200/80 bg-white p-7 shadow-sm">
-              <div>
-                <p className="mb-1.5 text-[17px] font-bold text-neutral-900">
-                  Ya no es la excepción. Es la norma del sector.
-                </p>
-                <p className="text-[15px] leading-relaxed text-neutral-500">
-                  De los puestos de ventas B2B hoy son 100% remotos, sin
-                  oficina.
-                </p>
-                <span className="mt-2.5 block text-[11px] font-bold uppercase tracking-wider text-neutral-400">
-                  FUENTE: ACCOUNTMAKERS, 2026
-                </span>
-              </div>
-              <div className="shrink-0 text-5xl font-bold leading-none tracking-tight text-[#A37B3E] md:text-6xl">
-                <CountUp value={45} suffix="%" />
-              </div>
-            </div>
-
-            <div className="flex flex-1 items-center justify-between gap-6 rounded-2xl border border-neutral-200/80 bg-white p-7 shadow-sm">
-              <div>
-                <p className="mb-1.5 text-[17px] font-bold text-neutral-900">
-                  Ventas remotas dejó de ser un nicho.
-                </p>
-                <p className="text-[15px] leading-relaxed text-neutral-500">
-                  Account Executive es el puesto remoto más buscado en
-                  2026, superando a software engineer.
-                </p>
-                <span className="mt-2.5 block text-[11px] font-bold uppercase tracking-wider text-neutral-400">
-                  FUENTE: DAILYREMOTE, 2026
-                </span>
-              </div>
-              <div className="shrink-0 text-5xl font-bold leading-none tracking-tight text-[#A37B3E] md:text-6xl">
-                <CountUp value={1} prefix="#" />
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>

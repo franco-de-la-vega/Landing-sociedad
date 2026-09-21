@@ -8,17 +8,17 @@ import RangeCountUp from "./RangeCountUp";
 const tiers = [
   {
     stage: "Nivel Inicial",
-    detail: "Operatoria base y prospección en proyectos remotos.",
+    detail: "Primeras conversaciones diagnosticadas y calibradas con mentor.",
     low: 1000,
     high: 1700,
     suffix: "",
     heightPct: 35,
-    bar: "from-white/15 to-white/5",
+    bar: "from-[var(--color-accent)]/20 to-[var(--color-accent)]/5",
     glow: false,
   },
   {
     stage: "Especialista",
-    detail: "Consolidador de cierres, autonomía técnica y gestión de pipeline.",
+    detail: "Proceso propio, calibrado y repetible: cerrás con autonomía.",
     low: 1700,
     high: 2500,
     suffix: "",
@@ -27,8 +27,8 @@ const tiers = [
     glow: false,
   },
   {
-    stage: "Closing Lead",
-    detail: "Liderazgo de equipo comercial y contratos high-ticket.",
+    stage: "Top Producer",
+    detail: "Cerrás los contratos más grandes y de mayor complejidad del portafolio.",
     low: 2500,
     high: 4200,
     suffix: "+",
@@ -181,8 +181,8 @@ export default function ROISection() {
                           t.glow
                             ? "text-[1.7rem] text-[var(--color-accent)] md:text-[2.1rem]"
                             : i === 1
-                              ? "text-[1.35rem] text-white/85"
-                              : "text-[1.15rem] text-white/60"
+                              ? "text-[1.4rem] text-white"
+                              : "text-[1.3rem] text-white"
                         }`}
                         style={t.glow ? { filter: "drop-shadow(0 0 14px color-mix(in srgb, var(--color-accent) 55%, transparent))" } : undefined}
                       />
@@ -224,7 +224,7 @@ export default function ROISection() {
               {tiers.map((t) => (
                 <div key={t.stage} className="text-center">
                   <h3 className="text-[16px] font-semibold text-white">{t.stage}</h3>
-                  <p className="mx-auto mt-1 max-w-[160px] text-[13px] leading-relaxed text-white/45">
+                  <p className="mx-auto mt-1 max-w-[170px] text-[13.5px] leading-relaxed text-white/65">
                     {t.detail}
                   </p>
                 </div>

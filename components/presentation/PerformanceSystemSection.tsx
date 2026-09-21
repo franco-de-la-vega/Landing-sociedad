@@ -2,11 +2,11 @@ import Reveal from "@/components/Reveal";
 
 // Valores ilustrativos: el dashboard real está en desarrollo, esto no es data de un alumno.
 const rings = [
-  { label: "Discovery", value: 84, color: "#E8CB86" },
-  { label: "Comunicación", value: 91, color: "#D4AF6A" },
-  { label: "Objeciones", value: 76, color: "#C9A24B" },
-  { label: "Propuesta de valor", value: 88, color: "#B8935A" },
-  { label: "Cierre", value: 79, color: "#8A6A2F" },
+  { label: "Diagnóstico", value: 84, color: "#F5D998" },
+  { label: "Comunicación", value: 91, color: "#D9A94A" },
+  { label: "Objeciones", value: 76, color: "#B8791F" },
+  { label: "Propuesta de valor", value: 88, color: "#8F6C30" },
+  { label: "Cierre", value: 79, color: "#5C4420" },
 ];
 
 const SIZE = 280;
@@ -44,7 +44,7 @@ export default function PerformanceSystemSection() {
         </Reveal>
         <Reveal delay={0.08} className="mt-5">
           <h2 className="mx-auto max-w-2xl text-[2.4rem] font-bold leading-[1.1] tracking-tight text-[var(--color-text-primary)] md:text-[3.3rem]">
-            ¿Y si pudieras ver cómo estás vendiendo?
+            ¿Y si pudieras ver cómo estás negociando?
           </h2>
         </Reveal>
         <Reveal delay={0.14} className="mt-4">
@@ -96,7 +96,7 @@ export default function PerformanceSystemSection() {
         <Reveal delay={0.26} className="mt-8">
           <p className="text-[15px] italic text-[var(--color-text-muted)]">
             Tu próxima sesión de entrenamiento nace de tu performance. Mockup
-            conceptual — sistema en desarrollo.
+            conceptual, sistema en desarrollo.
           </p>
         </Reveal>
       </div>

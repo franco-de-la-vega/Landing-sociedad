@@ -24,6 +24,10 @@ interface Plan {
   key: string;
   label: string;
   kicker: string;
+  /** Usa a propósito la misma palabra que su etapa en el gráfico "Escalada
+   * de ingresos" (ROISection) — Nivel Inicial / Especialista / Closing
+   * Lead — para que el lead ya la haya visto antes de llegar a precios.
+   * Nunca lo señala como conexión; solo repite la palabra (priming). */
   tag: string;
   duracion: string;
   /** Precio mensual mostrado grande arriba de cada card. */
@@ -63,7 +67,7 @@ const PLANES: Plan[] = [
     key: "junior",
     label: "Comercial Junior",
     kicker: "Entra a la profesión",
-    tag: "Tu puerta de entrada a las ventas remotas.",
+    tag: "Tu nivel inicial en lo comercial remoto.",
     duracion: "2 meses",
     priceMonthly: 198,
     priceUSD: 397,
@@ -72,9 +76,7 @@ const PLANES: Plan[] = [
     unoAUno: "6 sesiones personalizadas 1 a 1 con mentor especializado",
     checks: [
       "3 sesiones en vivo por semana",
-      "Acceso completo a la plataforma / campus ILFC",
-      "Preparación de perfil: CV y LinkedIn",
-      "Acceso a bolsa de trabajo ILFC",
+      "Acceso completo a la plataforma ILFC",
       "Certificado de finalización",
     ],
   },
@@ -82,7 +84,7 @@ const PLANES: Plan[] = [
     key: "high-ticket",
     label: "Comercial High Ticket",
     kicker: "Especializate",
-    tag: "Subí la complejidad. Subí tu nivel.",
+    tag: "Subí la complejidad. Convertite en especialista.",
     duracion: "3 meses",
     priceMonthly: 182,
     priceUSD: 547,
@@ -94,14 +96,14 @@ const PLANES: Plan[] = [
       "Todo lo incluido en Comercial Junior",
       "Certificación oficial con historial de desempeño",
       "Evaluación final de especialización comercial",
-      "Conexión con empresas (sujeta a aprobar el examen final)",
+      "Conexión con empresas (sujeta a examen final)",
     ],
   },
   {
     key: "carrera",
     label: "Carrera Completa",
     kicker: "Profesionalizate",
-    tag: "De aprender a vender a construir una carrera comercial.",
+    tag: "De negociar tus primeros acuerdos a Top Producer.",
     duracion: "5 meses",
     priceMonthly: 181,
     priceUSD: 905,
@@ -110,10 +112,10 @@ const PLANES: Plan[] = [
     unoAUno: "25 sesiones personalizadas 1 a 1 (acompañamiento total durante toda la carrera)",
     checks: [
       "Todo lo incluido en Comercial High Ticket",
-      "Mindset y habilidades blandas para liderar procesos de venta",
+      "Mindset y habilidades para liderar procesos de venta",
       "Certificación oficial + historial de desempeño operativo",
       "Conexión directa con empresas, sin proceso de RRHH",
-      "Acceso completo a la plataforma con prioridad de soporte",
+      "Acceso con prioridad de soporte",
     ],
   },
 ];
@@ -264,7 +266,7 @@ export default function DollarCalculator() {
           }}
           className="mt-10 flex items-center gap-1.5 text-[13px] font-semibold text-[var(--color-text-muted)] underline underline-offset-4"
         >
-          ¿Necesitás armar seña y cuotas con el lead? Mostrar calculadora ↓
+          ¿Seña y cuotas? Mostrar calculadora ↓
         </button>
       )}
       <div
@@ -480,7 +482,7 @@ function PlanCard({
 
   return (
     <div
-      className={`relative flex h-full flex-col overflow-visible rounded-[20px] border p-6 shadow-[0_16px_36px_-18px_rgba(20,18,14,0.22)] transition-all ${tierCard[p.tier]} ${
+      className={`relative flex h-full flex-col overflow-visible rounded-[20px] border p-7 shadow-[0_16px_36px_-18px_rgba(20,18,14,0.22)] transition-all ${tierCard[p.tier]} ${
         elegido ? "ring-2 ring-[var(--color-accent)] ring-offset-2 ring-offset-[var(--color-bg-elevated-2)]" : ""
       }`}
     >
@@ -498,13 +500,13 @@ function PlanCard({
 
         <span className={`text-[12px] font-semibold uppercase tracking-[0.16em] ${T.accent}`}>{p.kicker}</span>
         <h3 className={`mt-2 text-[22px] font-black tracking-tight ${T.primary}`}>{p.label}</h3>
-        <p className={`mt-1.5 text-[14.5px] leading-snug ${T.muted}`}>{p.tag}</p>
-        <span className={`mt-2.5 block text-[12.5px] font-semibold uppercase tracking-wide ${T.secondary}`}>{p.duracion}</span>
+        <p className={`mt-2 text-[14.5px] leading-relaxed ${T.muted}`}>{p.tag}</p>
+        <span className={`mt-3 block text-[12.5px] font-semibold uppercase tracking-wide ${T.secondary}`}>{p.duracion}</span>
 
         {/* ─── Precio: el mensual es el número grande (ancla psicológica), pero "A razón de" pegado a
              él deja clarísimo que es una tasa, no un cargo recurrente. El total real va justo abajo,
              legible, no una letra chica que nadie puede leer. ─── */}
-        <div className={`mt-4 border-t pt-4 ${T.border}`}>
+        <div className={`mt-5 border-t pt-5 ${T.border}`}>
           {p.listaUSD !== undefined && (
             <span className={`block text-[15px] font-medium line-through decoration-1 ${T.muted}`}>
               {money(p.listaUSD)}
@@ -513,24 +515,24 @@ function PlanCard({
           <span className={`block text-[12px] font-semibold uppercase tracking-[0.1em] ${T.muted}`}>
             A razón de
           </span>
-          <div className="mt-0.5 flex items-baseline gap-1.5">
+          <div className="mt-1 flex items-baseline gap-1.5">
             <span className={`text-[2.75rem] font-black leading-none tracking-tight ${T.primary}`}>
               ${p.priceMonthly}
             </span>
             <span className={`text-[15px] font-semibold ${T.muted}`}>USD /mes</span>
           </div>
-          <p className={`mt-2 text-[16px] font-bold ${T.secondary}`}>
+          <p className={`mt-2.5 text-[16px] font-bold ${T.secondary}`}>
             Total, pago único: <span className={T.primary}>{money(p.priceUSD)}</span>
           </p>
         </div>
 
         {/* ─── Apartado 1 a 1: el diferencial de marca. Franja con borde lateral, no un botón. ─── */}
-        <div className={`mt-4 flex items-start gap-2.5 border-l-2 py-1.5 pl-3 ${T.oneOnOneBorder}`}>
+        <div className={`mt-5 flex items-start gap-2.5 border-l-2 py-1.5 pl-3 ${T.oneOnOneBorder}`}>
           <Users size={16} strokeWidth={2.25} className={`mt-0.5 shrink-0 ${T.accent}`} />
           <span className={`text-[14.5px] font-semibold leading-snug ${T.primary}`}>{p.unoAUno}</span>
         </div>
 
-        <ul className="mt-4 flex flex-col gap-2">
+        <ul className="mt-5 flex flex-col gap-3">
           {p.checks.map((c) => {
             const esHerencia = c.startsWith("Todo lo incluido en");
             return (
@@ -544,7 +546,7 @@ function PlanCard({
           })}
         </ul>
 
-        <div className={`mt-auto border-t pt-4 ${T.border}`}>
+        <div className={`mt-auto border-t pt-5 ${T.border}`}>
           <a
             href={`/pagar/${p.key}`}
             target="_blank"

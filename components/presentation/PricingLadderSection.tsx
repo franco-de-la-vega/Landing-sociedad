@@ -2,108 +2,115 @@ import Reveal from "@/components/Reveal";
 import RevealGroup from "@/components/RevealGroup";
 import RevealItem from "@/components/RevealItem";
 
+function IconEntrar() {
+  return (
+    <svg viewBox="0 0 120 120" fill="none" className="h-6 w-6">
+      <circle cx="60" cy="60" r="34" stroke="var(--color-accent)" strokeWidth="2.5" />
+      <path d="M50 44l20 16-20 16" stroke="var(--color-accent)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function IconEspecializar() {
+  return (
+    <svg viewBox="0 0 120 120" fill="none" className="h-6 w-6">
+      <path d="M60 24l30 14v22c0 20-13 33-30 36-17-3-30-16-30-36V38l30-14Z" stroke="var(--color-accent)" strokeWidth="2.5" strokeLinejoin="round" />
+      <path d="M48 60l9 9 16-18" stroke="var(--color-accent)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function IconProfesionalizar() {
+  return (
+    <svg viewBox="0 0 120 120" fill="none" className="h-6 w-6">
+      <path d="M60 22l9 20 22 3-16 15 4 22-19-11-19 11 4-22-16-15 22-3 9-20Z" stroke="var(--color-accent)" strokeWidth="2.5" strokeLinejoin="round" />
+      <path d="M40 90h40" stroke="var(--color-accent)" strokeWidth="2.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 const stages = [
   {
     verb: "Entrar",
+    icon: IconEntrar,
     name: "Comercial Junior",
     duration: "2 meses",
-    body: "Fundamentos comerciales, discovery y cierre. Practicás, generás tu primera evidencia y quedás operativo en ventas remotas.",
-    featured: false,
+    meaning: "Pasás de la teoría a vender de verdad, con evidencia real.",
   },
   {
     verb: "Especializar",
+    icon: IconEspecializar,
     name: "Comercial High Ticket",
     duration: "3 meses",
-    body: "Venta consultiva, objeciones avanzadas y negociación. Subís la complejidad de las conversaciones que sabés manejar.",
-    featured: false,
+    meaning: "Subís de categoría: negociás con decisores más exigentes.",
   },
   {
     verb: "Profesionalizar",
+    icon: IconProfesionalizar,
     name: "Carrera Completa",
     duration: "5 meses",
-    body: "IA + Data, portafolio profesional, empleabilidad, gate de validación y vinculación. La ruta completa hacia una carrera comercial.",
+    meaning: "La ruta completa hasta la vinculación con empresas.",
     featured: true,
   },
 ];
 
 export default function PricingLadderSection() {
   return (
-    <section className="relative border-t border-[var(--color-border)] px-6 py-24 md:px-10 md:py-32">
-      <div className="mx-auto max-w-6xl">
+    <section className="relative flex min-h-screen flex-col justify-center border-t border-[var(--color-border)] px-6 py-10 md:px-10 md:py-12">
+      <div className="mx-auto w-full max-w-6xl">
         <Reveal>
-          <span className="text-[15px] font-semibold uppercase tracking-[0.14em] text-[var(--color-text-secondary)]">
-            Elige hasta dónde querés llevar tu profesión
+          <span className="text-[13px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
+            Antes de elegir, entendé qué significa cada etapa
           </span>
         </Reveal>
-        <Reveal delay={0.08} className="mt-5">
-          <h2 className="max-w-2xl text-[2.6rem] font-bold leading-[1.1] tracking-tight text-[var(--color-text-primary)] md:text-[3.6rem]">
+        <Reveal delay={0.08} className="mt-3">
+          <h2 className="max-w-2xl text-[1.9rem] font-bold leading-[1.15] tracking-tight text-[var(--color-text-primary)] md:text-[2.4rem]">
             Tres etapas. Una carrera comercial.
           </h2>
         </Reveal>
-        <Reveal delay={0.14} className="mt-4">
-          <p className="max-w-xl text-[19px] leading-relaxed text-[var(--color-text-secondary)]">
-            No es más o menos clases: es profundidad, especialización y
-            preparación para el mercado. Cada etapa te ubica en un momento
-            distinto de tu desarrollo profesional.
+        <Reveal delay={0.14} className="mt-2.5">
+          <p className="max-w-xl text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
+            No es más o menos clases: es profundidad y especialización.
           </p>
         </Reveal>
 
-        <div className="mt-16 grid grid-cols-1 gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16 lg:items-start">
-          <Reveal delay={0.2}>
-            <svg viewBox="0 0 220 320" className="h-auto w-full max-w-xs" aria-hidden>
-              <path
-                d="M40 280 C 40 220, 100 210, 110 160 S 180 90, 180 40"
-                fill="none"
-                stroke="var(--color-border-strong)"
-                strokeWidth="2"
-                strokeDasharray="1 8"
-                strokeLinecap="round"
-              />
-              <circle cx="40" cy="280" r="6" fill="var(--color-bg-elevated)" stroke="var(--color-accent)" strokeWidth="2.5" />
-              <circle cx="110" cy="160" r="6" fill="var(--color-bg-elevated)" stroke="var(--color-accent)" strokeWidth="2.5" />
-              <circle cx="180" cy="40" r="8" fill="var(--color-accent)" stroke="var(--color-accent)" strokeWidth="2.5" />
-              <path
-                d="M168 24l14 16-16 14"
-                fill="none"
-                stroke="var(--color-accent)"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </Reveal>
-
-          <RevealGroup stagger={0.1} className="flex flex-col">
-            {stages.map((s) => (
-              <RevealItem key={s.name}>
-                <div
-                  className={`border-b border-[var(--color-border)] py-7 first:pt-0 ${
-                    s.featured ? "border-b-0" : ""
+        <RevealGroup stagger={0.1} className="mt-8 flex flex-col">
+          {stages.map((s, i) => (
+            <RevealItem key={s.name}>
+              <div
+                className={`flex flex-col gap-3 rounded-2xl px-4 py-6 sm:flex-row sm:items-center sm:gap-7 ${
+                  s.featured ? "bg-[var(--color-accent)]/[0.05]" : ""
+                } ${i > 0 ? "mt-1" : ""}`}
+              >
+                <span
+                  className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full ${
+                    s.featured ? "bg-[var(--color-accent)]/[0.12]" : "bg-[var(--color-accent)]/[0.07]"
                   }`}
                 >
-                  <div className="flex flex-wrap items-center gap-3">
-                    <span
-                      className={`text-[12px] font-bold uppercase tracking-widest ${
-                        s.featured ? "text-[var(--color-accent)]" : "text-[var(--color-text-muted)]"
-                      }`}
-                    >
+                  <s.icon />
+                </span>
+
+                <div className="sm:w-56 sm:shrink-0">
+                  <div className="flex flex-wrap items-center gap-2.5">
+                    <span className="text-[12px] font-bold uppercase tracking-widest text-[var(--color-accent)]">
                       {s.verb}
                     </span>
-                    <span className="rounded-full border border-[var(--color-border-strong)] bg-black/[0.03] px-3 py-0.5 text-[11px] font-semibold text-[var(--color-text-muted)]">
+                    <span className="rounded-full border border-[var(--color-border-strong)] bg-black/[0.03] px-2.5 py-0.5 text-[10.5px] font-semibold text-[var(--color-text-muted)]">
                       {s.duration}
                     </span>
                   </div>
-                  <h3 className="mt-1.5 text-[19px] font-bold leading-tight text-[var(--color-text-primary)]">
+                  <h3 className="mt-1 text-[21px] font-bold leading-tight text-[var(--color-text-primary)]">
                     {s.name}
                   </h3>
-                  <p className="mt-2 max-w-2xl text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
-                    {s.body}
-                  </p>
                 </div>
-              </RevealItem>
-            ))}
-          </RevealGroup>
-        </div>
+
+                <p className="text-[16px] leading-relaxed text-[var(--color-text-secondary)]">
+                  {s.meaning}
+                </p>
+              </div>
+            </RevealItem>
+          ))}
+        </RevealGroup>
       </div>
     </section>
   );

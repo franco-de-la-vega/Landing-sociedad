@@ -18,6 +18,7 @@ const labels = [
   "Casos",
   "Etapas",
   "Comparación",
+  "Cuenta regresiva",
   "FAQ",
   "Precios",
 ];

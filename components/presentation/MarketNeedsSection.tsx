@@ -73,11 +73,31 @@ function IconHerramientas() {
 }
 
 const cards = [
-  { icon: IconComunicacion, title: "Comunicación" },
-  { icon: IconDiscovery, title: "Discovery" },
-  { icon: IconObjeciones, title: "Manejo de objeciones" },
-  { icon: IconCierre, title: "Cierre" },
-  { icon: IconPerformance, title: "Gestión y performance" },
+  {
+    icon: IconComunicacion,
+    title: "Comunicación",
+    detail: "Estructura cada conversación en vez de improvisarla.",
+  },
+  {
+    icon: IconDiscovery,
+    title: "Diagnóstico",
+    detail: "Detecta el dolor real antes de proponer nada.",
+  },
+  {
+    icon: IconObjeciones,
+    title: "Manejo de objeciones",
+    detail: "Responde con criterio, no con guiones de memoria.",
+  },
+  {
+    icon: IconCierre,
+    title: "Cierre",
+    detail: "Lleva la conversación a una decisión, sin forzarla.",
+  },
+  {
+    icon: IconPerformance,
+    title: "Gestión y performance",
+    detail: "Mide su propio proceso y lo ajusta con datos.",
+  },
   {
     icon: IconHerramientas,
     title: "Herramientas digitales",
@@ -87,31 +107,31 @@ const cards = [
 
 export default function MarketNeedsSection() {
   return (
-    <section className="relative border-t border-[var(--color-border)] px-6 py-24 md:px-10 md:py-32">
-      <div className="mx-auto max-w-5xl text-center">
+    <section className="relative flex min-h-screen flex-col justify-center border-t border-[var(--color-border)] px-6 py-14 md:px-10 md:py-16">
+      <div className="mx-auto w-full max-w-5xl text-center">
         <Reveal>
           <span className="text-[14px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
             Qué busca el mercado
           </span>
         </Reveal>
-        <Reveal delay={0.08} className="mt-5">
-          <h2 className="mx-auto max-w-2xl text-[2.2rem] font-bold leading-[1.15] tracking-tight text-[var(--color-text-primary)] md:text-[2.9rem]">
+        <Reveal delay={0.08} className="mt-4">
+          <h2 className="mx-auto max-w-2xl text-[1.9rem] font-bold leading-[1.15] tracking-tight text-[var(--color-text-primary)] md:text-[2.4rem]">
             No buscan solo vendedores. Buscan profesionales que puedan
             ejecutar.
           </h2>
         </Reveal>
 
-        <RevealGroup stagger={0.06} className="mt-16 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+        <RevealGroup stagger={0.06} className="mt-10 grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3">
           {cards.map((c) => (
             <RevealItem key={c.title}>
-              <div className="flex h-full flex-col items-center gap-5 border-b-2 border-transparent px-6 py-12">
-                <span className="flex h-24 w-24 items-center justify-center rounded-full bg-[var(--color-accent)]/[0.06] md:h-28 md:w-28">
+              <div className="flex h-full flex-col items-center gap-3 border-b-2 border-transparent px-6 py-5">
+                <span className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-accent)]/[0.06] md:h-[4.5rem] md:w-[4.5rem]">
                   <c.icon />
                 </span>
                 <div>
-                  <h3 className="text-[19px] font-bold text-[var(--color-text-primary)]">{c.title}</h3>
+                  <h3 className="text-[17px] font-bold text-[var(--color-text-primary)]">{c.title}</h3>
                   {c.detail && (
-                    <p className="mt-2 text-[13px] text-[var(--color-text-muted)]">{c.detail}</p>
+                    <p className="mt-1.5 text-[12.5px] text-[var(--color-text-muted)]">{c.detail}</p>
                   )}
                 </div>
               </div>

@@ -6,14 +6,7 @@ import Reveal from "@/components/Reveal";
 
 export default function HeroSection() {
   return (
-    <section className="relative flex min-h-[85vh] items-center overflow-hidden px-6 py-20 md:px-10">
-      {/* resplandor de fondo */}
-      <div
-        className="pointer-events-none absolute -top-40 left-1/2 h-[42rem] w-[64rem] -translate-x-1/2 opacity-[0.07] blur-3xl"
-        style={{ background: "radial-gradient(ellipse, var(--color-accent) 0%, transparent 70%)" }}
-        aria-hidden
-      />
-
+    <section className="relative flex min-h-screen items-center overflow-hidden px-6 py-16 md:px-10">
       {/* malla de fondo, marca de agua integrada a toda la sección */}
       <svg
         aria-hidden
@@ -35,32 +28,34 @@ export default function HeroSection() {
       <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-14 lg:grid-cols-2 lg:gap-10">
         <div>
           <Reveal>
-            <span className="text-[13px] font-semibold uppercase tracking-[0.14em] text-[var(--color-text-secondary)]">
-              Instituto Latinoamericano de Formación Comercial
+            <span className="text-[13px] font-semibold uppercase tracking-[0.14em] text-[var(--color-accent)]">
+              Ingeniería Comercial
             </span>
           </Reveal>
           <Reveal delay={0.08} className="mt-5">
-            <h1 className="text-[2.6rem] font-bold leading-[1.08] tracking-tight text-[var(--color-text-primary)] md:text-[3.4rem]">
-              Convertí tu habilidad para vender en una profesión.
+            <h1 className="text-[2.9rem] font-bold leading-[1.06] tracking-tight text-[var(--color-text-primary)] md:text-[3.8rem]">
+              Te formamos para negociar y cerrar acuerdos con empresas de todo el mundo.
             </h1>
           </Reveal>
-          <Reveal delay={0.16} className="mt-6">
-            <p className="max-w-lg text-[18px] leading-relaxed text-[var(--color-text-secondary)]">
-              Entrená ventas remotas con práctica real, evaluación de
-              desempeño, evidencia profesional e inteligencia aplicada a tu
-              evolución comercial.
+          <Reveal delay={0.16} className="mt-7">
+            <p className="max-w-lg text-[19px] leading-relaxed text-[var(--color-text-secondary)]">
+              Diagnosticamos tu punto de partida, diseñamos tu proceso
+              comercial y lo calibramos sesión a sesión hasta que se vuelve
+              medible, repetible y tuyo: tu capacidad de negociación,
+              construida como un sistema. Ingeniería Comercial, tocamos lo
+              que ningún otro programa enseña hoy.
             </p>
           </Reveal>
           <Reveal delay={0.22} className="mt-8">
             <p className="text-[13px] font-semibold uppercase tracking-[0.1em] text-[var(--color-accent)]">
-              Formación práctica · Performance · IA + Data · Empleabilidad
+              Diagnóstico · Diseño de proceso · Calibración · Evidencia medible
             </p>
           </Reveal>
         </div>
 
         {/* panel de evaluación de simulación comercial */}
         <Reveal delay={0.2}>
-          <div className="relative mx-auto max-w-xl rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-8 shadow-[0_20px_40px_rgba(0,0,0,0.06)]">
+          <div className="relative mx-auto max-w-xl rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-9 shadow-[0_20px_40px_rgba(0,0,0,0.06)]">
             <div className="flex items-center justify-between border-b border-[var(--color-border)] pb-5">
               <span className="flex items-center gap-2 text-[15px] font-semibold text-[var(--color-text-secondary)]">
                 <span className="relative flex h-2.5 w-2.5">
