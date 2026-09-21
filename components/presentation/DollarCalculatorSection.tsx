@@ -6,9 +6,9 @@ export default function DollarCalculatorSection() {
   return (
     <section
       id="precios"
-      className="relative border-t border-[var(--color-border)] bg-[var(--color-bg-elevated-2)] px-6 py-24 md:px-10 md:py-32"
+      className="relative border-t border-[var(--color-border)] bg-[var(--color-bg-elevated-2)] px-6 py-14 md:px-12 md:py-16"
     >
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-[1240px]">
         <DollarCalculator />
       </div>
     </section>

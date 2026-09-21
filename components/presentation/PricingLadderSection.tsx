@@ -20,7 +20,7 @@ const stages = [
   {
     verb: "Profesionalizar",
     name: "Carrera Completa",
-    duration: "9 meses",
+    duration: "5 meses",
     body: "IA + Data, portafolio profesional, empleabilidad, gate de validación y vinculación. La ruta completa hacia una carrera comercial.",
     featured: true,
   },
