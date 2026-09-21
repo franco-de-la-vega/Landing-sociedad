@@ -123,8 +123,8 @@ const PLANES: Plan[] = [
 /** Misma superficie para las 3 — solo el grosor/color del borde marca jerarquía. */
 const tierCard: Record<Plan["tier"], string> = {
   base: "border-[var(--color-border)] bg-[var(--color-bg-elevated)]",
-  mid: "border-2 border-[var(--color-accent)] bg-[var(--color-bg-elevated)] lg:-translate-y-2",
-  vip: "border border-[var(--color-accent)]/50 bg-[#151210] shadow-[0_30px_60px_-24px_rgba(0,0,0,0.55)] lg:-translate-y-3",
+  mid: "border-2 border-[var(--color-accent)] bg-[var(--color-bg-elevated)]",
+  vip: "border border-[var(--color-accent)]/50 bg-[#151210] shadow-[0_30px_60px_-24px_rgba(0,0,0,0.55)]",
 };
 
 // ─────────────── Helpers ───────────────
