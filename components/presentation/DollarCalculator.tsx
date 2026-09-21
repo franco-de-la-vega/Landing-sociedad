@@ -289,7 +289,7 @@ export default function DollarCalculator() {
                       className={`rounded-full border px-3.5 py-1.5 text-[13px] font-semibold transition-colors ${
                         cuotas === n
                           ? "border-[var(--color-accent)] bg-[var(--color-accent-muted)] text-[var(--color-accent)]"
-                          : "border-[var(--color-border-strong)] text-[var(--color-text-secondary)] hover:border-[var(--color-accent)]/50"
+                          : "border-[var(--color-border-strong)] text-[var(--color-text-secondary)]"
                       }`}
                     >
                       {n === 1 ? "1 cuota" : `${n} cuotas`}
