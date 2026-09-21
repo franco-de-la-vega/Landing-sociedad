@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-const COHORT_DATE = new Date("2026-09-18T00:00:00");
+const COHORT_DATE = new Date("2026-10-16T00:00:00");
 const WINDOW_DAYS = 30;
 
 function getRemaining() {
@@ -91,7 +91,7 @@ export default function CohortCountdown() {
                 Próxima camada
               </span>
               <h3 className="mt-2 text-[2.1rem] font-bold leading-[1.05] tracking-tight text-[var(--color-text-primary)] sm:text-[2.6rem]">
-                Arrancamos el 18 de septiembre.
+                Arrancamos el 16 de octubre.
               </h3>
               <p className="mx-auto mt-3 max-w-sm text-[15px] leading-relaxed text-[var(--color-text-secondary)] sm:mx-0">
                 Esta camada no se repite. Una vez que arranca, el acceso se
