@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import CurriculaHeader from "@/components/curricula/CurriculaHeader";
-import CursorSpotlight from "@/components/presentation/CursorSpotlight";
 import HeroSection from "@/components/curricula/HeroSection";
 import WhatIsSection from "@/components/curricula/WhatIsSection";
 import CapabilitiesSection from "@/components/curricula/CapabilitiesSection";
@@ -24,7 +23,6 @@ export const metadata: Metadata = {
 export default function CurriculaPage() {
   return (
     <div className="theme-light min-h-screen bg-[var(--color-bg-base)] text-[var(--color-text-primary)]">
-      <CursorSpotlight />
       <CurriculaHeader />
       <main>
         <HeroSection />

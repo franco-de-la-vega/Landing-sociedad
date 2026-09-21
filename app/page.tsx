@@ -1,5 +1,4 @@
 import Header from "@/components/Header";
-import CursorSpotlight from "@/components/presentation/CursorSpotlight";
 import Hero from "@/components/Hero";
 import ManifestoSection from "@/components/ManifestoSection";
 import LevelsSection from "@/components/LevelsSection";
@@ -12,7 +11,6 @@ import AmbientGlow from "@/components/AmbientGlow";
 export default function Home() {
   return (
     <>
-      <CursorSpotlight />
       <Header />
       <main className="relative">
         <AmbientGlow />
