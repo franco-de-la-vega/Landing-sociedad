@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, Copy, Info, Users } from "lucide-react";
+import { Check, ChevronDown, Copy, Info, Star, X } from "lucide-react";
 
 // ─────────────── Config de negocio ───────────────
 
@@ -20,25 +20,25 @@ const DLOCAL_OPEN_CHECKOUT_URL = "https://checkout.dlocalgo.com/open-checkout/b3
 
 // ─────────────── Planes ───────────────
 
+type Incluido = true | false | "cond";
+interface Feature {
+  t: string;
+  ok: Incluido;
+}
 interface Plan {
   key: string;
   label: string;
   kicker: string;
   tag: string;
   duracion: string;
-  /** Precio mensual mostrado grande arriba de cada card. */
-  priceMonthly: number;
-  /** Total real, pago único, mostrado chico debajo del mensual. */
   priceUSD: number;
-  /** Precio de lista anterior, en USD (solo Carrera Completa, mostrado tachado). */
+  /** Precio antes del descuento, en USD (solo donde hay promo). */
   listaUSD?: number;
   /** Máximo de pagos totales (la seña de hoy cuenta como el primero). */
   maxCuotas: number;
   tier: "base" | "mid" | "vip";
-  badge?: string;
-  /** El diferencial de marca: sesiones 1 a 1, siempre en su propio apartado destacado. */
-  unoAUno: string;
-  checks: string[];
+  highlights: string[];
+  features: Feature[];
 }
 
 // Cuotas del resto (2026-09-07): Junior sin cuotas (pago único), High Ticket
@@ -51,31 +51,28 @@ interface Plan {
 // el dólar blue, pero el checkout de dLocal siempre cobra en USD a su propio
 // tipo de cambio — mostrar un monto en ARS que después no coincide con lo que
 // ve el cliente en el checkout generaba desconfianza. Un solo precio, el real.
-//
-// Reestructuración de planes (2026-09-21, pedido de Franco): precio mensual
-// arriba, total chico debajo, apartado de sesiones 1 a 1 destacado como
-// diferencial de marca en cada card. Los totales de High Ticket (547) y
-// Carrera (905) cambiaron respecto a los anteriores (497 y 1429) — el
-// checkout de dLocal en /pagar sigue cobrando los montos viejos hasta que se
-// generen los nuevos links en el panel de dLocal y se reemplacen los snippets.
 const PLANES: Plan[] = [
   {
     key: "junior",
     label: "Comercial Junior",
-    kicker: "Entra a la profesión",
+    kicker: "Entrá a la profesión",
     tag: "Tu puerta de entrada a las ventas remotas.",
     duracion: "2 meses",
-    priceMonthly: 198,
     priceUSD: 397,
     maxCuotas: 1,
     tier: "base",
-    unoAUno: "6 sesiones personalizadas 1 a 1 con mentor especializado",
-    checks: [
-      "3 sesiones en vivo por semana",
-      "Acceso completo a la plataforma / campus ILFC",
-      "Preparación de perfil: CV y LinkedIn",
-      "Acceso a bolsa de trabajo ILFC",
-      "Certificado de finalización",
+    highlights: [
+      "Sesiones grupales, 2 por semana",
+      "4 sesiones 1 a 1 por mes",
+      "Acceso a la plataforma completa",
+      "Preparación de perfil de LinkedIn y armado de CV",
+    ],
+    features: [
+      { t: "Acceso a la bolsa de trabajo independiente", ok: true },
+      { t: "Conexión con empresas — sujeta a aprobar el examen de nivel", ok: "cond" },
+      { t: "Certificación oficial con historial de desempeño", ok: false },
+      { t: "Especializaciones comerciales (High-Ticket, Software B2B, etc.)", ok: false },
+      { t: "Tutor dedicado exclusivo", ok: false },
     ],
   },
   {
@@ -84,17 +81,18 @@ const PLANES: Plan[] = [
     kicker: "Especializate",
     tag: "Subí la complejidad. Subí tu nivel.",
     duracion: "3 meses",
-    priceMonthly: 182,
-    priceUSD: 547,
+    priceUSD: 497,
     maxCuotas: 2,
     tier: "mid",
-    badge: "El más elegido",
-    unoAUno: "12 sesiones personalizadas 1 a 1 (el doble de acompañamiento)",
-    checks: [
+    highlights: [
       "Todo lo incluido en Comercial Junior",
       "Certificación oficial con historial de desempeño",
-      "Evaluación final de especialización comercial",
-      "Conexión con empresas (sujeta a aprobar el examen final)",
+      "Conexión directa con empresas",
+      "6 mentorías 1 a 1 en vivo con especialistas del equipo",
+    ],
+    features: [
+      { t: "Evaluación de especialización (Software B2B, Evergreen, Launching)", ok: false },
+      { t: "Tutor dedicado exclusivo", ok: false },
     ],
   },
   {
@@ -102,29 +100,30 @@ const PLANES: Plan[] = [
     label: "Carrera Completa",
     kicker: "Profesionalizate",
     tag: "De aprender a vender a construir una carrera comercial.",
-    duracion: "5 meses",
-    priceMonthly: 181,
-    priceUSD: 905,
-    listaUSD: 1429,
+    duracion: "9 meses",
+    priceUSD: 1429,
+    listaUSD: 1786,
     maxCuotas: 3,
     tier: "vip",
-    badge: "Ruta profesional completa",
-    unoAUno: "25 sesiones personalizadas 1 a 1 (acompañamiento total durante toda la carrera)",
-    checks: [
-      "Todo lo incluido en Comercial High Ticket",
-      "Mindset y habilidades blandas para liderar procesos de venta",
-      "Certificación oficial + historial de desempeño operativo",
-      "Conexión directa con empresas, sin proceso de RRHH",
-      "Acceso completo a la plataforma con prioridad de soporte",
+    highlights: [
+      "Acceso completo a la plataforma de formación",
+      "10 mentorías 1 a 1 en vivo con especialistas del equipo",
+      "Certificación oficial con historial de desempeño operativo",
+      "Conexión directa con empresas y bolsa de vinculación comercial",
+      "Evaluación de especialización comercial (High-Ticket, Software B2B, etc.)",
+    ],
+    features: [
+      { t: "Prácticas operativas y role-play entre pares", ok: true },
+      { t: "Sesiones grupales de feedback", ok: true },
+      { t: "Tutor dedicado exclusivo durante todo el proceso", ok: true },
     ],
   },
 ];
 
-/** Misma superficie para las 3 — solo el grosor/color del borde marca jerarquía. */
 const tierCard: Record<Plan["tier"], string> = {
   base: "border-[var(--color-border)] bg-[var(--color-bg-elevated)]",
-  mid: "border-2 border-[var(--color-accent)] bg-[var(--color-bg-elevated)] lg:-translate-y-2",
-  vip: "border border-[var(--color-accent)]/50 bg-[#151210] shadow-[0_30px_60px_-24px_rgba(0,0,0,0.55)] lg:-translate-y-3",
+  mid: "border-[var(--color-border)] bg-[var(--color-bg-elevated)]",
+  vip: "border-[var(--color-accent)]/50 bg-[var(--color-accent-muted)] lg:-translate-y-3",
 };
 
 // ─────────────── Helpers ───────────────
@@ -173,6 +172,7 @@ export default function DollarCalculator() {
   const [planKey, setPlanKey] = useState<string>("junior");
   const [monto, setMonto] = useState("");
   const [cuotas, setCuotas] = useState(1);
+  const [expandido, setExpandido] = useState<string[]>([]);
   const [copiado, setCopiado] = useState(false);
   const [copiarError, setCopiarError] = useState(false);
 
@@ -242,16 +242,23 @@ export default function DollarCalculator() {
       <span className="text-[12px] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
         La inversión
       </span>
-      <h2 className="mt-2 text-[1.8rem] font-black leading-[1.05] tracking-tight text-[var(--color-text-primary)] md:text-[2.2rem]">
+      <h2 className="mt-3 text-[2rem] font-black leading-[1.05] tracking-tight text-[var(--color-text-primary)] md:text-[2.6rem]">
         Elegí tu plan
       </h2>
-      <p className="mt-2 max-w-2xl text-[14px] leading-relaxed text-[var(--color-text-secondary)]">
-        Precios en dólares: es la moneda en la que se paga, sin sorpresas entre lo que ves acá y lo que se cobra.
+      <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
+        Precios en dólares — es la moneda en la que se paga, sin sorpresas entre lo que ves acá y lo que se cobra.
       </p>
 
-      <div className="mt-6 grid grid-cols-1 items-stretch gap-6 pt-3 lg:grid-cols-3 lg:gap-7 lg:pt-3">
+      <div className="mt-9 grid grid-cols-1 items-start gap-5 lg:grid-cols-3 lg:gap-6 lg:pt-3">
         {PLANES.map((p) => (
-          <PlanCard key={p.key} p={p} elegido={planKey === p.key} onElegir={() => elegirPlan(p.key)} />
+          <PlanCard
+            key={p.key}
+            p={p}
+            elegido={planKey === p.key}
+            onElegir={() => elegirPlan(p.key)}
+            abierto={expandido.includes(p.key)}
+            onToggle={() => setExpandido((a) => (a.includes(p.key) ? a.filter((k) => k !== p.key) : [...a, p.key]))}
+          />
         ))}
       </div>
 
@@ -350,25 +357,25 @@ export default function DollarCalculator() {
             </motion.div>
 
             <p className="mt-3 text-center text-[12px] text-[var(--color-text-muted)]">
-              Precio de hoy, válido {VALIDEZ_DIAS} días.
+              Precio de hoy — válido {VALIDEZ_DIAS} días.
             </p>
 
             <a
               href={DLOCAL_OPEN_CHECKOUT_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 flex items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] py-3.5 text-[13px] font-bold uppercase tracking-widest text-[#0B0C0E]"
+              className="mt-4 flex items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] py-3.5 text-[13px] font-bold uppercase tracking-widest text-[#0B0C0E] transition-transform hover:scale-[1.02] hover:bg-[var(--color-accent-hover)]"
             >
               Avanzar
             </a>
             <p className="mt-2 text-center text-[11px] leading-relaxed text-[var(--color-text-muted)]">
-              Abre el link de pago, decile al cliente el monto de &ldquo;{pdp.pagos[0]?.label ?? "Hoy"}&rdquo; de arriba
+              Abre el link de pago — decile al cliente el monto de &ldquo;{pdp.pagos[0]?.label ?? "Hoy"}&rdquo; de arriba
               ({money(pdp.pagos[0]?.monto ?? total)}) para que lo cargue él mismo.
             </p>
 
             <button
               onClick={copiarResumen}
-              className="mt-3 flex items-center justify-center gap-1.5 py-1 text-[12px] font-semibold text-[var(--color-text-muted)] underline-offset-4"
+              className="mt-3 flex items-center justify-center gap-1.5 py-1 text-[12px] font-semibold text-[var(--color-text-muted)] underline-offset-4 transition-colors hover:text-[var(--color-accent)] hover:underline"
             >
               {copiado ? (
                 <>
@@ -394,158 +401,143 @@ export default function DollarCalculator() {
   );
 }
 
-/**
- * Junior y High Ticket comparten la misma superficie clara — High Ticket se
- * destaca solo con borde y badge, no con otro color. El negro queda
- * reservado para una sola card: Carrera Completa, la más cara, la que
- * necesita sentirse "elite silenciosa". Un solo dorado, usado igual en
- * ambas superficies (clara y oscura) para que siga siendo un solo acento.
- */
-const T_LIGHT = {
-  primary: "text-[var(--color-text-primary)]",
-  secondary: "text-[var(--color-text-secondary)]",
-  muted: "text-[var(--color-text-muted)]",
-  border: "border-[var(--color-border)]",
-  accent: "text-[var(--color-accent)]",
-  oneOnOneBorder: "border-[var(--color-accent)]",
-};
-
-const T_DARK = {
-  primary: "text-white",
-  secondary: "text-white/70",
-  muted: "text-white/45",
-  border: "border-white/12",
-  accent: "text-[var(--color-accent)]",
-  oneOnOneBorder: "border-[var(--color-accent)]",
-};
-
-/** Glifo de corona: trazo fino, una sola tinta. Vive dentro del medallón. */
-function CrownGlyph({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 20" fill="none" className={className} aria-hidden>
-      <path
-        d="M3 17 L2 6.5 L8 11 L12 3 L16 11 L22 6.5 L21 17 Z"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinejoin="round"
-        strokeLinecap="round"
-      />
-      <path d="M3 17 H21" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-/**
- * Medallón de Carrera Completa: un sello circular de doble anillo, apoyado
- * sobre el vértice de la card (mitad afuera, mitad adentro), sin joyas ni
- * degradés estridentes. Es la única marca distintiva del tier VIP — discreta
- * a propósito, "elite silenciosa" y no bazar.
- */
-function CrownSeal({ className }: { className?: string }) {
-  return (
-    <div className={className}>
-      <div className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--color-accent)]/60 bg-[var(--color-bg-elevated)] shadow-[0_6px_16px_-6px_rgba(120,90,40,0.5)]">
-        <div className="flex h-8 w-8 items-center justify-center rounded-full border border-[var(--color-accent)]/25">
-          <CrownGlyph className="h-4 w-4 text-[var(--color-accent-hover)]" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function PlanCard({
   p,
   elegido,
   onElegir,
+  abierto,
+  onToggle,
 }: {
   p: Plan;
   elegido: boolean;
   onElegir: () => void;
+  abierto: boolean;
+  onToggle: () => void;
 }) {
-  const isVip = p.tier === "vip";
-  const T = isVip ? T_DARK : T_LIGHT;
+  const ahorro = p.listaUSD ? p.listaUSD - p.priceUSD : null;
 
   return (
     <div
-      className={`relative flex h-full flex-col overflow-visible rounded-[20px] border p-5 shadow-[0_16px_36px_-18px_rgba(20,18,14,0.22)] transition-all ${tierCard[p.tier]} ${
+      className={`relative flex h-full flex-col rounded-2xl border p-8 transition-all md:p-9 ${tierCard[p.tier]} ${
         elegido ? "ring-2 ring-[var(--color-accent)] ring-offset-2 ring-offset-[var(--color-bg-elevated-2)]" : ""
       }`}
     >
-      {isVip && <CrownSeal className="pointer-events-none absolute -top-2.5 -right-2.5" />}
+      {p.tier === "vip" && (
+        <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-[var(--color-accent)] px-4 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-[#0B0C0E]">
+          Ruta profesional completa
+        </span>
+      )}
 
-      <div className="relative flex h-full flex-1 flex-col">
-        {/* Alto reservado siempre, con o sin badge, para que las 3 cards arranquen el título a la misma altura. */}
-        <span
-          className={`mb-3 inline-flex w-fit items-center gap-1.5 rounded-full bg-[var(--color-accent)] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white ${
-            p.badge ? "" : "invisible"
+      <span className="text-[11.5px] font-semibold uppercase tracking-[0.16em] text-[var(--color-accent)]">{p.kicker}</span>
+      <h3 className="mt-2 text-[20px] font-black tracking-tight text-[var(--color-text-primary)]">{p.label}</h3>
+      <p className="mt-1.5 text-[13.5px] leading-snug text-[var(--color-text-muted)]">{p.tag}</p>
+      <span className="mt-3 block text-[14px] font-semibold text-[var(--color-text-muted)]">{p.duracion}</span>
+
+      {p.listaUSD !== undefined && (
+        <div className="mt-5 flex flex-wrap items-center gap-2.5">
+          <span className="text-[17px] font-bold text-[var(--color-text-muted)] line-through decoration-red-500/70 decoration-2">
+            {money(p.listaUSD)}
+          </span>
+          <span className="rounded-full bg-red-500/15 px-2.5 py-1 text-[12px] font-bold uppercase tracking-wide text-red-500">
+            -{PROMO.descuento}%
+          </span>
+        </div>
+      )}
+      <p className={`text-[2.7rem] font-black leading-none tracking-tight text-[var(--color-text-primary)] md:text-[3rem] ${p.listaUSD !== undefined ? "mt-1.5" : "mt-5"}`}>
+        {money(p.priceUSD)}
+      </p>
+      {ahorro !== null && ahorro > 0 && (
+        <span className="mt-2 block text-[14px] font-semibold text-emerald-600">Ahorrás {money(ahorro)}</span>
+      )}
+      {p.listaUSD && (
+        <span className="mt-1 block text-[12.5px] font-medium text-[var(--color-text-muted)]">
+          Promo hasta el {fmtFecha(PROMO.hasta)}
+        </span>
+      )}
+      <ul className="mt-7 flex flex-col gap-3">
+        {p.highlights.map((h) => (
+          <li key={h} className="flex items-start gap-2.5">
+            <Check size={15} strokeWidth={2.5} className="mt-0.5 shrink-0 text-[var(--color-accent)]" />
+            <span className="text-[14.5px] font-medium leading-snug text-[var(--color-text-primary)]">{h}</span>
+          </li>
+        ))}
+      </ul>
+
+      {p.features.length > 0 && (
+        <>
+          <button
+            onClick={onToggle}
+            className="mt-6 flex items-center justify-center gap-2 rounded-full border border-[var(--color-border)] py-2.5 text-[12px] font-semibold uppercase tracking-widest text-[var(--color-text-secondary)] transition-colors hover:border-black/25"
+          >
+            {abierto ? "Ocultar detalle" : "Ver detalle"}
+            <ChevronDown size={13} strokeWidth={2.5} className={`transition-transform ${abierto ? "rotate-180" : ""}`} />
+          </button>
+          <AnimatePresence initial={false}>
+            {abierto && (
+              <motion.ul
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
+                className="overflow-hidden"
+              >
+                <div className="mt-5 flex flex-col gap-3 border-t border-[var(--color-border)] pt-5">
+                  {p.features.map((f) => (
+                    <li key={f.t} className="flex items-start gap-2.5">
+                      {f.ok === true ? (
+                        <Check size={14} strokeWidth={2.5} className="mt-0.5 shrink-0 text-[var(--color-accent)]" />
+                      ) : f.ok === "cond" ? (
+                        <Star size={14} strokeWidth={2.5} className="mt-0.5 shrink-0 text-[var(--color-accent-secondary)]" />
+                      ) : (
+                        <X size={14} strokeWidth={2.5} className="mt-0.5 shrink-0 text-red-500" />
+                      )}
+                      <span
+                        className={`text-[13.5px] font-medium leading-snug ${
+                          f.ok === true
+                            ? "text-[var(--color-text-primary)]"
+                            : f.ok === "cond"
+                              ? "text-[var(--color-accent-secondary)]"
+                              : "text-[var(--color-text-muted)]"
+                        }`}
+                      >
+                        {f.t}
+                      </span>
+                    </li>
+                  ))}
+                </div>
+              </motion.ul>
+            )}
+          </AnimatePresence>
+        </>
+      )}
+
+      <div className="mt-auto pt-7">
+        <a
+          href={`/pagar/${p.key}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] py-3.5 text-[13px] font-bold uppercase tracking-widest text-[#0B0C0E] transition-transform hover:scale-[1.02] hover:bg-[var(--color-accent-hover)]"
+        >
+          Pagar ahora
+        </a>
+        <p className="mt-2 text-center text-[11px] leading-relaxed text-[var(--color-text-muted)]">
+          Abre en pestaña nueva — pago fijo de {money(p.priceUSD)}, listo para compartir.
+        </p>
+
+        <button
+          onClick={onElegir}
+          className={`mt-3 flex w-full items-center justify-center gap-1.5 py-1 text-[12px] font-semibold underline-offset-4 transition-colors ${
+            elegido ? "text-[var(--color-accent)] underline" : "text-[var(--color-text-muted)] hover:text-[var(--color-accent)] hover:underline"
           }`}
         >
-          {p.badge ?? "·"}
-        </span>
-
-        <span className={`text-[11px] font-semibold uppercase tracking-[0.16em] ${T.accent}`}>{p.kicker}</span>
-        <h3 className={`mt-1.5 text-[19px] font-black tracking-tight ${T.primary}`}>{p.label}</h3>
-        <p className={`mt-1 text-[13px] leading-snug ${T.muted}`}>{p.tag}</p>
-        <span className={`mt-2 block text-[11px] font-semibold uppercase tracking-wide ${T.secondary}`}>{p.duracion}</span>
-
-        {/* ─── Precio: única fuente de verdad, mensual y total juntos, sin repetir más abajo ─── */}
-        <div className={`mt-3.5 border-t pt-3.5 ${T.border}`}>
-          {p.listaUSD !== undefined && (
-            <span className={`block text-[12px] font-medium line-through decoration-1 ${T.muted}`}>
-              {money(p.listaUSD)}
-            </span>
+          {elegido ? (
+            <>
+              <Check size={13} strokeWidth={3} /> Armando el pago abajo ↓
+            </>
+          ) : (
+            "¿Seña y cuotas? Armar el pago ↓"
           )}
-          <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-            <span className={`text-[2rem] font-black leading-none tracking-tight ${T.primary}`}>
-              ${p.priceMonthly}
-            </span>
-            <span className={`text-[12.5px] font-semibold ${T.muted}`}>USD /mes</span>
-          </div>
-          <p className={`mt-1 text-[14.5px] font-bold ${T.secondary}`}>
-            Total: <span className={T.primary}>{money(p.priceUSD)}</span>
-          </p>
-        </div>
-
-        {/* ─── Apartado 1 a 1: el diferencial de marca. Franja con borde lateral, no un botón. ─── */}
-        <div className={`mt-3.5 flex items-start gap-2.5 border-l-2 py-1.5 pl-3 ${T.oneOnOneBorder}`}>
-          <Users size={15} strokeWidth={2.25} className={`mt-0.5 shrink-0 ${T.accent}`} />
-          <span className={`text-[13.5px] font-semibold leading-snug ${T.primary}`}>{p.unoAUno}</span>
-        </div>
-
-        <ul className="mt-3.5 flex flex-col gap-2">
-          {p.checks.map((c) => (
-            <li key={c} className="flex items-start gap-2">
-              <Check size={15} strokeWidth={2.5} className={`mt-[3px] shrink-0 ${T.accent}`} />
-              <span className={`text-[14px] font-medium leading-snug ${T.secondary}`}>{c}</span>
-            </li>
-          ))}
-        </ul>
-
-        <div className={`mt-auto border-t pt-4 ${T.border}`}>
-          <a
-            href={`/pagar/${p.key}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] py-2.5 text-[12px] font-bold uppercase tracking-widest text-white"
-          >
-            Inscribirme ahora
-          </a>
-
-          <button
-            onClick={onElegir}
-            className={`mt-2 flex w-full items-center justify-center gap-1.5 py-1 text-[11px] font-semibold underline-offset-4 transition-colors ${
-              elegido ? T.accent + " underline" : T.muted
-            }`}
-          >
-            {elegido ? (
-              <>
-                <Check size={12} strokeWidth={3} /> Armando el pago abajo ↓
-              </>
-            ) : (
-              "¿Seña y cuotas? Armar el pago ↓"
-            )}
-          </button>
-        </div>
+        </button>
       </div>
     </div>
   );
