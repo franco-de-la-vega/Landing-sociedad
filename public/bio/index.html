@@ -591,6 +591,18 @@
           setTimeout(function () { copyBtn.textContent = 'Copiar el número'; }, 2000);
         });
       });
+
+      // En iPhone, el navegador embebido de TikTok bloquea el salto directo
+      // a la app de WhatsApp ("la acción no se pudo completar"). El prefijo
+      // x-safari-https:// fuerza a iOS a abrir el link en Safari en vez de
+      // en el navegador de TikTok, y desde Safari el salto a WhatsApp sí
+      // funciona. Pedido de Franco, 2026-09-24 (perdía ventas por esto).
+      var esIOS = /iPhone|iPad|iPod/i.test(ua);
+      if (esIOS) {
+        document.querySelectorAll('a[href^="https://wa.me/"], a[href^="https://api.whatsapp.com/"]').forEach(function (link) {
+          link.href = 'x-safari-' + link.href;
+        });
+      }
     })();
 
     // Glow ambiental: sigue el mouse en desktop; en touch queda fijo arriba-centro.
