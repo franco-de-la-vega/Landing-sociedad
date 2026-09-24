@@ -478,6 +478,73 @@
     cursor: pointer;
   }
 
+  /* ===== Modal de WhatsApp bloqueado por TikTok ===== */
+  .wa-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    align-items: flex-end;
+    justify-content: center;
+    background: rgba(10, 9, 8, 0.6);
+    backdrop-filter: blur(4px);
+    padding: 0 16px 16px;
+  }
+
+  .wa-modal.is-open { display: flex; }
+
+  .wa-modal-card {
+    width: 100%;
+    max-width: 380px;
+    border-radius: 20px;
+    border: 1px solid var(--border-strong);
+    background: #17140f;
+    padding: 22px 20px 18px;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  }
+
+  .wa-modal-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 8px;
+  }
+
+  .wa-modal-body {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--text-secondary);
+    margin: 0 0 18px;
+  }
+
+  .wa-modal-body b { color: var(--accent-bright); }
+
+  .wa-modal-copy {
+    width: 100%;
+    padding: 12px;
+    border-radius: 999px;
+    border: none;
+    background: var(--accent-bright);
+    color: #17140f;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-bottom: 8px;
+  }
+
+  .wa-modal-close {
+    width: 100%;
+    padding: 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border-strong);
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
   /* ===== Footer ===== */
   .footer {
     margin-top: auto;
@@ -503,6 +570,20 @@
       Para que el botón abra WhatsApp, tocá los <b>•••</b> arriba a la derecha y elegí <b>«Abrir en navegador»</b>.
       <br />
       <button type="button" id="copyNumberBtn">Copiar el número</button>
+    </div>
+
+    <!-- ===== Modal: se muestra al tocar cualquier botón de WhatsApp, en vez
+         de dejar que el salto a la app falle en silencio (o con el error
+         nativo de WhatsApp). Explica el paso real y ya copió el número. ===== -->
+    <div class="wa-modal" id="webviewModal">
+      <div class="wa-modal-card">
+        <p class="wa-modal-title">Ya copiamos el número 📋</p>
+        <p class="wa-modal-body">
+          TikTok no deja abrir WhatsApp directo desde acá. Tocá los <b>•••</b> (arriba a la derecha) → <b>«Abrir en navegador»</b>, y después pegá el número en WhatsApp.
+        </p>
+        <button type="button" class="wa-modal-copy" id="webviewModalCopy">Copiar de nuevo</button>
+        <button type="button" class="wa-modal-close" id="webviewModalClose">Entendido</button>
+      </div>
     </div>
 
     <!-- ===== Badge de estado ===== -->
@@ -584,23 +665,48 @@
       if (!esWebviewEmbebido) return;
       document.getElementById('webviewNotice').classList.add('is-visible');
 
+      function copiarNumero(numero, boton, textoOriginal) {
+        navigator.clipboard.writeText(numero).then(function () {
+          boton.textContent = '¡Copiado! Ahora pegalo en WhatsApp';
+          setTimeout(function () { boton.textContent = textoOriginal; }, 2500);
+        });
+      }
+
       var copyBtn = document.getElementById('copyNumberBtn');
       copyBtn.addEventListener('click', function () {
-        navigator.clipboard.writeText('+57 318 149 6980').then(function () {
-          copyBtn.textContent = '¡Copiado!';
-          setTimeout(function () { copyBtn.textContent = 'Copiar el número'; }, 2000);
+        copiarNumero('+57 318 149 6980', copyBtn, 'Copiar el número');
+      });
+
+      // El navegador embebido de TikTok bloquea el salto directo a la app
+      // de WhatsApp — ni wa.me ni el truco de forzar Safari (x-safari-https)
+      // lo esquivan, TikTok también lo bloquea. No hay truco de código que
+      // lo resuelva al 100%: en vez de dejar que el botón falle en
+      // silencio (o muestre el error nativo de WhatsApp), lo interceptamos
+      // y mostramos un modal con el paso a paso real + copiamos el número
+      // automáticamente. Pedido de Franco, 2026-09-24 (perdía ventas).
+      var modal = document.getElementById('webviewModal');
+      var modalCloseBtn = document.getElementById('webviewModalClose');
+      var modalCopyBtn = document.getElementById('webviewModalCopy');
+
+      document.querySelectorAll('a[href^="https://wa.me/"], a[href^="https://api.whatsapp.com/"]').forEach(function (link) {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          var numero = link.href.indexOf('573181496980') !== -1 ? '+57 318 149 6980' : '+54 9 261 533 6300';
+          modalCopyBtn.dataset.numero = numero;
+          modalCopyBtn.textContent = 'Copiar ' + numero;
+          navigator.clipboard.writeText(numero).catch(function () {});
+          modal.classList.add('is-open');
         });
       });
 
-      // En iPhone, el navegador embebido de TikTok bloquea el salto directo
-      // a la app de WhatsApp ("la acción no se pudo completar"). El prefijo
-      // x-safari-https:// fuerza a iOS a abrir el link en Safari en vez de
-      // en el navegador de TikTok, y desde Safari el salto a WhatsApp sí
-      // funciona. Pedido de Franco, 2026-09-24 (perdía ventas por esto).
-      var esIOS = /iPhone|iPad|iPod/i.test(ua);
-      if (esIOS) {
-        document.querySelectorAll('a[href^="https://wa.me/"], a[href^="https://api.whatsapp.com/"]').forEach(function (link) {
-          link.href = 'x-safari-' + link.href;
+      if (modalCloseBtn) {
+        modalCloseBtn.addEventListener('click', function () {
+          modal.classList.remove('is-open');
+        });
+      }
+      if (modalCopyBtn) {
+        modalCopyBtn.addEventListener('click', function () {
+          copiarNumero(modalCopyBtn.dataset.numero, modalCopyBtn, modalCopyBtn.textContent);
         });
       }
     })();
