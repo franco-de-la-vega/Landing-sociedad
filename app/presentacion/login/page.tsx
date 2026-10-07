@@ -8,7 +8,7 @@ import Logo from "@/components/Logo";
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const next = searchParams.get("next") || "/presentacion";
+  const next = searchParams.get("next") || "/presentacion2.1.1";
 
   useEffect(() => {
     document.title = "Ingresar a Presentación — ILFC";
