@@ -123,13 +123,13 @@ export function businessDaysByWeek(): Date[] {
 // el evento a SU propio calendario, nosotros no leemos ni tocamos nada.
 export function googleCalendarLink(date: Date, hour: number) {
   const start = slotInstant(date, hour);
-  const end = new Date(start.getTime() + 40 * 60000);
+  const end = new Date(start.getTime() + 120 * 60000);
   const fmt = (d: Date) => d.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
   const params = new URLSearchParams({
     action: "TEMPLATE",
     text: "Llamada con Instituto Latinoamericano de Formación Comercial",
     dates: `${fmt(start)}/${fmt(end)}`,
-    details: "Reunión de 40 minutos. Te recomendamos conectarte desde una computadora.",
+    details: "Reunión de 2 horas. Te recomendamos conectarte desde una computadora.",
   });
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }

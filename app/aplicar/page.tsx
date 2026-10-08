@@ -574,7 +574,7 @@ export default function AplicarPage() {
                 <span className="text-[11.5px] font-semibold uppercase tracking-[0.14em] text-[var(--color-accent-hover)] sm:text-[12.5px]">Paso 3 de 3 · Tu perfil encaja</span>
                 <h2 className="mt-3 text-[1.7rem] font-bold leading-[1.15] tracking-tight text-white sm:text-[2.2rem]">Elegí el horario de tu llamada</h2>
                 <p className="mt-3 text-[14.5px] leading-relaxed text-white/55 sm:text-[16px]">
-                  Es una reunión de 40 minutos por videollamada. Te recomendamos conectarte desde una computadora. Los horarios se muestran en tu huso horario.
+                  Es una reunión de 2 horas por videollamada, así que reservá un horario en el que puedas estar con tiempo y sin interrupciones. Te recomendamos conectarte desde una computadora. Los horarios se muestran en tu huso horario.
                 </p>
                 <div className="mt-6 sm:mt-8">
                   <BookingCalendar

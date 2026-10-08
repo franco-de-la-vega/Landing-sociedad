@@ -418,7 +418,7 @@ function AgendarFlow() {
           </Reveal>
           <Reveal delay={0.1} className="relative mt-3">
             <p className="text-[14.5px] leading-relaxed text-white/55 sm:text-[16.5px]">
-              Es una reunión de 40 minutos. Te recomendamos conectarte desde una
+              Es una reunión de 2 horas. Te recomendamos conectarte desde una
               computadora para aprovecharla mejor. Los horarios se muestran en
               tu huso horario.
             </p>
