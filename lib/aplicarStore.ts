@@ -7,7 +7,7 @@
  * cae a memoria del proceso.
  */
 
-import { alertFailure } from "@/lib/alert";
+import { alertFailure, notify } from "@/lib/alert";
 import { EMPRESA_ID, agendaCrmConfigurado, getJson, normTel, rest } from "@/lib/agendaCrm";
 import { DIAS_BLOQUEO, MS_DIA } from "@/lib/aplicarToken";
 import type { Categoria } from "@/lib/aplicarEvaluar";
@@ -52,8 +52,16 @@ export async function registrarIntento(opts: {
   motivo: string;
   score: number;
   resumen: string;
+  campos: { situacion: string; que_busca: string; disponibilidad: string };
 }): Promise<void> {
-  const { contacto, califica, categoria, motivo, score, resumen } = opts;
+  const { contacto, califica, categoria, motivo, score, resumen, campos } = opts;
+
+  if (!califica) {
+    await notify(
+      "Lead sin calificar (queda en el CRM como base de datos)",
+      `${contacto.nombre}\nWhatsApp: ${contacto.whatsapp}\nEmail: ${contacto.email}\nMotivo: ${motivo}`
+    );
+  }
 
   if (!agendaCrmConfigurado) {
     if (!califica) memoria.push({ tel: contacto.whatsapp, email: mail(contacto.email), categoria: categoria ?? "perfil", en: Date.now() });
@@ -76,8 +84,43 @@ export async function registrarIntento(opts: {
         respuestas: resumen,
       }),
     });
+    if (!califica) await cargarLeadBase(contacto, campos, resumen, motivo);
   } catch (e) {
     console.warn("[aplicar] no se pudo guardar el intento:", e instanceof Error ? e.message : e);
     await alertFailure("No se pudo guardar un intento de /aplicar (¿falta aplicar la migración 54?)", `${contacto.nombre} · ${contacto.whatsapp}\n${e instanceof Error ? e.message : String(e)}`);
   }
+}
+
+/**
+ * Los no calificados quedan en el CRM como BASE DE DATOS para escribirles después:
+ * pipeline "setter", etapa "redes" (no aparecen en el tablero de los closers ni
+ * cuentan como ventas perdidas), con la etiqueta "filtro-no-calificado". Sin agenda.
+ * Si esa persona ya existe como lead (mismo WhatsApp) no se duplica.
+ */
+async function cargarLeadBase(
+  c: Contacto,
+  campos: { situacion: string; que_busca: string; disponibilidad: string },
+  resumen: string,
+  motivo: string
+): Promise<void> {
+  const existentes = await getJson<{ whatsapp: string | null }[]>(`leads?select=whatsapp&empresa_id=eq.${EMPRESA_ID}`);
+  const tel = ultimos8(c.whatsapp);
+  if (existentes.some((l) => l.whatsapp && ultimos8(l.whatsapp) === tel)) return;
+  await rest(`leads`, {
+    method: "POST",
+    body: JSON.stringify({
+      empresa_id: EMPRESA_ID,
+      nombre: c.nombre,
+      whatsapp: c.whatsapp,
+      email: c.email,
+      origen: "Landing /aplicar (filtro)",
+      pipeline: "setter",
+      etapa: "redes",
+      tags: ["filtro-no-calificado"],
+      situacion: campos.situacion,
+      que_busca: campos.que_busca,
+      disponibilidad: campos.disponibilidad,
+      notas: `No calificó en el filtro de la landing (${motivo}). Guardado como base de datos para contactar más adelante.\n\n${resumen}`,
+    }),
+  });
 }

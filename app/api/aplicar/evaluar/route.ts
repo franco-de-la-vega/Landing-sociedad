@@ -56,6 +56,7 @@ export async function POST(req: NextRequest) {
     motivo: veredicto.califica ? "" : veredicto.motivo,
     score: veredicto.score,
     resumen,
+    campos: camposCrm(respuestas),
   });
 
   if (!veredicto.califica) {

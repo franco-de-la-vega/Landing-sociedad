@@ -535,35 +535,16 @@ export default function AplicarPage() {
             {fase === "no" && (
               <motion.div key="no" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }} className="relative overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-8 text-center sm:p-10">
                 <div className="pointer-events-none absolute left-1/2 top-0 h-48 w-48 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.12] blur-2xl" style={{ background: "radial-gradient(circle, var(--color-accent) 0%, transparent 70%)" }} aria-hidden />
-                <span className="relative text-[11.5px] font-semibold uppercase tracking-[0.14em] text-[var(--color-accent-hover)]">Gracias por tu tiempo</span>
-                {categoria === "trabajo" ? (
-                  <>
-                    <h2 className="relative mt-4 text-[1.5rem] font-bold leading-[1.2] text-white sm:text-[1.8rem]">Esto no es una bolsa de trabajo.</h2>
-                    <p className="relative mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-white/60 sm:text-[16px]">
-                      Somos una formación: primero te preparamos en el área comercial y, al terminar, te conectamos con empresas. No conseguimos empleo sin esa formación,
-                      así que este programa no es lo que estás buscando por ahora.
-                    </p>
-                  </>
-                ) : categoria === "momento" ? (
-                  <>
-                    <h2 className="relative mt-4 text-[1.5rem] font-bold leading-[1.2] text-white sm:text-[1.8rem]">Hoy no es el momento, y está bien.</h2>
-                    <p className="relative mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-white/60 sm:text-[16px]">
-                      La formación es intensiva y requiere tiempo y dinero. Preferimos que llegues cuando puedas aprovecharla al máximo.
-                    </p>
-                  </>
-                ) : (
-                  <>
-                    <h2 className="relative mt-4 text-[1.5rem] font-bold leading-[1.2] text-white sm:text-[1.8rem]">Por ahora, sentimos que no es el momento ideal.</h2>
-                    <p className="relative mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-white/60 sm:text-[16px]">
-                      Revisamos tu solicitud con atención y, por ahora, no vemos que el programa sea el paso indicado para vos. Te agradecemos la sinceridad.
-                    </p>
-                  </>
-                )}
+                <span className="relative text-[11.5px] font-semibold uppercase tracking-[0.14em] text-[var(--color-accent-hover)]">Gracias por contarnos tu historia</span>
+                <h2 className="relative mt-4 text-[1.5rem] font-bold leading-[1.2] text-white sm:text-[1.8rem]">Recibimos tus respuestas.</h2>
+                <p className="relative mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-white/60 sm:text-[16px]">
+                  Alguien del equipo va a revisar tu perfil con atención y estamos en contacto. Valoramos mucho el tiempo que te tomaste para responder.
+                </p>
                 <p className="relative mx-auto mt-5 max-w-md text-[13.5px] leading-relaxed text-white/40">
-                  Si tu situación cambia, vas a poder volver a aplicar{fechaHasta ? ` a partir del ${fechaHasta}` : " dentro de 30 días"}. Cada persona puede completar la solicitud una vez cada 30 días.
+                  Por ahora no vas a poder agendar una llamada desde acá. Si tu situación cambia, vas a poder volver a aplicar{fechaHasta ? ` a partir del ${fechaHasta}` : " dentro de 30 días"}.
                 </p>
                 <a href={INSTAGRAM} target="_blank" rel="noopener noreferrer" className="relative mt-6 inline-flex rounded-xl border border-[var(--color-border)] px-5 py-2.5 text-[14.5px] font-semibold text-white/85 transition-colors hover:border-[var(--color-accent)]">
-                  Seguir aprendiendo gratis en Instagram
+                  Mientras tanto, seguinos en Instagram
                 </a>
               </motion.div>
             )}
