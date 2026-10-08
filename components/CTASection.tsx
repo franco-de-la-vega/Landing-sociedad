@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import Reveal from "./Reveal";
-import MultiStepForm from "./MultiStepForm";
 
 export default function CTASection() {
   return (
@@ -42,14 +41,18 @@ export default function CTASection() {
         </Reveal>
         <Reveal delay={0.14} className="mt-4">
           <p className="max-w-lg text-[15px] leading-relaxed text-white/55 sm:text-[16.5px]">
-            Dos preguntas breves para entender dónde estás parado hoy.
-            No hay respuestas correctas o incorrectas: el objetivo es
-            ubicarte en el punto de partida que te corresponde.
+            Mirá el video, respondé unas preguntas y, si el programa es para vos,
+            elegí el horario de tu llamada con el equipo.
           </p>
         </Reveal>
 
         <Reveal delay={0.2} className="mt-12 w-full">
-          <MultiStepForm />
+          <a
+            href="/aplicar"
+            className="mx-auto inline-flex items-center justify-center rounded-xl bg-[var(--color-accent)] px-8 py-4 text-[16px] font-semibold text-white transition-colors hover:bg-[var(--color-accent-hover)]"
+          >
+            Quiero saber más
+          </a>
         </Reveal>
       </div>
     </section>
