@@ -190,12 +190,38 @@ export async function cargaFuturaPorForm(closerIds: string[]): Promise<Record<st
   return conteo;
 }
 
+/**
+ * Franjas ocupadas en el Google Calendar de los closers para un día (hora Argentina,
+ * con margen hasta las 3 h siguientes porque la reunión puede terminar pasada la medianoche).
+ * Devuelve `null` si no se pudo consultar (el llamador decide qué hacer).
+ */
+export async function ocupadosGoogleDelDia(closerIds: string[], fecha: string): Promise<Record<string, Ocupado[]> | null> {
+  if (!LANDING_AGENDA_SECRET || closerIds.length === 0) return {};
+  const desdeISO = new Date(`${fecha}T00:00:00${TZ_OFFSET}`).toISOString();
+  const hastaISO = new Date(new Date(`${fecha}T23:59:59${TZ_OFFSET}`).getTime() + 3 * 3600_000).toISOString();
+  try {
+    const res = await fetch(`${CRM_URL}/api/agenda/disponibilidad-publica`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${LANDING_AGENDA_SECRET}` },
+      body: JSON.stringify({ closerIds, desdeISO, hastaISO }),
+      cache: "no-store",
+    });
+    if (!res.ok) return null;
+    const j = (await res.json()) as { ok?: boolean; ocupados?: Record<string, Ocupado[]> };
+    return j.ok ? (j.ocupados ?? {}) : null;
+  } catch {
+    return null;
+  }
+}
+
 // ─────────────── Lógica de slots ───────────────
 
 const hhmm = (t: string) => t.slice(0, 5);
 
 /** ¿El closer está libre para una llamada que arranca en `inicioMs`? */
-export function closerLibre(closer: CloserPool, inicioMs: number, reuniones: Reunion[]): boolean {
+export type Ocupado = { inicio: string; fin: string };
+
+export function closerLibre(closer: CloserPool, inicioMs: number, reuniones: Reunion[], ocupadosGoogle: Ocupado[] = []): boolean {
   if (closer.max_por_dia != null && reuniones.length >= closer.max_por_dia) return false;
 
   // El slot pedido (`inicioMs`) es hora Argentina — lo que ve el visitante de
@@ -217,6 +243,9 @@ export function closerLibre(closer: CloserPool, inicioMs: number, reuniones: Reu
     return inicioMs >= d && finMs <= f;
   });
   if (!enHorario) return false;
+
+  // Lo que el closer ya tiene en su Google Calendar (clases, reuniones propias, etc.).
+  if (ocupadosGoogle.some((o) => inicioMs < new Date(o.fin).getTime() && finMs > new Date(o.inicio).getTime())) return false;
 
   return !reuniones.some((r) => {
     const ri = new Date(r.inicio).getTime() - bufMs;
@@ -512,7 +541,12 @@ export async function agendarCrm(body: AgendarBody): Promise<Respuesta> {
       pool.map((c) => c.usuario_id),
       date
     );
-    const libres = pool.filter((c) => closerLibre(c, inicioMs, reunionesPorCloser.get(c.usuario_id) ?? []));
+    const ocupadosG = await ocupadosGoogleDelDia(pool.map((c) => c.usuario_id), date);
+    if (ocupadosG === null) {
+      // No pudimos leer el Google Calendar: no frenamos la reserva (no perder un lead), pero avisamos.
+      await alertFailure("No se pudo leer el Google Calendar al agendar", `Reserva de ${nombre} (${date} ${hh}:00). Revisar que no se superponga con una clase.`);
+    }
+    const libres = pool.filter((c) => closerLibre(c, inicioMs, reunionesPorCloser.get(c.usuario_id) ?? [], ocupadosG?.[c.usuario_id] ?? []));
     if (libres.length === 0) return { status: 409, body: { ok: false, error: "slot_taken" } };
 
     const cargaForm = await cargaFuturaPorForm(libres.map((c) => c.usuario_id));
@@ -566,10 +600,12 @@ export async function availabilidadCrm(date: string, vendedor: string | null): P
       date
     );
 
+    const ocupadosG = await ocupadosGoogleDelDia(pool.map((c) => c.usuario_id), date);
+
     const bookedHours = HORAS.filter((hour) => {
       const hh = String(hour).padStart(2, "0");
       const inicioMs = new Date(`${date}T${hh}:00:00${TZ_OFFSET}`).getTime();
-      return !pool.some((c) => closerLibre(c, inicioMs, reunionesPorCloser.get(c.usuario_id) ?? []));
+      return !pool.some((c) => closerLibre(c, inicioMs, reunionesPorCloser.get(c.usuario_id) ?? [], ocupadosG?.[c.usuario_id] ?? []));
     });
 
     return { status: 200, body: { ok: true, bookedHours } };
