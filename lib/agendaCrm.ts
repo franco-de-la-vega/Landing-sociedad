@@ -10,7 +10,7 @@
  */
 
 import { alertFailure } from "@/lib/alert";
-import { HORAS, MIN_LEAD_HOURS, maxBookingDateKey } from "@/lib/booking";
+import { HORAS, MIN_LEAD_HOURS, VENDEDOR_UNICO, maxBookingDateKey } from "@/lib/booking";
 
 const SB_URL = process.env.SUPABASE_URL;
 const SB_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -45,7 +45,7 @@ function sincronizarGoogleDelCrm(reunionId: string): void {
 }
 
 /** Empresa ILFC en el CRM (única por ahora). */
-const EMPRESA_ID = "3e520c7a-5429-41b5-a43d-0b7f50fec333";
+export const EMPRESA_ID = "3e520c7a-5429-41b5-a43d-0b7f50fec333";
 
 /** Los horarios que ve el visitante en la landing son SIEMPRE Argentina — es
  * el público al que le habla el formulario. Lo que puede variar es la zona
@@ -79,7 +79,7 @@ function fechaEnZona(instanteMs: number, zona: string): { fecha: string; dow: nu
 
 export const agendaCrmConfigurado = Boolean(SB_URL && SB_KEY);
 
-async function rest(path: string, init?: RequestInit): Promise<Response> {
+export async function rest(path: string, init?: RequestInit): Promise<Response> {
   if (!SB_URL || !SB_KEY) throw new Error("supabase_no_configurado");
   const res = await fetch(`${SB_URL}/rest/v1/${path}`, {
     ...init,
@@ -95,7 +95,7 @@ async function rest(path: string, init?: RequestInit): Promise<Response> {
   return res;
 }
 
-async function getJson<T>(path: string): Promise<T> {
+export async function getJson<T>(path: string): Promise<T> {
   return (await rest(path)).json() as Promise<T>;
 }
 
@@ -123,6 +123,8 @@ interface Reunion {
 
 // ─────────────── Lecturas ───────────────
 
+const sinTildes = (t: string) => t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase();
+
 /** Closers en el pool (o el que matchee `vendedorNombre` para links personales). */
 export async function cargarPool(vendedorNombre?: string | null): Promise<CloserPool[]> {
   const configs = await getJson<
@@ -144,7 +146,7 @@ export async function cargarPool(vendedorNombre?: string | null): Promise<Closer
 
   return configs
     .filter((c) => c.activo && c.en_pool && c.usuarios)
-    .filter((c) => !vendedorNombre || c.usuarios!.nombre.toLowerCase() === vendedorNombre.toLowerCase())
+    .filter((c) => !vendedorNombre || sinTildes(c.usuarios!.nombre) === sinTildes(vendedorNombre))
     .map((c) => ({
       usuario_id: c.usuario_id,
       nombre: c.usuarios!.nombre,
@@ -246,10 +248,10 @@ export function elegirCloser(
 
 // ─────────────── Escrituras ───────────────
 
-function normNombre(n: string) {
+export function normNombre(n: string) {
   return n.trim().toLowerCase().replace(/\s+/g, " ");
 }
-function normTel(t: string) {
+export function normTel(t: string) {
   return t.replace(/[^0-9]/g, "");
 }
 
@@ -470,7 +472,7 @@ type Respuesta = { status: number; body: Record<string, unknown> };
  * 2026-09-07. Los links personales (`?vendedor=Andres`, etc.) siguen andando
  * igual que siempre, sin pasar por acá.
  */
-const VENDEDOR_POR_DEFECTO = "Sandra";
+const VENDEDOR_POR_DEFECTO = VENDEDOR_UNICO;
 
 interface AgendarBody {
   nombre: string;
@@ -532,6 +534,15 @@ export async function agendarCrm(body: AgendarBody): Promise<Respuesta> {
     } catch (e) {
       if (e instanceof Error && e.name === "SlotTaken") return { status: 409, body: { ok: false, error: "slot_taken" } };
       throw e;
+    }
+
+    // Respuestas completas del filtro en las notas del lead (solo si todavía no tiene notas: no pisa las del equipo).
+    if (mensaje?.trim()) {
+      try {
+        await rest(`leads?id=eq.${leadId}&notas=is.null`, { method: "PATCH", body: JSON.stringify({ notas: mensaje.trim() }) });
+      } catch {
+        // las respuestas igual quedaron en la reunión y en los campos de la ficha
+      }
     }
 
     return { status: 200, body: { ok: true, vendedor: asignado.nombre } };

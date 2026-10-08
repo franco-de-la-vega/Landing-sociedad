@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { isHoneypotFilled } from "@/lib/antiSpam";
 import { agendarNotion } from "@/lib/agendaNotion";
 import { agendaCrmConfigurado, agendarCrm } from "@/lib/agendaCrm";
+import { VENDEDOR_UNICO } from "@/lib/booking";
 
 /**
  * Reserva de la landing.
@@ -14,6 +15,7 @@ import { agendaCrmConfigurado, agendarCrm } from "@/lib/agendaCrm";
  */
 export async function POST(req: NextRequest) {
   const body = await req.json();
+  if (!body?.vendedor) body.vendedor = VENDEDOR_UNICO; // hasta nuevo aviso, todo va a una sola persona
 
   if (isHoneypotFilled(body?.sitioWeb)) {
     return NextResponse.json({ ok: true, vendedor: body?.vendedor || "Franco" });

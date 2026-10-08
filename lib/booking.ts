@@ -133,3 +133,6 @@ export function googleCalendarLink(date: Date, hour: number) {
   });
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }
+
+/** Hasta nuevo aviso (Franco, 2026-10-07) TODAS las llamadas se agendan con esta persona. Nombre tal cual figura en el CRM. */
+export const VENDEDOR_UNICO = "Andres";

@@ -418,132 +418,22 @@
     transform: rotate(90deg);
   }
 
-  /* ===== Línea personal: botón chico, discreto, no compite con los principales ===== */
-  .verify-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 18px;
-    padding: 9px 16px;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    background: rgba(255, 255, 255, 0.02);
-    font-size: 12.5px;
-    font-weight: 600;
-    color: var(--text-muted);
-    text-decoration: none;
-    text-align: center;
-    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
-    animation-delay: 0.4s;
+  /* ===== Tres puntos: qué es, de un vistazo ===== */
+  .points { flex-shrink: 0; width: 100%; display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; animation-delay: 0.34s; }
+  .point {
+    display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 16px;
+    background: rgba(255,255,255,0.025); border: 1px solid var(--border);
   }
-
-  .verify-link:hover {
-    color: var(--text-secondary);
-    border-color: var(--border-strong);
-    background: rgba(255, 255, 255, 0.05);
+  .point .ico {
+    flex-shrink: 0; width: 42px; height: 42px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(201,154,82,0.1); border: 1px solid rgba(201,154,82,0.22);
   }
+  .point .ico svg { width: 21px; height: 21px; fill: none; stroke: var(--accent-bright); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .point b { display: block; font-size: 14.5px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 2px; }
+  .point span { display: block; font-size: 12.5px; line-height: 1.45; color: var(--text-secondary); }
 
-  .verify-link:active { transform: scale(0.97); }
-
-  /* ===== Aviso de navegador embebido (TikTok/Instagram bloquean el salto
-     directo a WhatsApp) — solo aparece si detectamos ese navegador. ===== */
-  .webview-notice {
-    display: none;
-    width: 100%;
-    margin-bottom: 20px;
-    padding: 12px 14px;
-    border-radius: 14px;
-    border: 1px solid var(--border-strong);
-    background: rgba(201, 154, 82, 0.07);
-    font-size: 12.5px;
-    line-height: 1.5;
-    color: var(--text-secondary);
-    text-align: center;
-    animation-delay: 0.06s;
-  }
-
-  .webview-notice.is-visible { display: block; }
-
-  .webview-notice b { color: var(--accent-bright); }
-
-  .webview-notice button {
-    margin-top: 8px;
-    padding: 6px 14px;
-    border-radius: 999px;
-    border: 1px solid var(--border-strong);
-    background: rgba(255, 255, 255, 0.04);
-    color: var(--text-primary);
-    font-size: 11.5px;
-    font-weight: 600;
-    cursor: pointer;
-  }
-
-  /* ===== Modal de WhatsApp bloqueado por TikTok ===== */
-  .wa-modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 50;
-    align-items: flex-end;
-    justify-content: center;
-    background: rgba(10, 9, 8, 0.6);
-    backdrop-filter: blur(4px);
-    padding: 0 16px 16px;
-  }
-
-  .wa-modal.is-open { display: flex; }
-
-  .wa-modal-card {
-    width: 100%;
-    max-width: 380px;
-    border-radius: 20px;
-    border: 1px solid var(--border-strong);
-    background: #17140f;
-    padding: 22px 20px 18px;
-    text-align: center;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-  }
-
-  .wa-modal-title {
-    font-size: 17px;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin: 0 0 8px;
-  }
-
-  .wa-modal-body {
-    font-size: 13.5px;
-    line-height: 1.55;
-    color: var(--text-secondary);
-    margin: 0 0 18px;
-  }
-
-  .wa-modal-body b { color: var(--accent-bright); }
-
-  .wa-modal-copy {
-    width: 100%;
-    padding: 12px;
-    border-radius: 999px;
-    border: none;
-    background: var(--accent-bright);
-    color: #17140f;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    margin-bottom: 8px;
-  }
-
-  .wa-modal-close {
-    width: 100%;
-    padding: 10px;
-    border-radius: 999px;
-    border: 1px solid var(--border-strong);
-    background: transparent;
-    color: var(--text-secondary);
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-  }
+  .cta-note { margin-top: 12px; text-align: center; font-size: 12px; line-height: 1.5; color: var(--text-muted); animation-delay: 0.4s; }
 
   /* ===== Footer ===== */
   .footer {
@@ -564,32 +454,10 @@
 
   <div class="page">
 
-    <!-- ===== Aviso: solo se muestra si el navegador es el embebido de
-         TikTok/Instagram, que bloquea abrir WhatsApp directo. ===== -->
-    <div class="webview-notice reveal" id="webviewNotice">
-      Para que el botón abra WhatsApp, tocá los <b>•••</b> arriba a la derecha y elegí <b>«Abrir en navegador»</b>.
-      <br />
-      <button type="button" id="copyNumberBtn">Copiar el número</button>
-    </div>
-
-    <!-- ===== Modal: se muestra al tocar cualquier botón de WhatsApp, en vez
-         de dejar que el salto a la app falle en silencio (o con el error
-         nativo de WhatsApp). Explica el paso real y ya copió el número. ===== -->
-    <div class="wa-modal" id="webviewModal">
-      <div class="wa-modal-card">
-        <p class="wa-modal-title">Ya copiamos el número 📋</p>
-        <p class="wa-modal-body">
-          TikTok no deja abrir WhatsApp directo desde acá. Tocá los <b>•••</b> (arriba a la derecha) → <b>«Abrir en navegador»</b>, y después pegá el número en WhatsApp.
-        </p>
-        <button type="button" class="wa-modal-copy" id="webviewModalCopy">Copiar de nuevo</button>
-        <button type="button" class="wa-modal-close" id="webviewModalClose">Entendido</button>
-      </div>
-    </div>
-
     <!-- ===== Badge de estado ===== -->
     <div class="status reveal">
       <span class="dot"></span>
-      Disponible para hablar
+      Formación en ventas B2B remotas
     </div>
 
     <!-- ===== Avatar con anillo animado (clickeable: abre en grande) ===== -->
@@ -613,31 +481,32 @@
           <circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none"/>
         </svg>
       </a>
-      <a class="social-link" href="https://tiktok.com/@TU_USUARIO" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M16.6 5.8c-.9-.6-1.5-1.6-1.6-2.8h-3v12.4c0 1.3-1 2.3-2.3 2.3-1.3 0-2.3-1-2.3-2.3s1-2.3 2.3-2.3c.2 0 .5 0 .7.1v-3.1c-.2 0-.5 0-.7 0-3 0-5.4 2.4-5.4 5.4S7.7 20.9 10.7 20.9s5.4-2.4 5.4-5.4V9.1c1.1.8 2.5 1.3 4 1.3V7.4c-1.3 0-2.4-.6-3.5-1.6z"/>
-        </svg>
-      </a>
     </div>
 
     <!-- ===== Prueba social: discreta, no compite con el botón ===== -->
     <p class="social-proof reveal">+300 personas formadas</p>
 
-    <!-- ===== Botones de acción ===== -->
-    <div class="links reveal">
-      <a class="btn btn-primary" href="https://api.whatsapp.com/send?phone=542617093210&text=Hola%20Franco!%20Busco%20formarme%20para%20trabajar%20remoto!%20%0ATe%20cuento%20sobre%20mi%3A%20" rel="noopener noreferrer">
-        Hablar con el equipo
-      </a>
+    <!-- ===== Qué es, de un vistazo ===== -->
+    <div class="points reveal">
+      <div class="point">
+        <span class="ico"><svg viewBox="0 0 24 24"><path d="M3 20h18M5 20V10l7-5 7 5v10M9 20v-6h6v6"/></svg></span>
+        <div><b>Ingeniería comercial</b><span>No es un curso de ventas: trabajamos los pilares reales de la negociación y la psicología del comprador.</span></div>
+      </div>
+      <div class="point">
+        <span class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>
+        <div><b>Clases en vivo y campus propio</b><span>Formación intensiva, con ejercicios reales los días sin clase.</span></div>
+      </div>
+      <div class="point">
+        <span class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg></span>
+        <div><b>Conexión laboral</b><span>Al terminar, te conectamos con empresas de Latinoamérica, Estados Unidos y Europa.</span></div>
+      </div>
     </div>
 
-    <!-- ===== Verificación: alguien de mi equipo está usando este WhatsApp
-         corporativo hace poco tiempo, aparecieron perfiles falsos haciéndose
-         pasar por mí. Si hay dudas de si es real, este es mi WhatsApp
-         personal para confirmarlo — a propósito discreto, no es el CTA
-         principal. Pedido de Franco, 2026-09-11. ===== -->
-    <a class="verify-link reveal" href="https://wa.me/5492615336300" rel="noopener noreferrer">
-      Línea personal de Franco
-    </a>
+    <!-- ===== Botón único ===== -->
+    <div class="links reveal">
+      <a class="btn btn-primary" href="/aplicar">Quiero saber más</a>
+    </div>
+    <p class="cta-note reveal">Mirás el video, respondés unas preguntas y, si es para vos, agendás tu llamada.</p>
 
     <div class="footer reveal">Franco de la Vega © 2026</div>
 
@@ -655,62 +524,6 @@
   </div>
 
   <script>
-    // Detecta el navegador embebido de TikTok/Instagram/Facebook — ahí el
-    // salto directo a WhatsApp queda bloqueado por la app, así que avisamos
-    // con la instrucción de "Abrir en navegador" en vez de dejar que falle
-    // en silencio. Pedido de Franco, 2026-09-11.
-    (function () {
-      var ua = navigator.userAgent || '';
-      var esWebviewEmbebido = /TikTok|BytedanceWebview|musical_ly|Instagram|FBAN|FBAV/i.test(ua);
-      if (!esWebviewEmbebido) return;
-      document.getElementById('webviewNotice').classList.add('is-visible');
-
-      function copiarNumero(numero, boton, textoOriginal) {
-        navigator.clipboard.writeText(numero).then(function () {
-          boton.textContent = '¡Copiado! Ahora pegalo en WhatsApp';
-          setTimeout(function () { boton.textContent = textoOriginal; }, 2500);
-        });
-      }
-
-      var copyBtn = document.getElementById('copyNumberBtn');
-      copyBtn.addEventListener('click', function () {
-        copiarNumero('+54 9 261 709 3210', copyBtn, 'Copiar el número');
-      });
-
-      // El navegador embebido de TikTok bloquea el salto directo a la app
-      // de WhatsApp — ni wa.me ni el truco de forzar Safari (x-safari-https)
-      // lo esquivan, TikTok también lo bloquea. No hay truco de código que
-      // lo resuelva al 100%: en vez de dejar que el botón falle en
-      // silencio (o muestre el error nativo de WhatsApp), lo interceptamos
-      // y mostramos un modal con el paso a paso real + copiamos el número
-      // automáticamente. Pedido de Franco, 2026-09-24 (perdía ventas).
-      var modal = document.getElementById('webviewModal');
-      var modalCloseBtn = document.getElementById('webviewModalClose');
-      var modalCopyBtn = document.getElementById('webviewModalCopy');
-
-      document.querySelectorAll('a[href^="https://wa.me/"], a[href^="https://api.whatsapp.com/"]').forEach(function (link) {
-        link.addEventListener('click', function (e) {
-          e.preventDefault();
-          var numero = link.href.indexOf('542617093210') !== -1 ? '+54 9 261 709 3210' : '+54 9 261 533 6300';
-          modalCopyBtn.dataset.numero = numero;
-          modalCopyBtn.textContent = 'Copiar ' + numero;
-          navigator.clipboard.writeText(numero).catch(function () {});
-          modal.classList.add('is-open');
-        });
-      });
-
-      if (modalCloseBtn) {
-        modalCloseBtn.addEventListener('click', function () {
-          modal.classList.remove('is-open');
-        });
-      }
-      if (modalCopyBtn) {
-        modalCopyBtn.addEventListener('click', function () {
-          copiarNumero(modalCopyBtn.dataset.numero, modalCopyBtn, modalCopyBtn.textContent);
-        });
-      }
-    })();
-
     // Glow ambiental: sigue el mouse en desktop; en touch queda fijo arriba-centro.
     (function () {
       var glow = document.getElementById('glow');
