@@ -1,4 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isHoneypotFilled } from "@/lib/antiSpam";
+import { agendarNotion } from "@/lib/agendaNotion";
+import { agendaCrmConfigurado, agendarCrm } from "@/lib/agendaCrm";
+import { VENDEDOR_UNICO } from "@/lib/booking";
 
 /**
  * Reserva de la landing.
@@ -9,7 +13,14 @@ import { NextRequest, NextResponse } from "next/server";
  * escribiendo en Notion (fallback automático, cero riesgo mientras el equipo
  * sigue trabajando ahí). El corte es literalmente cargar esas dos variables.
  */
-export async function POST() {
-  // Cerrada: las reservas ahora solo entran por /api/aplicar/agendar, que exige haber pasado el filtro.
-  return NextResponse.json({ ok: false, error: "reservas_cerradas_usar_aplicar" }, { status: 410 });
+export async function POST(req: NextRequest) {
+  const body = await req.json();
+  if (!body?.vendedor) body.vendedor = VENDEDOR_UNICO; // hasta nuevo aviso, todo va a una sola persona
+
+  if (isHoneypotFilled(body?.sitioWeb)) {
+    return NextResponse.json({ ok: true, vendedor: body?.vendedor || "Franco" });
+  }
+
+  const r = agendaCrmConfigurado ? await agendarCrm(body) : await agendarNotion(body);
+  return NextResponse.json(r.body, { status: r.status });
 }
