@@ -6,15 +6,13 @@
  *  - hoy no puede invertir
  *  - quiere empezar "más adelante"
  *  - alguna respuesta de texto sin contenido real, o formulario incompleto
- * El resto suma puntos; hace falta llegar a UMBRAL.
+ * Todo lo demás califica (sin puntaje: Franco prefiere poca fricción).
  */
 
 import { O, flujoCompleto, type Resp } from "@/lib/aplicarFlow";
 
 export type Categoria = "trabajo" | "momento" | "perfil";
 export type Veredicto = { califica: true; score: number } | { califica: false; categoria: Categoria; motivo: string; score: number };
-
-const UMBRAL = 4;
 
 export function evaluar(r: Resp): Veredicto {
   if (!flujoCompleto(r)) return { califica: false, categoria: "perfil", motivo: "formulario incompleto o con respuestas sin contenido", score: 0 };
@@ -23,13 +21,7 @@ export function evaluar(r: Resp): Veredicto {
   if (r.inversion === O.inversion.no) return { califica: false, categoria: "momento", motivo: "hoy no puede invertir", score: 0 };
   if (r.cuando === O.cuando.masAdelante) return { califica: false, categoria: "momento", motivo: "quiere empezar más adelante", score: 0 };
 
-  let score = 0;
-  score += r.inversion === O.inversion.ahora ? 3 : 1;
-  score += r.cuando === O.cuando.ya ? 2 : 1;
-  score += r.horas === O.horas.mas10 || r.horas === O.horas.cinco10 ? 2 : r.horas === O.horas.tres5 ? 1 : -1;
-  if (r.tiempo_busca !== O.tiempoBusca.poco) score += 1;
-  if (r.intento && r.intento !== O.intento.nunca) score += 1;
-
-  if (score < UMBRAL) return { califica: false, categoria: "perfil", motivo: `puntaje bajo (${score}/${UMBRAL})`, score };
+  // Sin puntaje: solo descartan los "no" claros de arriba. El resto pasa y llega al closer con todas sus respuestas.
+  const score = 0;
   return { califica: true, score };
 }
