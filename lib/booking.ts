@@ -10,8 +10,9 @@ export const ARGENTINA_TZ = "America/Argentina/Buenos_Aires";
 // hace falta) antes de la llamada.
 export const MIN_LEAD_HOURS = 12;
 
-// Se agenda de lunes a sábado, hasta MAX_BOOKING_DIAS días para adelante
-// (ventana rodante — antes era una fecha fija por el cohort).
+// Se agenda de lunes a sábado. MAX_BOOKING_DIAS es solo el TOPE absoluto: el
+// límite real lo calcula el servidor (`fechaLimiteAgendable`) y libera una
+// semana más recién cuando la semana abierta se llenó.
 export const MAX_BOOKING_DIAS = 30;
 
 /** "YYYY-MM-DD" del último día agendable (hoy + MAX_BOOKING_DIAS). */
@@ -20,6 +21,29 @@ export function maxBookingDateKey(): string {
   d.setHours(0, 0, 0, 0);
   d.setDate(d.getDate() + MAX_BOOKING_DIAS);
   return toDateKey(d);
+}
+
+/** "YYYY-MM-DD" de hoy en Argentina (el servidor corre en UTC). */
+export function hoyArgentinaKey(): string {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: ARGENTINA_TZ,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+}
+
+/** Suma días a una clave "YYYY-MM-DD" sin depender de la zona del servidor. */
+export function sumarDiasKey(key: string, dias: number): string {
+  const d = new Date(`${key}T12:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + dias);
+  return d.toISOString().slice(0, 10);
+}
+
+/** Sábado (último día agendable) de la semana de una fecha. Domingo cuenta como fin de la semana anterior. */
+export function sabadoDeSemanaKey(key: string): string {
+  const dow = new Date(`${key}T12:00:00Z`).getUTCDay(); // 0=Dom
+  return sumarDiasKey(key, dow === 0 ? -1 : 6 - dow);
 }
 
 export const PAISES = [
@@ -102,7 +126,7 @@ export function convertSlot(date: Date, hour: number, tz: string) {
 // (arranca siempre en el lunes de la semana actual, aunque algunos de esos
 // días ya hayan pasado), hasta MAX_BOOKING_DATE. Así cada "página" de 6
 // días es siempre una semana completa, prolija, sin desalinearse.
-export function businessDaysByWeek(): Date[] {
+export function businessDaysByWeek(limiteKey?: string): Date[] {
   const days: Date[] = [];
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -110,7 +134,7 @@ export function businessDaysByWeek(): Date[] {
   const diffToMonday = (today.getDay() + 6) % 7; // Lun=0 ... Dom=6
   monday.setDate(monday.getDate() - diffToMonday);
 
-  const maxDate = new Date(`${maxBookingDateKey()}T00:00:00`);
+  const maxDate = new Date(`${limiteKey ?? maxBookingDateKey()}T00:00:00`);
   const cursor = new Date(monday);
   while (cursor <= maxDate) {
     if (cursor.getDay() !== 0) days.push(new Date(cursor)); // excluye domingo

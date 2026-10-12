@@ -10,7 +10,7 @@
  */
 
 import { alertFailure } from "@/lib/alert";
-import { HORAS, MIN_LEAD_HOURS, VENDEDOR_UNICO, maxBookingDateKey } from "@/lib/booking";
+import { HORAS, MAX_BOOKING_DIAS, MIN_LEAD_HOURS, hoyArgentinaKey, sabadoDeSemanaKey, sumarDiasKey, VENDEDOR_UNICO } from "@/lib/booking";
 
 const SB_URL = process.env.SUPABASE_URL;
 const SB_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -196,9 +196,14 @@ export async function cargaFuturaPorForm(closerIds: string[]): Promise<Record<st
  * Devuelve `null` si no se pudo consultar (el llamador decide qué hacer).
  */
 export async function ocupadosGoogleDelDia(closerIds: string[], fecha: string): Promise<Record<string, Ocupado[]> | null> {
-  if (!LANDING_AGENDA_SECRET || closerIds.length === 0) return {};
   const desdeISO = new Date(`${fecha}T00:00:00${TZ_OFFSET}`).toISOString();
   const hastaISO = new Date(new Date(`${fecha}T23:59:59${TZ_OFFSET}`).getTime() + 3 * 3600_000).toISOString();
+  return ocupadosGoogleRango(closerIds, desdeISO, hastaISO);
+}
+
+/** Igual que `ocupadosGoogleDelDia` pero para un rango cualquiera. */
+export async function ocupadosGoogleRango(closerIds: string[], desdeISO: string, hastaISO: string): Promise<Record<string, Ocupado[]> | null> {
+  if (!LANDING_AGENDA_SECRET || closerIds.length === 0) return {};
   try {
     const res = await fetch(`${CRM_URL}/api/agenda/disponibilidad-publica`, {
       method: "POST",
@@ -523,7 +528,7 @@ export async function agendarCrm(body: AgendarBody): Promise<Respuesta> {
 
   if (!nombre || !whatsapp || !date || hour === undefined) return { status: 400, body: { ok: false, error: "missing_fields" } };
   if (whatsapp.replace(/[^0-9]/g, "").length < 8) return { status: 400, body: { ok: false, error: "invalid_whatsapp" } };
-  if (date > maxBookingDateKey()) return { status: 400, body: { ok: false, error: "date_out_of_range" } };
+  if (date > (await fechaLimiteAgendable(vendedor))) return { status: 400, body: { ok: false, error: "date_out_of_range" } };
   if (new Date(`${date}T12:00:00${TZ_OFFSET}`).getDay() === 0) return { status: 400, body: { ok: false, error: "sunday_not_bookable" } };
 
   const hh = String(hour).padStart(2, "0");
@@ -586,6 +591,60 @@ export async function agendarCrm(body: AgendarBody): Promise<Respuesta> {
       `Nombre: ${nombre}\nWhatsApp: ${whatsapp}\nFecha: ${date} ${hh}:00\n\n${err instanceof Error ? err.message : String(err)}`
     );
     return { status: 502, body: { ok: false, error: err instanceof Error ? err.message : "network_error" } };
+  }
+}
+
+/**
+ * Último día agendable hoy. Solo se muestra la semana en curso (hasta el
+ * sábado); recién cuando esa semana no tiene NINGÚN horario libre se libera
+ * la siguiente, y así. `MAX_BOOKING_DIAS` es el tope absoluto. Si no se
+ * puede leer el CRM, cae al sábado de esta semana (lo más conservador).
+ */
+export async function fechaLimiteAgendable(vendedor: string | null): Promise<string> {
+  const hoy = hoyArgentinaKey();
+  const tope = sumarDiasKey(hoy, MAX_BOOKING_DIAS);
+  let limite = sabadoDeSemanaKey(hoy);
+  try {
+    const pool = await cargarPool(vendedor || VENDEDOR_POR_DEFECTO);
+    if (pool.length === 0) return limite;
+    const ids = pool.map((c) => c.usuario_id);
+    const desdeISO = new Date(`${hoy}T00:00:00${TZ_OFFSET}`).toISOString();
+    const hastaISO = new Date(`${tope}T23:59:59${TZ_OFFSET}`).toISOString();
+    const reuniones = await getJson<Reunion[]>(
+      `reuniones?select=closer_id,inicio,fin&estado=neq.cancelada&inicio=gte.${desdeISO}&inicio=lte.${hastaISO}&closer_id=in.(${ids.join(",")})`
+    );
+    const ocupadosG = await ocupadosGoogleRango(ids, desdeISO, hastaISO);
+    const minMs = Date.now() + MIN_LEAD_HOURS * 3600 * 1000;
+
+    const hayLibre = (dia: string): boolean => {
+      const ini = new Date(`${dia}T00:00:00${TZ_OFFSET}`).getTime();
+      const fin = new Date(`${dia}T23:59:59${TZ_OFFSET}`).getTime();
+      const delDia = reuniones.filter((r) => {
+        const t = new Date(r.inicio).getTime();
+        return t >= ini && t <= fin;
+      });
+      return HORAS.some((hora) => {
+        const inicioMs = new Date(`${dia}T${String(hora).padStart(2, "0")}:00:00${TZ_OFFSET}`).getTime();
+        if (inicioMs < minMs) return false;
+        return pool.some((c) =>
+          closerLibre(c, inicioMs, delDia.filter((r) => r.closer_id === c.usuario_id), ocupadosG?.[c.usuario_id] ?? [])
+        );
+      });
+    };
+
+    for (;;) {
+      let hayEnSemana = false;
+      for (let i = 0; i < 6 && !hayEnSemana; i++) {
+        const dia = sumarDiasKey(limite, -5 + i);
+        if (dia < hoy) continue;
+        if (new Date(`${dia}T12:00:00Z`).getUTCDay() === 0) continue;
+        hayEnSemana = hayLibre(dia);
+      }
+      if (hayEnSemana || limite >= tope) return limite < tope ? limite : tope;
+      limite = sumarDiasKey(limite, 7);
+    }
+  } catch {
+    return limite;
   }
 }
 

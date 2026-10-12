@@ -10,6 +10,8 @@ import {
   MIN_LEAD_HOURS,
   PAISES,
   businessDaysByWeek,
+  hoyArgentinaKey,
+  sabadoDeSemanaKey,
   convertSlot,
   detectDefaultTz,
   slotInstant,
@@ -32,7 +34,19 @@ export default function BookingCalendar({
 }) {
   const [tz, setTz] = useState(ARGENTINA_TZ);
   useEffect(() => setTz(detectDefaultTz()), []);
-  const days = useMemo(() => businessDaysByWeek(), []);
+  // Solo se muestra la semana en curso; el servidor libera la siguiente
+  // cuando esta se llena. Mientras responde, se asume el sábado de esta semana.
+  const [limite, setLimite] = useState(() => sabadoDeSemanaKey(hoyArgentinaKey()));
+  useEffect(() => {
+    const vendedorParam = vendedorFijo ? `?vendedor=${encodeURIComponent(vendedorFijo)}` : "";
+    fetch(`/api/agendar/horizonte${vendedorParam}`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.ok && typeof data.limite === "string") setLimite(data.limite);
+      })
+      .catch(() => {});
+  }, [vendedorFijo]);
+  const days = useMemo(() => businessDaysByWeek(limite), [limite]);
   const [dayOffset, setDayOffset] = useState(0);
   const visibleDays = days.slice(dayOffset, dayOffset + 6);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
