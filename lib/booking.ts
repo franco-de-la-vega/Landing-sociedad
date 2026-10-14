@@ -2,7 +2,16 @@
 // embebido en la portada, para no duplicar la lógica de días/horarios/huso
 // horario en dos lugares.
 
-export const HORAS = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];
+// Horarios de inicio ofrecibles, cada 30 min (10, 10.5 = 10:30, ...). Cuáles
+// quedan libres lo define el CRM según la duración y el descanso de cada closer.
+export const HORAS = Array.from({ length: 23 }, (_, i) => 10 + i * 0.5);
+
+/** "HH:MM" de una hora decimal (10.5 → "10:30"). */
+export function horaHHMM(hour: number): string {
+  const h = Math.floor(hour);
+  const m = Math.round((hour - h) * 60);
+  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+}
 export const ARGENTINA_TZ = "America/Argentina/Buenos_Aires";
 
 // Nadie puede agendar dentro de las próximas MIN_LEAD_HOURS horas: le da
@@ -96,10 +105,10 @@ export function toDateKey(d: Date) {
 
 // El instante real (UTC) de un slot definido en hora de Argentina.
 export function slotInstant(date: Date, hour: number): Date {
-  return new Date(`${toDateKey(date)}T${String(hour).padStart(2, "0")}:00:00-03:00`);
+  return new Date(`${toDateKey(date)}T${horaHHMM(hour)}:00-03:00`);
 }
 
-// Convierte un slot definido en hora de Argentina (fecha + hora en punto)
+// Convierte un slot definido en hora de Argentina (fecha + hora, en punto o y media)
 // a como se ve ese mismo instante en el huso horario elegido por el lead.
 export function convertSlot(date: Date, hour: number, tz: string) {
   const instant = slotInstant(date, hour);

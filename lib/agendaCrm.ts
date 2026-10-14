@@ -10,7 +10,7 @@
  */
 
 import { alertFailure } from "@/lib/alert";
-import { HORAS, MAX_BOOKING_DIAS, MIN_LEAD_HOURS, hoyArgentinaKey, sabadoDeSemanaKey, sumarDiasKey, VENDEDOR_UNICO } from "@/lib/booking";
+import { HORAS, horaHHMM, MAX_BOOKING_DIAS, MIN_LEAD_HOURS, hoyArgentinaKey, sabadoDeSemanaKey, sumarDiasKey, VENDEDOR_UNICO } from "@/lib/booking";
 
 const SB_URL = process.env.SUPABASE_URL;
 const SB_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -366,7 +366,7 @@ export async function espejarReservaEnCrm(body: FormBody, asignadoNombre: string
   const closer = await buscarUsuarioPorNombre(asignadoNombre);
   if (!closer) return; // el closer de Notion no existe en el CRM todavía
 
-  const iso = `${body.date}T${String(body.hour).padStart(2, "0")}:00:00${TZ_OFFSET}`;
+  const iso = `${body.date}T${horaHHMM(body.hour)}:00${TZ_OFFSET}`;
   const inicio = new Date(iso);
   const fin = new Date(inicio.getTime() + closer.duracion_min * 60_000);
 
@@ -531,8 +531,9 @@ export async function agendarCrm(body: AgendarBody): Promise<Respuesta> {
   if (date > (await fechaLimiteAgendable(vendedor))) return { status: 400, body: { ok: false, error: "date_out_of_range" } };
   if (new Date(`${date}T12:00:00${TZ_OFFSET}`).getDay() === 0) return { status: 400, body: { ok: false, error: "sunday_not_bookable" } };
 
-  const hh = String(hour).padStart(2, "0");
-  const iso = `${date}T${hh}:00:00${TZ_OFFSET}`;
+  if (!HORAS.includes(Number(hour))) return { status: 400, body: { ok: false, error: "invalid_hour" } };
+  const hh = horaHHMM(hour);
+  const iso = `${date}T${hh}:00${TZ_OFFSET}`;
   const inicioMs = new Date(iso).getTime();
   if (inicioMs < Date.now() + MIN_LEAD_HOURS * 3600 * 1000) {
     return { status: 400, body: { ok: false, error: "too_soon" } };
@@ -549,7 +550,7 @@ export async function agendarCrm(body: AgendarBody): Promise<Respuesta> {
     const ocupadosG = await ocupadosGoogleDelDia(pool.map((c) => c.usuario_id), date);
     if (ocupadosG === null) {
       // No pudimos leer el Google Calendar: no frenamos la reserva (no perder un lead), pero avisamos.
-      await alertFailure("No se pudo leer el Google Calendar al agendar", `Reserva de ${nombre} (${date} ${hh}:00). Revisar que no se superponga con una clase.`);
+      await alertFailure("No se pudo leer el Google Calendar al agendar", `Reserva de ${nombre} (${date} ${hh}). Revisar que no se superponga con una clase.`);
     }
     const libres = pool.filter((c) => closerLibre(c, inicioMs, reunionesPorCloser.get(c.usuario_id) ?? [], ocupadosG?.[c.usuario_id] ?? []));
     if (libres.length === 0) return { status: 409, body: { ok: false, error: "slot_taken" } };
@@ -588,7 +589,7 @@ export async function agendarCrm(body: AgendarBody): Promise<Respuesta> {
   } catch (err) {
     await alertFailure(
       "Falló una reserva de agenda (CRM)",
-      `Nombre: ${nombre}\nWhatsApp: ${whatsapp}\nFecha: ${date} ${hh}:00\n\n${err instanceof Error ? err.message : String(err)}`
+      `Nombre: ${nombre}\nWhatsApp: ${whatsapp}\nFecha: ${date} ${hh}\n\n${err instanceof Error ? err.message : String(err)}`
     );
     return { status: 502, body: { ok: false, error: err instanceof Error ? err.message : "network_error" } };
   }
@@ -624,7 +625,7 @@ export async function fechaLimiteAgendable(vendedor: string | null): Promise<str
         return t >= ini && t <= fin;
       });
       return HORAS.some((hora) => {
-        const inicioMs = new Date(`${dia}T${String(hora).padStart(2, "0")}:00:00${TZ_OFFSET}`).getTime();
+        const inicioMs = new Date(`${dia}T${horaHHMM(hora)}:00${TZ_OFFSET}`).getTime();
         if (inicioMs < minMs) return false;
         return pool.some((c) =>
           closerLibre(c, inicioMs, delDia.filter((r) => r.closer_id === c.usuario_id), ocupadosG?.[c.usuario_id] ?? [])
@@ -662,8 +663,7 @@ export async function availabilidadCrm(date: string, vendedor: string | null): P
     const ocupadosG = await ocupadosGoogleDelDia(pool.map((c) => c.usuario_id), date);
 
     const bookedHours = HORAS.filter((hour) => {
-      const hh = String(hour).padStart(2, "0");
-      const inicioMs = new Date(`${date}T${hh}:00:00${TZ_OFFSET}`).getTime();
+      const inicioMs = new Date(`${date}T${horaHHMM(hour)}:00${TZ_OFFSET}`).getTime();
       return !pool.some((c) => closerLibre(c, inicioMs, reunionesPorCloser.get(c.usuario_id) ?? [], ocupadosG?.[c.usuario_id] ?? []));
     });
 

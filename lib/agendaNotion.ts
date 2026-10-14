@@ -7,7 +7,7 @@
  */
 
 import { alertFailure } from "@/lib/alert";
-import { maxBookingDateKey } from "@/lib/booking";
+import { horaHHMM, maxBookingDateKey } from "@/lib/booking";
 
 const NOTION_VERSION = "2022-06-28";
 const LEADS_DATABASE_ID = "3c63d284-28ee-81ae-991a-f362c63f3857";
@@ -44,8 +44,8 @@ export async function agendarNotion(body: AgendarBody): Promise<Respuesta> {
   if (date > maxBookingDateKey()) return { status: 400, body: { ok: false, error: "date_out_of_range" } };
   if (new Date(`${date}T12:00:00-03:00`).getDay() === 0) return { status: 400, body: { ok: false, error: "sunday_not_bookable" } };
 
-  const hh = String(hour).padStart(2, "0");
-  const iso = `${date}T${hh}:00:00-03:00`;
+  const hh = horaHHMM(hour);
+  const iso = `${date}T${hh}:00-03:00`;
   if (new Date(iso).getTime() < Date.now() + MIN_LEAD_HOURS * 3600 * 1000) {
     return { status: 400, body: { ok: false, error: "too_soon" } };
   }
@@ -139,13 +139,13 @@ export async function agendarNotion(body: AgendarBody): Promise<Respuesta> {
 
     if (!createRes.ok) {
       const errorBody = await createRes.text();
-      await alertFailure("Falló una reserva de agenda", `Nombre: ${nombre}\nWhatsApp: ${whatsapp}\nFecha: ${date} ${hh}:00\n\n${errorBody.slice(0, 300)}`);
+      await alertFailure("Falló una reserva de agenda", `Nombre: ${nombre}\nWhatsApp: ${whatsapp}\nFecha: ${date} ${hh}\n\n${errorBody.slice(0, 300)}`);
       return { status: 502, body: { ok: false, error: "notion_error" } };
     }
 
     return { status: 200, body: { ok: true, vendedor: asignado } };
   } catch (err) {
-    await alertFailure("Falló una reserva de agenda (red)", `Nombre: ${nombre}\nWhatsApp: ${whatsapp}\nFecha: ${date} ${hh}:00`);
+    await alertFailure("Falló una reserva de agenda (red)", `Nombre: ${nombre}\nWhatsApp: ${whatsapp}\nFecha: ${date} ${hh}`);
     return { status: 502, body: { ok: false, error: err instanceof Error ? err.message : "network_error" } };
   }
 }
