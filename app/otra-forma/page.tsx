@@ -13,13 +13,13 @@ import Watermark from "@/components/Watermark";
 
 /**
  * Landing de SEGUIMIENTO comercial — no es la landing de venta (esa es
- * /presentacion). Esta la manda el closer por WhatsApp a un prospecto que ya
+ * /presentacion2.1.1). Esta la manda el closer por WhatsApp a un prospecto que ya
  * tuvo una llamada y no decidió en el momento.
  *
  * Filosofía (Franco): "vender sin vender". Tres capas, en ese orden, sin
  * mezclarlas — dolor → posibilidad → una mención breve de ILFC al cierre.
  * Nada de pensum, sprints, precios ni metodología: eso es trabajo de
- * /presentacion y /curricula, no de esta pieza.
+ * /presentacion2.1.1 y /curricula, no de esta pieza.
  *
  * Diseño: cero tokens nuevos, mismo lenguaje visual que el resto del sitio
  * (theme.css, Reveal/RevealGroup, .text-metal, el mismo tratamiento oscuro
