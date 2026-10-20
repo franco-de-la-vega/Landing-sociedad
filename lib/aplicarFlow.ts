@@ -15,6 +15,8 @@ export type Pregunta = {
   opciones?: string[];
   /** Mínimo de caracteres (solo texto libre). */
   min?: number;
+  /** Texto libre que se puede dejar vacío (no frena el avance). */
+  opcional?: boolean;
   placeholder?: string;
 };
 
@@ -48,8 +50,8 @@ export const O = {
     mas10: "Más de 10 horas",
   },
   inversion: {
-    ahora: "Puedo invertir ahora",
-    organizar: "Tendría que organizarme, pero quiero hacerlo",
+    ahora: "Estoy listo para invertir",
+    organizar: "Quiero invertir, pero necesito organizarme",
     no: "Hoy no puedo invertir",
   },
   cuando: {
@@ -86,7 +88,8 @@ const P: Record<string, Pregunta> = {
     id: "des_hizo",
     titulo: "¿Qué hiciste hasta ahora para salir de ahí y qué resultado tuviste?",
     ayuda: "Contanos tu historia: qué probaste, cuánto tiempo y qué pasó.",
-    min: 70,
+    opcional: true,
+    min: 0,
     placeholder: "Por ejemplo: hace 4 meses me quedé sin trabajo, me postulé a…",
   },
   des_ahora: {
@@ -101,7 +104,8 @@ const P: Record<string, Pregunta> = {
   dep_hoy: {
     id: "dep_hoy",
     titulo: "Contanos qué hacés hoy y qué es lo que no te convence de tu situación actual.",
-    min: 70,
+    opcional: true,
+    min: 0,
     placeholder: "Por ejemplo: trabajo como… hace X años y lo que me pesa es…",
   },
   dep_obj: {
@@ -121,7 +125,8 @@ const P: Record<string, Pregunta> = {
     id: "ind_hoy",
     titulo: "¿A qué te dedicás y cómo te está yendo hoy?",
     ayuda: "Sé específico: qué hacés, hace cuánto y cómo son tus resultados.",
-    min: 70,
+    opcional: true,
+    min: 0,
     placeholder: "Por ejemplo: tengo un negocio de… hace 2 años, facturo…",
   },
   ind_porque: {
@@ -135,7 +140,8 @@ const P: Record<string, Pregunta> = {
   est_que: {
     id: "est_que",
     titulo: "¿Qué estudiás y cuándo terminás?",
-    min: 70,
+    opcional: true,
+    min: 0,
     placeholder: "Carrera o curso, año en el que vas y fecha estimada de fin",
   },
   est_porque: {
@@ -182,7 +188,7 @@ const P: Record<string, Pregunta> = {
   },
   inversion: {
     id: "inversion",
-    titulo: "La formación requiere invertir tiempo y dinero. ¿En qué situación estás?",
+    titulo: "El programa requiere invertir dinero y tiempo. ¿Cómo lo ves?",
     opciones: [O.inversion.ahora, O.inversion.organizar, O.inversion.no],
   },
   inv_org: {
@@ -207,9 +213,9 @@ const P: Record<string, Pregunta> = {
 
 /** Lista ordenada de preguntas que le corresponden a ESTAS respuestas. */
 export function visibles(r: Resp): Pregunta[] {
-  // Flujo corto (Franco, 2026-10-19, por volumen de leads de un video viral): 6 preguntas y UNA sola de texto.
+  // Flujo corto (Franco, 2026-10-20): 5 preguntas + 1 texto OPCIONAL. Sin "¿qué buscás?": inducía a elegir "que me consigan trabajo".
   // Las demás preguntas siguen definidas arriba por si se quiere volver a un filtro más largo.
-  const ids: string[] = ["busca", "situacion"];
+  const ids: string[] = ["situacion"];
 
   switch (r.situacion) {
     case O.situacion.sinTrabajo:
@@ -244,6 +250,7 @@ export function textoValido(texto: string | undefined, min: number): boolean {
 
 export function respuestaCompleta(p: Pregunta, valor: string | undefined): boolean {
   if (p.opciones) return Boolean(valor && p.opciones.includes(valor));
+  if (p.opcional) return true;
   return textoValido(valor, p.min ?? 0);
 }
 

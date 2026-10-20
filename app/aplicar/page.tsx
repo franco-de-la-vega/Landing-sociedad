@@ -86,7 +86,7 @@ export default function AplicarPage() {
       const r = await fetch("/api/aplicar/estado", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ whatsapp, email }),
+        body: JSON.stringify({ nombre, whatsapp, email }),
       }).then((x) => x.json());
       if (r.estado === "no") {
         setCategoria(r.categoria);
@@ -395,10 +395,10 @@ export default function AplicarPage() {
                 <span className="text-[11.5px] font-semibold uppercase tracking-[0.14em] text-[var(--color-accent-hover)] sm:text-[12.5px]">Paso 2 de 3</span>
                 <h2 className="mt-3 text-[1.7rem] font-bold leading-[1.15] tracking-tight text-white sm:text-[2.2rem]">Ahora, contanos sobre vos</h2>
                 <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed text-white/55 sm:text-[16.5px]">
-                  Leemos cada respuesta con atención antes de ofrecerte una llamada. Respondé con calma y sinceridad, y sin apuro: pensá bien lo que escribís.
+                  Son unas pocas preguntas y te lleva menos de un minuto. Respondé con sinceridad: lo leemos antes de tu llamada.
                 </p>
                 <p className="mx-auto mt-3 max-w-md text-[13.5px] leading-relaxed text-white/40">
-                  Solo se puede completar una vez cada 30 días, así que tomate el tiempo que necesites.
+                  El programa requiere una inversión de dinero y de tiempo; el video lo explica.
                 </p>
                 <button
                   type="button"
@@ -640,12 +640,34 @@ function TextoLibre({
   onNext,
   esUltima,
 }: {
-  p: { id: string; min?: number; placeholder?: string };
+  p: { id: string; min?: number; placeholder?: string; opcional?: boolean };
   valor: string;
   onChange: (t: string) => void;
   onNext: () => void;
   esUltima: boolean;
 }) {
+  if (p.opcional) {
+    return (
+      <div className="mt-5">
+        <textarea
+          value={valor}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={p.placeholder}
+          rows={4}
+          className="w-full resize-none rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] px-4 py-3 text-[15.5px] leading-relaxed text-white outline-none transition-colors placeholder:text-white/30 focus:border-[var(--color-accent)]"
+        />
+        <p className="mt-2 text-[13px] text-white/45">Opcional: nos ayuda a prepararnos para tu llamada.</p>
+        <button
+          type="button"
+          onClick={onNext}
+          className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--color-accent)] px-6 py-3.5 text-[16px] font-semibold text-white transition-colors hover:bg-[var(--color-accent-hover)]"
+        >
+          {valor.trim() ? (esUltima ? "Enviar mis respuestas" : "Siguiente") : "Seguir sin escribir"} <ArrowRight size={17} />
+        </button>
+      </div>
+    );
+  }
+
   const min = p.min ?? 0;
   const n = valor.trim().length;
   const falta = Math.max(0, min - n);

@@ -32,7 +32,7 @@ export async function buscarBloqueo(c: Pick<Contacto, "whatsapp" | "email">): Pr
 
   try {
     const filas = await getJson<{ whatsapp: string; email: string; creado_en: string; categoria: string | null }[]>(
-      `aplicaciones_filtro?select=whatsapp,email,creado_en,categoria&empresa_id=eq.${EMPRESA_ID}&califica=eq.false&creado_en=gte.${new Date(desde).toISOString()}`
+      `aplicaciones_filtro?select=whatsapp,email,creado_en,categoria&empresa_id=eq.${EMPRESA_ID}&califica=eq.false&categoria=neq.abandono&creado_en=gte.${new Date(desde).toISOString()}`
     );
     const f = filas.find((x) => ultimos8(x.whatsapp) === tel || mail(x.email) === em);
     if (!f) return null;
@@ -123,4 +123,44 @@ async function cargarLeadBase(
       notas: `No calificó en el filtro de la landing (${motivo}). Guardado como base de datos para contactar más adelante.\n\n${resumen}`,
     }),
   });
+}
+
+/**
+ * Guarda a quien empezó el formulario (dejó sus datos) por si lo abandona: categoría "abandono".
+ * NO cuenta como descarte (no bloquea) y no se duplica. Cuando termina el formulario, se borra.
+ */
+export async function registrarInicio(c: Contacto): Promise<void> {
+  if (!agendaCrmConfigurado) return;
+  try {
+    const desde = new Date(Date.now() - DIAS_BLOQUEO * MS_DIA).toISOString();
+    const previas = await getJson<{ whatsapp: string }[]>(`aplicaciones_filtro?select=whatsapp&empresa_id=eq.${EMPRESA_ID}&creado_en=gte.${desde}`);
+    const tel = ultimos8(c.whatsapp);
+    if (previas.some((x) => ultimos8(x.whatsapp) === tel)) return;
+    await rest(`aplicaciones_filtro`, {
+      method: "POST",
+      body: JSON.stringify({
+        empresa_id: EMPRESA_ID,
+        nombre: c.nombre,
+        whatsapp: c.whatsapp,
+        email: c.email,
+        califica: false,
+        categoria: "abandono",
+        motivo: "empezó el formulario y no lo terminó",
+        puntaje: 0,
+        respuestas: "",
+      }),
+    });
+  } catch (e) {
+    console.warn("[aplicar] no se pudo guardar el inicio:", e instanceof Error ? e.message : e);
+  }
+}
+
+/** Al terminar el formulario ya no es un abandono: se borra ese registro provisorio. */
+export async function borrarInicio(c: Pick<Contacto, "whatsapp">): Promise<void> {
+  if (!agendaCrmConfigurado) return;
+  try {
+    await rest(`aplicaciones_filtro?empresa_id=eq.${EMPRESA_ID}&categoria=eq.abandono&whatsapp=eq.${encodeURIComponent(c.whatsapp)}`, { method: "DELETE" });
+  } catch {
+    // no es crítico
+  }
 }

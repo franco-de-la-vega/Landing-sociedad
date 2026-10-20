@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { COOKIE, verificar } from "@/lib/aplicarToken";
 import type { Categoria } from "@/lib/aplicarEvaluar";
-import { buscarBloqueo } from "@/lib/aplicarStore";
+import { buscarBloqueo, registrarInicio } from "@/lib/aplicarStore";
 import { esEmailValido, esWhatsappValido } from "@/lib/aplicarFlow";
 
 type CookieNo = { v: "no"; c: Categoria };
@@ -15,10 +15,13 @@ export async function GET(req: NextRequest) {
 
 /** POST: con los datos de contacto, ¿esta persona ya fue descartada desde otro navegador? */
 export async function POST(req: NextRequest) {
-  const { whatsapp, email } = await req.json().catch(() => ({}));
+  const { nombre, whatsapp, email } = await req.json().catch(() => ({}));
   if (!esWhatsappValido(String(whatsapp ?? "")) || !esEmailValido(String(email ?? ""))) {
     return NextResponse.json({ ok: false, error: "datos_invalidos" }, { status: 400 });
   }
   const b = await buscarBloqueo({ whatsapp, email });
-  return NextResponse.json(b ? { estado: "no", categoria: b.categoria, hasta: b.hasta } : { estado: "nuevo" });
+  if (b) return NextResponse.json({ estado: "no", categoria: b.categoria, hasta: b.hasta });
+  // Empezó el formulario: lo guardamos por si lo abandona (para poder escribirle).
+  if (typeof nombre === "string" && nombre.trim().length >= 3) await registrarInicio({ nombre: nombre.trim(), whatsapp: String(whatsapp), email: String(email) });
+  return NextResponse.json({ estado: "nuevo" });
 }

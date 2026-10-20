@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { isHoneypotFilled } from "@/lib/antiSpam";
 import { COOKIE, DIAS_BLOQUEO, MS_DIA, firmar, verificar } from "@/lib/aplicarToken";
 import { evaluar } from "@/lib/aplicarEvaluar";
-import { buscarBloqueo, registrarIntento } from "@/lib/aplicarStore";
+import { borrarInicio, buscarBloqueo, registrarIntento } from "@/lib/aplicarStore";
 import { camposCrm, esEmailValido, esWhatsappValido, resumenRespuestas, type Resp } from "@/lib/aplicarFlow";
 
 const cookieOpts = (maxAgeMs: number) => ({
@@ -46,7 +46,8 @@ export async function POST(req: NextRequest) {
     return res;
   }
 
-  // 3) evaluar
+  // 3) evaluar (si había quedado registrado como "abandono", ya no lo es)
+  await borrarInicio({ whatsapp });
   const veredicto = evaluar(respuestas);
   const resumen = resumenRespuestas(respuestas);
   await registrarIntento({
