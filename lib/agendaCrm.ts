@@ -10,7 +10,7 @@
  */
 
 import { alertFailure } from "@/lib/alert";
-import { HORAS, horaHHMM, MAX_BOOKING_DIAS, MIN_LEAD_HOURS, hoyArgentinaKey, sabadoDeSemanaKey, sumarDiasKey, VENDEDOR_UNICO } from "@/lib/booking";
+import { HORAS, horaHHMM, MAX_BOOKING_DIAS, MIN_LEAD_HOURS, hoyArgentinaKey, sabadoDeSemanaKey, sumarDiasKey, VENDEDORES_LANDING } from "@/lib/booking";
 
 const SB_URL = process.env.SUPABASE_URL;
 const SB_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -126,7 +126,7 @@ interface Reunion {
 const sinTildes = (t: string) => t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase();
 
 /** Closers en el pool (o el que matchee `vendedorNombre` para links personales). */
-export async function cargarPool(vendedorNombre?: string | null): Promise<CloserPool[]> {
+export async function cargarPool(vendedorNombre?: string | string[] | null): Promise<CloserPool[]> {
   const configs = await getJson<
     {
       usuario_id: string;
@@ -146,7 +146,7 @@ export async function cargarPool(vendedorNombre?: string | null): Promise<Closer
 
   return configs
     .filter((c) => c.activo && c.en_pool && c.usuarios)
-    .filter((c) => !vendedorNombre || sinTildes(c.usuarios!.nombre) === sinTildes(vendedorNombre))
+    .filter((c) => !vendedorNombre || [vendedorNombre].flat().some((n) => sinTildes(c.usuarios!.nombre) === sinTildes(n)))
     .map((c) => ({
       usuario_id: c.usuario_id,
       nombre: c.usuarios!.nombre,
@@ -506,7 +506,7 @@ type Respuesta = { status: number; body: Record<string, unknown> };
  * 2026-09-07. Los links personales (`?vendedor=Andres`, etc.) siguen andando
  * igual que siempre, sin pasar por acá.
  */
-const VENDEDOR_POR_DEFECTO = VENDEDOR_UNICO;
+const VENDEDOR_POR_DEFECTO = VENDEDORES_LANDING;
 
 interface AgendarBody {
   nombre: string;
@@ -524,7 +524,7 @@ interface AgendarBody {
 /** Camino nuevo de /api/agendar: todo cae directo en el CRM (Supabase), nada en Notion. */
 export async function agendarCrm(body: AgendarBody): Promise<Respuesta> {
   const { nombre, whatsapp, mensaje, date, hour, situacion, busqueda, disponibilidad, email } = body;
-  const vendedor = body.vendedor || VENDEDOR_POR_DEFECTO;
+  const vendedor: string | string[] = body.vendedor || VENDEDOR_POR_DEFECTO;
 
   if (!nombre || !whatsapp || !date || hour === undefined) return { status: 400, body: { ok: false, error: "missing_fields" } };
   if (whatsapp.replace(/[^0-9]/g, "").length < 8) return { status: 400, body: { ok: false, error: "invalid_whatsapp" } };
@@ -601,7 +601,7 @@ export async function agendarCrm(body: AgendarBody): Promise<Respuesta> {
  * la siguiente, y así. `MAX_BOOKING_DIAS` es el tope absoluto. Si no se
  * puede leer el CRM, cae al sábado de esta semana (lo más conservador).
  */
-export async function fechaLimiteAgendable(vendedor: string | null): Promise<string> {
+export async function fechaLimiteAgendable(vendedor: string | string[] | null): Promise<string> {
   const hoy = hoyArgentinaKey();
   const tope = sumarDiasKey(hoy, MAX_BOOKING_DIAS);
   let limite = sabadoDeSemanaKey(hoy);

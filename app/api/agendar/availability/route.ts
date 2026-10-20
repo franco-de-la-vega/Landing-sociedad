@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { availabilityNotion } from "@/lib/agendaNotion";
 import { agendaCrmConfigurado, availabilidadCrm } from "@/lib/agendaCrm";
-import { VENDEDOR_UNICO } from "@/lib/booking";
 
 /**
  * Qué horas de un día ya no tienen ningún closer libre.
@@ -12,7 +11,7 @@ import { VENDEDOR_UNICO } from "@/lib/booking";
  */
 export async function GET(req: NextRequest) {
   const date = req.nextUrl.searchParams.get("date");
-  const vendedor = req.nextUrl.searchParams.get("vendedor") || VENDEDOR_UNICO;
+  const vendedor = req.nextUrl.searchParams.get("vendedor");
 
   if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
     return NextResponse.json({ ok: false, error: "invalid_date" }, { status: 400 });

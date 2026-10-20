@@ -167,5 +167,5 @@ export function googleCalendarLink(date: Date, hour: number) {
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }
 
-/** Hasta nuevo aviso (Franco, 2026-10-07) TODAS las llamadas se agendan con esta persona. Nombre tal cual figura en el CRM. */
-export const VENDEDOR_UNICO = "Andres";
+/** Quiénes toman las llamadas que salen de la landing (Franco, 2026-10-19: Andrés y Franco). Nombres tal cual figuran en el CRM. */
+export const VENDEDORES_LANDING = ["Andres", "Franco"];

@@ -6,7 +6,7 @@ import { ArrowRight, CalendarPlus, Check, ChevronLeft, Loader2, Pause, Play, Vol
 import Reveal from "@/components/Reveal";
 import Logo from "@/components/Logo";
 import BookingCalendar, { type BookingSelection } from "@/components/BookingCalendar";
-import { DIA_LABEL, MES_LABEL, PAISES, VENDEDOR_UNICO, convertSlot, googleCalendarLink, toDateKey } from "@/lib/booking";
+import { DIA_LABEL, MES_LABEL, PAISES, convertSlot, googleCalendarLink, toDateKey } from "@/lib/booking";
 import { esEmailValido, esWhatsappValido, respuestaCompleta, textoValido, visibles, type Resp } from "@/lib/aplicarFlow";
 import { sanitizeWhatsapp } from "@/lib/booking";
 
@@ -559,7 +559,6 @@ export default function AplicarPage() {
                 </p>
                 <div className="mt-6 sm:mt-8">
                   <BookingCalendar
-                    vendedorFijo={VENDEDOR_UNICO}
                     onContinue={(sel) => {
                       setSelection(sel);
                       setFase("confirmar");

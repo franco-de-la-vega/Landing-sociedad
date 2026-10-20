@@ -86,7 +86,7 @@ const P: Record<string, Pregunta> = {
     id: "des_hizo",
     titulo: "¿Qué hiciste hasta ahora para salir de ahí y qué resultado tuviste?",
     ayuda: "Contanos tu historia: qué probaste, cuánto tiempo y qué pasó.",
-    min: 100,
+    min: 70,
     placeholder: "Por ejemplo: hace 4 meses me quedé sin trabajo, me postulé a…",
   },
   des_ahora: {
@@ -101,7 +101,7 @@ const P: Record<string, Pregunta> = {
   dep_hoy: {
     id: "dep_hoy",
     titulo: "Contanos qué hacés hoy y qué es lo que no te convence de tu situación actual.",
-    min: 100,
+    min: 70,
     placeholder: "Por ejemplo: trabajo como… hace X años y lo que me pesa es…",
   },
   dep_obj: {
@@ -121,7 +121,7 @@ const P: Record<string, Pregunta> = {
     id: "ind_hoy",
     titulo: "¿A qué te dedicás y cómo te está yendo hoy?",
     ayuda: "Sé específico: qué hacés, hace cuánto y cómo son tus resultados.",
-    min: 100,
+    min: 70,
     placeholder: "Por ejemplo: tengo un negocio de… hace 2 años, facturo…",
   },
   ind_porque: {
@@ -207,34 +207,26 @@ const P: Record<string, Pregunta> = {
 
 /** Lista ordenada de preguntas que le corresponden a ESTAS respuestas. */
 export function visibles(r: Resp): Pregunta[] {
+  // Flujo corto (Franco, 2026-10-19, por volumen de leads de un video viral): 6 preguntas y UNA sola de texto.
+  // Las demás preguntas siguen definidas arriba por si se quiere volver a un filtro más largo.
   const ids: string[] = ["busca", "situacion"];
 
   switch (r.situacion) {
     case O.situacion.sinTrabajo:
-      ids.push("des_tiempo", "des_hizo", "des_ahora");
+      ids.push("des_hizo");
       break;
     case O.situacion.dependencia:
-      ids.push("dep_hoy", "dep_obj");
-      if (r.dep_obj === O.depObj.reemplazar) ids.push("dep_reemp");
+      ids.push("dep_hoy");
       break;
     case O.situacion.independiente:
-      ids.push("ind_hoy", "ind_porque");
+      ids.push("ind_hoy");
       break;
     case O.situacion.estudio:
-      ids.push("est_que", "est_porque");
+      ids.push("est_que");
       break;
   }
 
-  ids.push("intento");
-  if (r.intento) ids.push(r.intento === O.intento.nunca ? "int_nunca" : "int_cuenta");
-
-  ids.push("tiempo_busca", "horas");
-  if (r.horas === O.horas.menos3) ids.push("hor_org");
-
-  ids.push("inversion");
-  if (r.inversion === O.inversion.organizar) ids.push("inv_org");
-
-  ids.push("cuando", "meta");
+  ids.push("intento", "horas", "inversion", "cuando");
   return ids.map((id) => P[id]);
 }
 

@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { agendaCrmConfigurado, agendarCrm } from "@/lib/agendaCrm";
 import { agendarNotion } from "@/lib/agendaNotion";
-import { VENDEDOR_UNICO } from "@/lib/booking";
 import { verificar } from "@/lib/aplicarToken";
 
 type Calificado = { v: "si"; n: string; w: string; e: string; r: string; s: string; b: string; d: string };
@@ -27,7 +26,6 @@ export async function POST(req: NextRequest) {
     disponibilidad: t.d,
     date: String(body.date),
     hour: Number(body.hour),
-    vendedor: VENDEDOR_UNICO,
   };
   const r = agendaCrmConfigurado ? await agendarCrm(payload) : await agendarNotion(payload);
   return NextResponse.json(r.body, { status: r.status });
