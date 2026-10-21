@@ -50,9 +50,9 @@ export const O = {
     mas10: "Más de 10 horas",
   },
   inversion: {
-    ahora: "Estoy listo para invertir",
-    organizar: "Quiero invertir, pero necesito organizarme",
-    no: "Hoy no puedo invertir",
+    ahora: "Sí, estoy dispuesto",
+    organizar: "Quiero, pero necesito ver las opciones",
+    no: "No estoy dispuesto a invertir",
   },
   cuando: {
     ya: "Lo antes posible",
@@ -188,7 +188,8 @@ const P: Record<string, Pregunta> = {
   },
   inversion: {
     id: "inversion",
-    titulo: "El programa requiere invertir dinero y tiempo. ¿Cómo lo ves?",
+    titulo: "Si el programa es para vos, ¿estás dispuesto a invertir en tu formación?",
+    ayuda: "En la llamada vemos las opciones que se ajustan a tu situación.",
     opciones: [O.inversion.ahora, O.inversion.organizar, O.inversion.no],
   },
   inv_org: {
