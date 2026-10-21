@@ -37,12 +37,15 @@ export default function BookingCalendar({
   // Solo se muestra la semana en curso; el servidor libera la siguiente
   // cuando esta se llena. Mientras responde, se asume el sábado de esta semana.
   const [limite, setLimite] = useState(() => sabadoDeSemanaKey(hoyArgentinaKey()));
+  // Días con al menos un horario libre (null = no se pudo saber: no se apaga ninguno).
+  const [libres, setLibres] = useState<string[] | null>(null);
   useEffect(() => {
     const vendedorParam = vendedorFijo ? `?vendedor=${encodeURIComponent(vendedorFijo)}` : "";
     fetch(`/api/agendar/horizonte${vendedorParam}`)
       .then((r) => r.json())
       .then((data) => {
         if (data.ok && typeof data.limite === "string") setLimite(data.limite);
+        if (data.ok && Array.isArray(data.libres)) setLibres(data.libres);
       })
       .catch(() => {});
   }, [vendedorFijo]);
@@ -50,6 +53,13 @@ export default function BookingCalendar({
   const [dayOffset, setDayOffset] = useState(0);
   const visibleDays = days.slice(dayOffset, dayOffset + 6);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  // Apenas se sabe qué días tienen lugar, se abre el primero (quien llega no tiene que adivinar).
+  useEffect(() => {
+    if (!libres || libres.length === 0) return;
+    const primero = days.find((d) => libres.includes(toDateKey(d)));
+    if (primero) setSelectedDate((actual) => actual ?? primero);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [libres]);
   const [selectedHour, setSelectedHour] = useState<number | null>(null);
   const [bookedHours, setBookedHours] = useState<number[]>([]);
   const [loadingHours, setLoadingHours] = useState(false);
@@ -104,6 +114,18 @@ export default function BookingCalendar({
         {MIN_LEAD_HOURS} horas de anticipación desde este momento.
       </p>
 
+      {/* aviso cuando esta semana ya no tiene lugar */}
+      {libres !== null && libres.length > 0 && !libres.some((k) => k <= sabadoDeSemanaKey(hoyArgentinaKey())) && (
+        <div className="mb-4 rounded-xl border border-[var(--color-accent)]/30 bg-[var(--color-accent-muted)] px-4 py-3 text-[13.5px] leading-relaxed text-[var(--color-accent-hover)] sm:text-[14.5px]">
+          Esta semana ya está todo ocupado. Te mostramos los horarios disponibles de la semana que viene.
+        </div>
+      )}
+      {libres !== null && libres.length === 0 && (
+        <div className="mb-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] px-4 py-3 text-[13.5px] leading-relaxed text-[var(--color-text-secondary)] sm:text-[14.5px]">
+          Por ahora no quedan horarios disponibles. Volvé a intentar más tarde: se liberan lugares seguido.
+        </div>
+      )}
+
       {/* selector de día */}
       <div className="flex items-center gap-1.5 sm:gap-2">
         <button
@@ -125,7 +147,8 @@ export default function BookingCalendar({
             // no tiene sentido dejar seleccionar el día para mostrar una
             // grilla vacía.
             const hasNoBookableHour = HORAS.every((h) => slotInstant(d, h).getTime() < minBookableInstant);
-            const disabled = isPastDay || hasNoBookableHour;
+            const sinLugar = libres !== null && !libres.includes(toDateKey(d));
+            const disabled = isPastDay || hasNoBookableHour || sinLugar;
             return (
               <button
                 key={toDateKey(d)}

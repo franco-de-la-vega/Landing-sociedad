@@ -596,57 +596,92 @@ export async function agendarCrm(body: AgendarBody): Promise<Respuesta> {
 }
 
 /**
- * Último día agendable hoy. Solo se muestra la semana en curso (hasta el
- * sábado); recién cuando esa semana no tiene NINGÚN horario libre se libera
- * la siguiente, y así. `MAX_BOOKING_DIAS` es el tope absoluto. Si no se
- * puede leer el CRM, cae al sábado de esta semana (lo más conservador).
+ * Horizonte de la agenda: último día agendable hoy y qué días tienen al menos un horario libre.
+ * Solo se muestra la semana en curso (hasta el sábado); recién cuando esa semana no tiene NINGÚN
+ * horario libre se libera la siguiente, y así. `MAX_BOOKING_DIAS` es el tope absoluto.
+ *
+ * Si algo falla (CRM o Google Calendar no responden), se falla HACIA MOSTRAR MÁS: se libera la
+ * semana siguiente y no se apagan días. Es preferible mostrar un día lleno (la grilla de horas
+ * lo marca ocupado y la reserva vuelve a chequear) que dejar a alguien sin ver nada.
  */
-export async function fechaLimiteAgendable(vendedor: string | string[] | null): Promise<string> {
+export type Horizonte = { limite: string; libres: string[] | null };
+
+const horizonteCache = new Map<string, { en: number; valor: Horizonte }>();
+const HORIZONTE_TTL_MS = 15_000;
+
+export async function horizonteAgenda(vendedor: string | string[] | null): Promise<Horizonte> {
+  const clave = JSON.stringify(vendedor ?? "default");
+  const hit = horizonteCache.get(clave);
+  if (hit && Date.now() - hit.en < HORIZONTE_TTL_MS) return hit.valor;
+
   const hoy = hoyArgentinaKey();
   const tope = sumarDiasKey(hoy, MAX_BOOKING_DIAS);
-  let limite = sabadoDeSemanaKey(hoy);
+  const sabadoActual = sabadoDeSemanaKey(hoy);
+  const masAmplio = (): Horizonte => ({ limite: sumarDiasKey(sabadoActual, 7) < tope ? sumarDiasKey(sabadoActual, 7) : tope, libres: null });
+
+  let valor: Horizonte;
   try {
     const pool = await cargarPool(vendedor || VENDEDOR_POR_DEFECTO);
-    if (pool.length === 0) return limite;
-    const ids = pool.map((c) => c.usuario_id);
-    const desdeISO = new Date(`${hoy}T00:00:00${TZ_OFFSET}`).toISOString();
-    const hastaISO = new Date(`${tope}T23:59:59${TZ_OFFSET}`).toISOString();
-    const reuniones = await getJson<Reunion[]>(
-      `reuniones?select=closer_id,inicio,fin&estado=neq.cancelada&inicio=gte.${desdeISO}&inicio=lte.${hastaISO}&closer_id=in.(${ids.join(",")})`
-    );
-    const ocupadosG = await ocupadosGoogleRango(ids, desdeISO, hastaISO);
-    const minMs = Date.now() + MIN_LEAD_HOURS * 3600 * 1000;
+    if (pool.length === 0) {
+      valor = masAmplio();
+    } else {
+      const ids = pool.map((c) => c.usuario_id);
+      const desdeISO = new Date(`${hoy}T00:00:00${TZ_OFFSET}`).toISOString();
+      const hastaISO = new Date(`${tope}T23:59:59${TZ_OFFSET}`).toISOString();
+      const reuniones = await getJson<Reunion[]>(
+        `reuniones?select=closer_id,inicio,fin&estado=neq.cancelada&inicio=gte.${desdeISO}&inicio=lte.${hastaISO}&closer_id=in.(${ids.join(",")})`
+      );
+      const ocupadosG = await ocupadosGoogleRango(ids, desdeISO, hastaISO);
+      if (ocupadosG === null) {
+        valor = masAmplio(); // no pudimos leer Google: no apagamos nada
+      } else {
+        const minMs = Date.now() + MIN_LEAD_HOURS * 3600 * 1000;
+        const hayLibre = (dia: string): boolean => {
+          const ini = new Date(`${dia}T00:00:00${TZ_OFFSET}`).getTime();
+          const fin = new Date(`${dia}T23:59:59${TZ_OFFSET}`).getTime();
+          const delDia = reuniones.filter((r) => {
+            const t = new Date(r.inicio).getTime();
+            return t >= ini && t <= fin;
+          });
+          return HORAS.some((hora) => {
+            const inicioMs = new Date(`${dia}T${horaHHMM(hora)}:00${TZ_OFFSET}`).getTime();
+            if (inicioMs < minMs) return false;
+            return pool.some((c) =>
+              closerLibre(c, inicioMs, delDia.filter((r) => r.closer_id === c.usuario_id), ocupadosG[c.usuario_id] ?? [])
+            );
+          });
+        };
+        const esDomingo = (dia: string) => new Date(`${dia}T12:00:00Z`).getUTCDay() === 0;
 
-    const hayLibre = (dia: string): boolean => {
-      const ini = new Date(`${dia}T00:00:00${TZ_OFFSET}`).getTime();
-      const fin = new Date(`${dia}T23:59:59${TZ_OFFSET}`).getTime();
-      const delDia = reuniones.filter((r) => {
-        const t = new Date(r.inicio).getTime();
-        return t >= ini && t <= fin;
-      });
-      return HORAS.some((hora) => {
-        const inicioMs = new Date(`${dia}T${horaHHMM(hora)}:00${TZ_OFFSET}`).getTime();
-        if (inicioMs < minMs) return false;
-        return pool.some((c) =>
-          closerLibre(c, inicioMs, delDia.filter((r) => r.closer_id === c.usuario_id), ocupadosG?.[c.usuario_id] ?? [])
-        );
-      });
-    };
-
-    for (;;) {
-      let hayEnSemana = false;
-      for (let i = 0; i < 6 && !hayEnSemana; i++) {
-        const dia = sumarDiasKey(limite, -5 + i);
-        if (dia < hoy) continue;
-        if (new Date(`${dia}T12:00:00Z`).getUTCDay() === 0) continue;
-        hayEnSemana = hayLibre(dia);
+        let limite = sabadoActual;
+        for (;;) {
+          let hayEnSemana = false;
+          for (let i = 0; i < 6 && !hayEnSemana; i++) {
+            const dia = sumarDiasKey(limite, -5 + i);
+            if (dia < hoy || esDomingo(dia)) continue;
+            hayEnSemana = hayLibre(dia);
+          }
+          if (hayEnSemana || limite >= tope) break;
+          limite = sumarDiasKey(limite, 7);
+        }
+        if (limite > tope) limite = tope;
+        const libres: string[] = [];
+        for (let dia = hoy; dia <= limite; dia = sumarDiasKey(dia, 1)) {
+          if (!esDomingo(dia) && hayLibre(dia)) libres.push(dia);
+        }
+        valor = { limite, libres };
       }
-      if (hayEnSemana || limite >= tope) return limite < tope ? limite : tope;
-      limite = sumarDiasKey(limite, 7);
     }
   } catch {
-    return limite;
+    valor = masAmplio();
   }
+  horizonteCache.set(clave, { en: Date.now(), valor });
+  return valor;
+}
+
+/** Último día agendable hoy (usado al confirmar una reserva). */
+export async function fechaLimiteAgendable(vendedor: string | string[] | null): Promise<string> {
+  return (await horizonteAgenda(vendedor)).limite;
 }
 
 /** Camino nuevo de /api/agendar/availability: qué horas ya no tienen a nadie libre. */

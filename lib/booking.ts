@@ -136,15 +136,13 @@ export function convertSlot(date: Date, hour: number, tz: string) {
 // días ya hayan pasado), hasta MAX_BOOKING_DATE. Así cada "página" de 6
 // días es siempre una semana completa, prolija, sin desalinearse.
 export function businessDaysByWeek(limiteKey?: string): Date[] {
+  // Desde HOY (no desde el lunes): los días que ya pasaron no sirven y escondían la semana siguiente
+  // detrás de la flecha.
   const days: Date[] = [];
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const monday = new Date(today);
-  const diffToMonday = (today.getDay() + 6) % 7; // Lun=0 ... Dom=6
-  monday.setDate(monday.getDate() - diffToMonday);
+  const cursor = new Date();
+  cursor.setHours(0, 0, 0, 0);
 
   const maxDate = new Date(`${limiteKey ?? maxBookingDateKey()}T00:00:00`);
-  const cursor = new Date(monday);
   while (cursor <= maxDate) {
     if (cursor.getDay() !== 0) days.push(new Date(cursor)); // excluye domingo
     cursor.setDate(cursor.getDate() + 1);
