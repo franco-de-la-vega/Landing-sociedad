@@ -11,7 +11,7 @@ const faqs = [
   },
   {
     q: "¿Cuánto dura y cómo son las clases?",
-    a: "Son 14 sprints en 5 meses, con dos clases en vivo por semana. Entre clase y clase avanzás en el campus a tu ritmo.",
+    a: "Tenés tres opciones: 2, 3 o 5 meses, según la ruta que elijas. En todas hay dos clases en vivo por semana, y entre clase y clase avanzás en el campus a tu ritmo.",
   },
   {
     q: "¿Qué necesito para empezar?",

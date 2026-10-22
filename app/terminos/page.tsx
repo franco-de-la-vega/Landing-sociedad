@@ -36,7 +36,7 @@ export default function TerminosPage() {
               El Instituto Latinoamericano de Formación Comercial (en adelante,
               &quot;ILFC&quot; o &quot;el Instituto&quot;) es un servicio de
               formación práctica orientado a preparar profesionales para
-              trabajar como Closers y Setters de ventas remotas B2B en
+              trabajar como representantes comerciales remotos en
               mercados internacionales.
             </p>
           </Section>
