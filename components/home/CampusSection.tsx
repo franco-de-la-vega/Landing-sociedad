@@ -21,7 +21,7 @@ export default function CampusSection() {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [0.3, 1]);
 
   return (
-    <section ref={ref} className="relative overflow-hidden bg-[#0A0B0D] px-6 py-28 md:px-12 md:py-36">
+    <section ref={ref} className="relative overflow-hidden bg-[#0A0B0D] px-6 py-20 sm:py-28 md:px-12 md:py-36">
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.05]"
         style={{ backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)", backgroundSize: "34px 34px" }}
@@ -48,7 +48,7 @@ export default function CampusSection() {
           </Reveal>
         </div>
 
-        <div className="mt-16 [perspective:1600px]">
+        <div className="mt-10 [perspective:1600px] sm:mt-16">
           <motion.div style={{ rotateX, scale, opacity }} className="origin-bottom">
             <div className="overflow-hidden rounded-[14px] border border-white/10 bg-[#121418] shadow-[0_60px_120px_-30px_rgba(0,0,0,0.8)]">
               <div className="flex items-center gap-1.5 border-b border-white/10 px-4 py-3">
@@ -57,19 +57,21 @@ export default function CampusSection() {
                 <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
                 <span className="ml-4 hidden rounded-md bg-white/[0.06] px-3 py-1 text-[11px] text-white/40 sm:inline">campus.formlat.com</span>
               </div>
-              <Image
-                src="/home/campus.webp"
-                alt="Pantalla de la ruta del alumno en el campus, con los sprints completados, disponibles y bloqueados"
-                width={4320}
-                height={2699}
-                sizes="(min-width: 1152px) 1152px, 100vw"
-                className="h-auto w-full"
-              />
+              {/* En celular la captura entera es ilegible: se recorta y agranda sobre el menú y el saludo */}
+              <div className="relative aspect-[4/3] overflow-hidden sm:aspect-[4320/2699]">
+                <Image
+                  src="/home/campus.webp"
+                  alt="Pantalla de la ruta del alumno en el campus, con los sprints completados, disponibles y bloqueados"
+                  fill
+                  sizes="(min-width: 1152px) 1152px, 180vw"
+                  className="origin-top-left scale-[1.8] object-cover object-left-top sm:scale-100"
+                />
+              </div>
             </div>
           </motion.div>
         </div>
 
-        <RevealGroup stagger={0.1} className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-3">
+        <RevealGroup stagger={0.1} className="mt-10 grid grid-cols-1 gap-6 sm:mt-16 sm:gap-8 md:grid-cols-3">
           {points.map((p) => (
             <RevealItem key={p.label}>
               <div className="border-t border-white/10 pt-6">

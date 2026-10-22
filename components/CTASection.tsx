@@ -2,7 +2,7 @@ import Reveal from "./Reveal";
 
 export default function CTASection() {
   return (
-    <section id="aplicar" className="relative overflow-hidden border-t border-black/10 bg-[var(--color-bg-base)] px-5 py-28 sm:px-8 sm:py-40">
+    <section id="aplicar" className="relative overflow-hidden border-t border-black/10 bg-[var(--color-bg-base)] px-5 py-20 sm:py-28 sm:px-8 sm:py-40">
       <div className="relative mx-auto flex max-w-3xl flex-col items-center text-center">
         <Reveal>
           <span className="text-[12px] font-medium uppercase tracking-[0.14em] text-[var(--color-text-muted)]">

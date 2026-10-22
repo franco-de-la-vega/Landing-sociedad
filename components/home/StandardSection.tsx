@@ -6,7 +6,7 @@ import RevealGroup from "../RevealGroup";
 import RevealItem from "../RevealItem";
 
 const card =
-  "group relative h-full overflow-hidden rounded-[var(--radius-panel)] border border-black/10 bg-[var(--color-bg-elevated)] p-7 transition-shadow duration-500 hover:shadow-[0_30px_60px_-28px_rgba(28,26,22,0.25)]";
+  "group relative h-full overflow-hidden rounded-[var(--radius-panel)] border border-black/10 bg-[var(--color-bg-elevated)] p-5 sm:p-7 transition-shadow duration-500 hover:shadow-[0_30px_60px_-28px_rgba(28,26,22,0.25)]";
 
 function Label({ n, children }: { n: string; children: React.ReactNode }) {
   return (
@@ -20,7 +20,7 @@ function Label({ n, children }: { n: string; children: React.ReactNode }) {
 // Onda de audio de una clase en vivo
 function LiveWave() {
   return (
-    <div className="flex h-20 items-center gap-[3px]" aria-hidden>
+    <div className="flex h-12 items-center gap-[3px] sm:h-20" aria-hidden>
       {Array.from({ length: 38 }).map((_, i) => (
         <motion.span
           key={i}
@@ -38,7 +38,7 @@ function ProgressRing() {
   const r = 46;
   const c = 2 * Math.PI * r;
   return (
-    <svg viewBox="0 0 120 120" className="h-28 w-28" aria-hidden>
+    <svg viewBox="0 0 120 120" className="h-20 w-20 shrink-0 sm:h-28 sm:w-28" aria-hidden>
       <circle cx="60" cy="60" r={r} fill="none" stroke="currentColor" strokeWidth="6" className="text-black/[0.07]" />
       <motion.circle
         cx="60"
@@ -90,7 +90,7 @@ function Seal() {
   return (
     <motion.svg
       viewBox="0 0 100 100"
-      className="h-24 w-24 text-[var(--color-accent)]"
+      className="h-16 w-16 shrink-0 text-[var(--color-accent)] sm:h-24 sm:w-24"
       animate={{ rotate: 360 }}
       transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
       aria-hidden
@@ -110,7 +110,7 @@ function Seal() {
 
 export default function StandardSection() {
   return (
-    <section id="metodo" className="relative z-10 border-t border-black/10 bg-[var(--color-bg-base)] px-6 py-28 md:px-12 md:py-36">
+    <section id="metodo" className="relative z-10 border-t border-black/10 bg-[var(--color-bg-base)] px-6 py-20 sm:py-28 md:px-12 md:py-36">
       <div className="mx-auto max-w-7xl">
         <div className="grid grid-cols-1 items-end gap-10 lg:grid-cols-12">
           <div className="lg:col-span-7">
@@ -132,7 +132,7 @@ export default function StandardSection() {
           </Reveal>
         </div>
 
-        <RevealGroup stagger={0.08} className="mt-16 grid grid-cols-1 gap-5 md:grid-cols-6">
+        <RevealGroup stagger={0.08} className="mt-10 grid grid-cols-1 gap-3 sm:mt-16 sm:gap-5 md:grid-cols-6">
           <RevealItem className="md:col-span-4">
             <div className={`${card} bg-[var(--color-text-primary)] text-white`}>
               <div className="flex items-center justify-between">
@@ -145,9 +145,9 @@ export default function StandardSection() {
                   Live
                 </span>
               </div>
-              <div className="mt-10 grid grid-cols-1 items-end gap-8 sm:grid-cols-2">
+              <div className="mt-5 grid grid-cols-1 items-end gap-5 sm:mt-10 sm:grid-cols-2 sm:gap-8">
                 <div>
-                  <div className="text-6xl font-black tracking-tight sm:text-7xl">2x</div>
+                  <div className="text-5xl font-black tracking-tight sm:text-7xl">2x</div>
                   <p className="mt-2 text-[15px] leading-relaxed text-white/60">
                     Clases en vivo por semana, con formadores activos en el mercado. Nada de videos grabados hace años.
                   </p>
@@ -162,23 +162,25 @@ export default function StandardSection() {
           <RevealItem className="md:col-span-2">
             <div className={card}>
               <Label n="02">La ruta</Label>
-              <div className="mt-6 flex justify-center">
+              <div className="mt-4 flex items-center gap-5 sm:mt-6 sm:block">
+              <div className="flex justify-center">
                 <ProgressRing />
               </div>
-              <p className="mt-4 text-center text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
+              <p className="text-[15px] sm:mt-4 sm:text-center leading-relaxed text-[var(--color-text-secondary)]">
                 <b className="text-[var(--color-text-primary)]">14 sprints en 5 meses.</b> Cada uno se desbloquea al
                 completar el anterior.
               </p>
+              </div>
             </div>
           </RevealItem>
 
           <RevealItem className="md:col-span-2">
             <div className={card}>
               <Label n="03">Herramientas reales</Label>
-              <div className="mt-8">
+              <div className="mt-5 sm:mt-8">
                 <Pipeline />
               </div>
-              <p className="mt-6 text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
+              <p className="mt-5 text-[15px] leading-relaxed text-[var(--color-text-secondary)] sm:mt-6">
                 Practicás con el mismo CRM que usa un equipo comercial de verdad.
               </p>
             </div>
@@ -187,7 +189,7 @@ export default function StandardSection() {
           <RevealItem className="md:col-span-2">
             <div className={card}>
               <Label n="04">Formadores</Label>
-              <div className="mt-8 text-6xl font-black tracking-tight text-[var(--color-text-primary)]">+10</div>
+              <div className="mt-4 text-5xl font-black tracking-tight text-[var(--color-text-primary)] sm:mt-8 sm:text-6xl">+10</div>
               <p className="mt-1 text-[13px] font-semibold uppercase tracking-[0.12em] text-[var(--color-accent)]">
                 años liderando equipos
               </p>
@@ -200,12 +202,14 @@ export default function StandardSection() {
           <RevealItem className="md:col-span-2">
             <div className={card}>
               <Label n="05">Certificación</Label>
-              <div className="mt-6 flex justify-center">
+              <div className="mt-4 flex items-center gap-5 sm:mt-6 sm:block">
+              <div className="flex justify-center">
                 <Seal />
               </div>
-              <p className="mt-5 text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
+              <p className="text-[15px] sm:mt-5 leading-relaxed text-[var(--color-text-secondary)]">
                 Cada etapa cierra con un proyecto. Terminás con un portafolio que demuestra lo que sabés hacer.
               </p>
+              </div>
             </div>
           </RevealItem>
         </RevealGroup>

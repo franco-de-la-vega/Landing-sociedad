@@ -12,7 +12,7 @@ const items = [
 
 export default function PracticeSection() {
   return (
-    <section className="relative z-10 border-t border-black/10 bg-[var(--color-bg-base)] px-6 py-28 md:px-12 md:py-36">
+    <section className="relative z-10 border-t border-black/10 bg-[var(--color-bg-base)] px-6 py-20 sm:py-28 md:px-12 md:py-36">
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
         <Reveal className="relative order-2 lg:order-1">
           <div className="relative overflow-hidden rounded-[var(--radius-panel)] border border-black/10 bg-[#0A0B0D] p-2 shadow-[0_40px_80px_-30px_rgba(0,0,0,0.35)]">

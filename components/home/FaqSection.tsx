@@ -31,7 +31,7 @@ export default function FaqSection() {
   const [open, setOpen] = useState(0);
 
   return (
-    <section className="relative z-10 border-t border-black/10 bg-[var(--color-bg-base)] px-6 py-28 md:px-12 md:py-32">
+    <section className="relative z-10 border-t border-black/10 bg-[var(--color-bg-base)] px-6 py-20 sm:py-28 md:px-12 md:py-32">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-4">
           <Reveal>

@@ -18,7 +18,7 @@ const founders = [
 
 export default function FoundersSection() {
   return (
-    <section className="relative z-10 border-t border-black/10 bg-[var(--color-bg-base)] px-6 py-28 md:px-12 md:py-32">
+    <section className="relative z-10 border-t border-black/10 bg-[var(--color-bg-base)] px-6 py-20 sm:py-28 md:px-12 md:py-32">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-14 lg:grid-cols-12">
         <div className="lg:col-span-4">
           <Reveal>
@@ -47,7 +47,7 @@ export default function FoundersSection() {
                     alt={`${f.name}, ${f.role.toLowerCase()} del instituto`}
                     fill
                     sizes="(min-width: 1024px) 420px, 50vw"
-                    className="object-cover object-top grayscale transition-all duration-700 group-hover:scale-[1.03] group-hover:grayscale-0"
+                    className="object-cover object-top transition-all duration-700 sm:grayscale sm:group-hover:scale-[1.03] sm:group-hover:grayscale-0"
                   />
                 </div>
                 <div className="p-4 sm:p-7">

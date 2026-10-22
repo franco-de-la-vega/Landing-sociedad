@@ -18,8 +18,8 @@ const ORIGINS = [
 const DESTINATIONS = [
   { name: "Nueva York", lon: -74, lat: 40.7 },
   { name: "Miami", lon: -80.2, lat: 25.8 },
-  { name: "Toronto", lon: -79.4, lat: 43.7 },
-  { name: "Madrid", lon: -3.7, lat: 40.4 },
+  { name: "Toronto", lon: -79.4, lat: 43.7, labelLeft: true },
+  { name: "Madrid", lon: -3.7, lat: 40.4, labelLeft: true },
 ];
 const ROUTES = [
   [0, 0],
@@ -57,9 +57,9 @@ function Clocks() {
   return (
     <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[var(--radius-panel)] border border-black/10 bg-black/10 sm:grid-cols-5">
       {CLOCKS.map((c, i) => (
-        <div key={c.tz} className={`bg-[var(--color-bg-elevated)] px-5 py-5 ${i === CLOCKS.length - 1 ? "col-span-2 sm:col-span-1" : ""}`}>
-          <div className="text-[11px] uppercase tracking-[0.12em] text-[var(--color-text-muted)]">{c.city}</div>
-          <div className="mt-1.5 font-mono text-2xl font-semibold tabular-nums text-[var(--color-text-primary)]">
+        <div key={c.tz} className={`bg-[var(--color-bg-elevated)] px-4 py-3 sm:px-5 sm:py-5 ${i === CLOCKS.length - 1 ? "col-span-2 sm:col-span-1" : ""}`}>
+          <div className="text-[10px] uppercase tracking-[0.12em] text-[var(--color-text-muted)] sm:text-[11px]">{c.city}</div>
+          <div className="mt-1 font-mono text-xl font-semibold sm:mt-1.5 sm:text-2xl tabular-nums text-[var(--color-text-primary)]">
             {now ? now.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit", hourCycle: "h23", timeZone: c.tz }) : "--:--"}
           </div>
         </div>
@@ -73,7 +73,7 @@ export default function CareerSection() {
   for (let x = 10; x < 600; x += 16) for (let y = 10; y < 400; y += 16) dots.push({ x, y });
 
   return (
-    <section className="relative overflow-hidden border-t border-black/10 bg-[var(--color-bg-elevated-2)] px-6 py-28 md:px-12 md:py-36">
+    <section className="relative overflow-hidden border-t border-black/10 bg-[var(--color-bg-elevated-2)] px-6 py-20 sm:py-28 md:px-12 md:py-36">
       <div className="mx-auto max-w-7xl">
         <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-12">
           <div className="lg:col-span-5">
@@ -136,7 +136,7 @@ export default function CareerSection() {
                       <animate attributeName="r" values="5;12;5" dur="2.6s" repeatCount="indefinite" />
                     </circle>
                     <circle cx={px(c.lon)} cy={py(c.lat)} r="4" className="fill-[var(--color-accent)]" />
-                    <text x={px(c.lon) + 9} y={py(c.lat) + 4} className="fill-[var(--color-text-secondary)] text-[11px] font-medium">
+                    <text x={px(c.lon) + 9} y={py(c.lat) + 4} className="hidden fill-[var(--color-text-secondary)] text-[11px] font-medium sm:block">
                       {c.name}
                     </text>
                   </g>
@@ -144,7 +144,11 @@ export default function CareerSection() {
                 {DESTINATIONS.map((c) => (
                   <g key={c.name}>
                     <rect x={px(c.lon) - 4} y={py(c.lat) - 4} width="8" height="8" rx="2" className="fill-[var(--color-text-primary)]" />
-                    <text x={px(c.lon) + 9} y={py(c.lat) - 6} className="fill-[var(--color-text-primary)] text-[11px] font-semibold">
+                    <text
+                      x={c.labelLeft ? px(c.lon) - 9 : px(c.lon) + 9}
+                      y={py(c.lat) - 6}
+                      textAnchor={c.labelLeft ? "end" : "start"}
+                      className="fill-[var(--color-text-primary)] text-[20px] font-semibold sm:text-[11px]">
                       {c.name}
                     </text>
                   </g>
