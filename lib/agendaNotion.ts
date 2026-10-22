@@ -12,7 +12,7 @@ import { horaHHMM, maxBookingDateKey } from "@/lib/booking";
 const NOTION_VERSION = "2022-06-28";
 const LEADS_DATABASE_ID = "3c63d284-28ee-81ae-991a-f362c63f3857";
 const VENDEDORES = ["Franco", "Natalia", "Andres"];
-const MIN_LEAD_HOURS = 0;
+const MIN_LEAD_HOURS = 4;
 
 type Respuesta = { status: number; body: Record<string, unknown> };
 

@@ -535,9 +535,16 @@ export async function agendarCrm(body: AgendarBody): Promise<Respuesta> {
   const hh = horaHHMM(hour);
   const iso = `${date}T${hh}:00${TZ_OFFSET}`;
   const inicioMs = new Date(iso).getTime();
-  // Se puede reservar en cualquier momento (MIN_LEAD_HOURS = 0): solo no puede ser un horario que ya empezó.
-  if (inicioMs < Date.now() + MIN_LEAD_HOURS * 3600 * 1000) {
+  // Mínimo de anticipación (MIN_LEAD_HOURS). Excepción: un horario que SE LIBERÓ (alguien canceló) se puede
+  // reservar con menos (MIN_LEAD_LIBERADO_HORAS), si no ese lugar no serviría de nada.
+  if (inicioMs < Date.now() + MIN_LEAD_LIBERADO_HORAS * 3600 * 1000) {
     return { status: 400, body: { ok: false, error: "too_soon" } };
+  }
+  if (inicioMs < Date.now() + MIN_LEAD_HOURS * 3600 * 1000) {
+    const h = await horizonteAgenda(vendedor);
+    if (!h.liberados.some((l) => l.dia === date && l.hora === Number(hour))) {
+      return { status: 400, body: { ok: false, error: "too_soon" } };
+    }
   }
 
   try {
