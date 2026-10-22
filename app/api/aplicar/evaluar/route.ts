@@ -3,6 +3,7 @@ import { isHoneypotFilled } from "@/lib/antiSpam";
 import { COOKIE, DIAS_BLOQUEO, MS_DIA, firmar, verificar } from "@/lib/aplicarToken";
 import { evaluar } from "@/lib/aplicarEvaluar";
 import { borrarInicio, buscarBloqueo, registrarIntento } from "@/lib/aplicarStore";
+import { notify } from "@/lib/alert";
 import { camposCrm, esEmailValido, esWhatsappValido, resumenRespuestas, type Resp } from "@/lib/aplicarFlow";
 
 const cookieOpts = (maxAgeMs: number) => ({
@@ -36,11 +37,15 @@ export async function POST(req: NextRequest) {
 
   // 1) ya descartado en este navegador
   const previa = verificar<{ v: string; c: string }>(req.cookies.get(COOKIE)?.value);
-  if (previa?.v === "no") return NextResponse.json({ estado: "no", categoria: previa.c, hasta: previa.exp });
+  if (previa?.v === "no") {
+    await notify("Insistió: completó el formulario de nuevo y sigue bloqueada", `${nombre}\nWhatsApp: ${whatsapp}\nEmail: ${email}\n\nQuedó descartada antes (bloqueo de 30 días). Si querés que vuelva a aplicar, levantale el bloqueo.`);
+    return NextResponse.json({ estado: "no", categoria: previa.c, hasta: previa.exp });
+  }
 
   // 2) ya descartado con este WhatsApp o email (otro navegador / cookies borradas)
   const bloqueo = await buscarBloqueo({ whatsapp, email });
   if (bloqueo) {
+    await notify("Insistió: completó el formulario de nuevo y sigue bloqueada", `${nombre}\nWhatsApp: ${whatsapp}\nEmail: ${email}\n\nQuedó descartada antes (bloqueo de 30 días). Si querés que vuelva a aplicar, levantale el bloqueo.`);
     const res = NextResponse.json({ estado: "no", categoria: bloqueo.categoria, hasta: bloqueo.hasta });
     res.cookies.set(COOKIE, firmar({ v: "no", c: bloqueo.categoria }, bloqueo.hasta - Date.now()), cookieOpts(bloqueo.hasta - Date.now()));
     return res;
