@@ -17,11 +17,11 @@ export const ARGENTINA_TZ = "America/Argentina/Buenos_Aires";
 // Nadie puede agendar dentro de las próximas MIN_LEAD_HOURS horas: le da
 // tiempo al equipo a averiguar sobre la persona (y hablar por WhatsApp si
 // hace falta) antes de la llamada.
-export const MIN_LEAD_HOURS = 12;
+export const MIN_LEAD_HOURS = 0; // Franco (2026-10-22): se puede reservar en cualquier momento; el equipo bloquea su calendario cuando no está.
 
 // Un horario que SE LIBERÓ (alguien canceló) se puede reservar con menos anticipación que el resto:
 // si no, un lugar que se libera a 6 h de la llamada no serviría de nada.
-export const MIN_LEAD_LIBERADO_HORAS = 2;
+export const MIN_LEAD_LIBERADO_HORAS = 0;
 
 // Se agenda de lunes a sábado. MAX_BOOKING_DIAS es solo el TOPE absoluto: el
 // límite real lo calcula el servidor (`fechaLimiteAgendable`) y libera una

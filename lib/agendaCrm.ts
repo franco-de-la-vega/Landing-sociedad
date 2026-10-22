@@ -535,15 +535,9 @@ export async function agendarCrm(body: AgendarBody): Promise<Respuesta> {
   const hh = horaHHMM(hour);
   const iso = `${date}T${hh}:00${TZ_OFFSET}`;
   const inicioMs = new Date(iso).getTime();
-  if (inicioMs < Date.now() + MIN_LEAD_LIBERADO_HORAS * 3600 * 1000) {
-    return { status: 400, body: { ok: false, error: "too_soon" } };
-  }
+  // Se puede reservar en cualquier momento (MIN_LEAD_HOURS = 0): solo no puede ser un horario que ya empezó.
   if (inicioMs < Date.now() + MIN_LEAD_HOURS * 3600 * 1000) {
-    // Menos de 12 h: solo si es un horario que se liberó (alguien canceló) y sigue libre.
-    const h = await horizonteAgenda(vendedor);
-    if (!h.liberados.some((l) => l.dia === date && l.hora === Number(hour))) {
-      return { status: 400, body: { ok: false, error: "too_soon" } };
-    }
+    return { status: 400, body: { ok: false, error: "too_soon" } };
   }
 
   try {
@@ -618,6 +612,8 @@ const horizonteCache = new Map<string, { en: number; valor: Horizonte }>();
 const HORIZONTE_TTL_MS = 15_000;
 
 const H_MS = 3_600_000;
+/** Cuántas horas hacia adelante se destacan los lugares liberados (cartel rojo). */
+const VENTANA_LIBERADOS_H = 12;
 
 /** Fecha (YYYY-MM-DD) y hora decimal (15.5 = 15:30) de un instante, en hora de Argentina. */
 function fechaHoraAR(ms: number): { dia: string; hora: number } {
@@ -628,7 +624,7 @@ function fechaHoraAR(ms: number): { dia: string; hora: number } {
 
 /**
  * Horarios que SE LIBERARON: reuniones canceladas (por el lead, a mano o por no confirmar) que empiezan en
- * las próximas 12 h y cuyo lugar sigue libre. Se pueden reservar con poca anticipación (ver MIN_LEAD_LIBERADO_HORAS).
+ * las próximas 12 h y cuyo lugar sigue libre: se destacan en rojo en la landing.
  */
 async function calcularLiberados(
   pool: CloserPool[],
@@ -637,7 +633,7 @@ async function calcularLiberados(
 ): Promise<Liberado[]> {
   const ahora = Date.now();
   const desde = new Date(ahora + MIN_LEAD_LIBERADO_HORAS * H_MS).toISOString();
-  const hasta = new Date(ahora + MIN_LEAD_HOURS * H_MS).toISOString();
+  const hasta = new Date(ahora + VENTANA_LIBERADOS_H * H_MS).toISOString();
   const ids = pool.map((c) => c.usuario_id);
   const canceladas = await getJson<{ inicio: string }[]>(
     `reuniones?select=inicio&estado=eq.cancelada&inicio=gte.${desde}&inicio=lte.${hasta}&closer_id=in.(${ids.join(",")})`

@@ -114,10 +114,6 @@ export default function BookingCalendar({
         </select>
       </div>
 
-      <p className="mb-3 text-[12.5px] leading-relaxed text-[var(--color-text-muted)] sm:mb-4 sm:text-[13.5px]">
-        Por una cuestión operativa, solo mostramos horarios con al menos{" "}
-        {MIN_LEAD_HOURS} horas de anticipación desde este momento.
-      </p>
 
       {/* horario que se acaba de liberar: el más próximo, bien visible */}
       {proximoLiberado?.fecha && (() => {
