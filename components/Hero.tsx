@@ -58,7 +58,7 @@ export default function Hero() {
             className="flex items-center gap-3 text-[12px] font-medium uppercase tracking-[0.16em] text-[var(--color-text-muted)]"
           >
             <span className="h-px w-8 bg-[var(--color-accent)]" />
-            Instituto online · Latinoamérica
+            Carrera de Representante Comercial Remoto
           </motion.div>
 
           <h1 className="mt-8 text-[2.9rem] font-bold leading-[1.02] tracking-[-0.045em] text-[var(--color-text-primary)] sm:text-7xl lg:text-[5.2rem]">
