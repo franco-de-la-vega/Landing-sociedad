@@ -1,9 +1,11 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
-import ManifestoSection from "@/components/ManifestoSection";
-import LevelsSection from "@/components/LevelsSection";
-import BentoSection from "@/components/BentoSection";
-import FoundersSection from "@/components/FoundersSection";
+import SkillsMarquee from "@/components/home/SkillsMarquee";
+import ProblemSection from "@/components/home/ProblemSection";
+import StandardSection from "@/components/home/StandardSection";
+import CampusSection from "@/components/home/CampusSection";
+import PracticeSection from "@/components/home/PracticeSection";
+import CareerSection from "@/components/home/CareerSection";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 import AmbientGlow from "@/components/AmbientGlow";
@@ -15,10 +17,12 @@ export default function Home() {
       <main className="relative">
         <AmbientGlow />
         <Hero />
-        <ManifestoSection />
-        <LevelsSection />
-        <BentoSection />
-        <FoundersSection />
+        <SkillsMarquee />
+        <ProblemSection />
+        <StandardSection />
+        <CampusSection />
+        <PracticeSection />
+        <CareerSection />
         <CTASection />
       </main>
       <Footer />

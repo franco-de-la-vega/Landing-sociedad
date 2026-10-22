@@ -27,9 +27,15 @@ export default function Header() {
     >
       <div className="mx-auto flex max-w-5xl items-center gap-3 px-5 py-4 sm:px-8">
         <Logo className="h-7 w-7 shrink-0 text-[var(--color-accent)] sm:h-8 sm:w-8" />
-        <span className="min-w-0 text-[11px] font-bold leading-tight tracking-[-0.01em] sm:text-[15px]">
+        <span className="min-w-0 flex-1 text-[11px] font-bold leading-tight tracking-[-0.01em] sm:text-[15px]">
           Instituto Latinoamericano de Formación Comercial
         </span>
+        <a
+          href="/aplicar"
+          className="shrink-0 rounded-full bg-[var(--color-text-primary)] px-4 py-2 text-[12px] font-semibold text-[var(--color-bg-base)] transition-colors duration-300 hover:bg-[var(--color-accent-hover)] sm:px-5 sm:text-[13px]"
+        >
+          Aplicar
+        </a>
       </div>
     </motion.header>
   );
