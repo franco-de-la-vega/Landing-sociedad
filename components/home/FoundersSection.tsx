@@ -37,23 +37,23 @@ export default function FoundersSection() {
           </Reveal>
         </div>
 
-        <RevealGroup stagger={0.12} className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:col-span-8">
+        <RevealGroup stagger={0.12} className="grid grid-cols-2 gap-3 sm:gap-5 lg:col-span-8">
           {founders.map((f) => (
             <RevealItem key={f.name}>
               <div className="group h-full overflow-hidden rounded-[var(--radius-panel)] border border-black/10 bg-[var(--color-bg-elevated)]">
-                <div className="relative aspect-[4/3] overflow-hidden">
+                <div className="relative aspect-[2/3] overflow-hidden">
                   <Image
                     src={f.photo}
                     alt={`${f.name}, ${f.role.toLowerCase()} del instituto`}
                     fill
-                    sizes="(min-width: 1024px) 420px, (min-width: 640px) 50vw, 100vw"
+                    sizes="(min-width: 1024px) 420px, 50vw"
                     className="object-cover object-top grayscale transition-all duration-700 group-hover:scale-[1.03] group-hover:grayscale-0"
                   />
                 </div>
-                <div className="p-7">
-                  <div className="flex items-baseline justify-between gap-4">
-                    <h3 className="text-2xl font-bold tracking-tight text-[var(--color-text-primary)]">{f.name}</h3>
-                    <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--color-accent)]">{f.role}</span>
+                <div className="p-4 sm:p-7">
+                  <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
+                    <h3 className="text-lg font-bold tracking-tight sm:text-2xl text-[var(--color-text-primary)]">{f.name}</h3>
+                    <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--color-accent)] sm:text-[11px] sm:tracking-[0.14em]">{f.role}</span>
                   </div>
                 </div>
               </div>
