@@ -5,16 +5,16 @@ import RevealItem from "../RevealItem";
 
 const founders = [
   {
-    name: "Franco",
-    role: "Director general",
-    photo: "/team/franco.jpeg",
-    body: "Diseña la infraestructura del programa, los estándares de formación y la metodología de negociación que aplican los alumnos.",
-  },
-  {
     name: "Andrés",
     role: "Director comercial",
     photo: "/team/andres.png",
     body: "Lidera el acompañamiento de los alumnos y el rendimiento en cada etapa del proceso, desde la primera clase hasta el trabajo.",
+  },
+  {
+    name: "Franco",
+    role: "Director general",
+    photo: "/team/franco.jpeg",
+    body: "Diseña la infraestructura del programa, los estándares de formación y la metodología de negociación que aplican los alumnos.",
   },
 ];
 
