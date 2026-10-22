@@ -1,32 +1,31 @@
-const ROW_A = ["Negociación", "Discovery", "Manejo de objeciones", "Cierre", "Propuesta de valor", "Storytelling"];
-const ROW_B = ["Videollamadas", "CRM", "Seguimiento", "Diagnóstico", "Persuasión", "Liderazgo comercial"];
-
-function Row({ items, reverse }: { items: string[]; reverse?: boolean }) {
-  const loop = [...items, ...items];
-  return (
-    <div className="flex overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_12%,black_88%,transparent)]">
-      <div className={`flex shrink-0 items-center gap-10 pr-10 ${reverse ? "animate-[marquee_42s_linear_infinite_reverse]" : "animate-[marquee_36s_linear_infinite]"}`}>
-        {loop.map((s, i) => (
-          <span key={i} className="flex items-center gap-10 whitespace-nowrap">
-            <span className={i % 2 ? "font-serif-display text-4xl italic text-[var(--color-accent-hover)] sm:text-6xl" : "text-4xl font-bold tracking-[-0.03em] text-[var(--color-text-primary)] sm:text-6xl"}>
-              {s}
-            </span>
-            <svg width="18" height="18" viewBox="0 0 24 24" className="text-[var(--color-accent)]" aria-hidden>
-              <path d="M12 0l3 9 9 3-9 3-3 9-3-9-9-3 9-3z" fill="currentColor" />
-            </svg>
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
+const SKILLS = [
+  "Negociación",
+  "Discovery",
+  "Manejo de objeciones",
+  "Cierre",
+  "Propuesta de valor",
+  "Storytelling",
+  "Videollamadas",
+  "CRM",
+  "Seguimiento",
+  "Persuasión",
+];
 
 export default function SkillsMarquee() {
+  const loop = [...SKILLS, ...SKILLS];
   return (
-    <section aria-label="Lo que vas a dominar" className="relative overflow-hidden border-y border-black/10 bg-[var(--color-bg-elevated)] py-12 sm:py-16">
-      <div className="flex flex-col gap-6 sm:gap-8">
-        <Row items={ROW_A} />
-        <Row items={ROW_B} reverse />
+    <section aria-label="Lo que vas a dominar" className="relative overflow-hidden border-y border-black/10 bg-[var(--color-bg-elevated)] py-7 sm:py-9">
+      <div className="flex overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_6%,black_94%,transparent)]">
+        <div className="flex shrink-0 animate-[marquee_48s_linear_infinite] items-center gap-8 pr-8">
+          {loop.map((s, i) => (
+            <span key={i} className="flex items-center gap-8 whitespace-nowrap">
+              <span className="text-xl font-semibold tracking-[-0.02em] text-[var(--color-text-secondary)] sm:text-2xl">{s}</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" className="text-[var(--color-accent)]" aria-hidden>
+                <path d="M12 0l3 9 9 3-9 3-3 9-3-9-9-3 9-3z" fill="currentColor" />
+              </svg>
+            </span>
+          ))}
+        </div>
       </div>
     </section>
   );

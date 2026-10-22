@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { EASE_OUT } from "@/lib/motion";
 
@@ -22,35 +23,33 @@ function Line({ children, delay }: { children: React.ReactNode; delay: number })
   );
 }
 
+// Sin overflow ni alturas fijas: así la palabra queda sobre la misma línea base que el resto del texto
 function Rotator() {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setI((n) => (n + 1) % ROTATING.length), 2600);
+    return () => clearInterval(id);
+  }, []);
   return (
-    <span className="relative inline-grid h-[1.625em] overflow-hidden align-top leading-[1.625]">
-      {ROTATING.map((w, i) => (
-        <motion.span
-          key={w}
-          className="col-start-1 row-start-1 whitespace-nowrap font-semibold text-[var(--color-accent-hover)]"
-          initial={{ y: "110%" }}
-          animate={{ y: ["110%", "0%", "0%", "-110%"] }}
-          transition={{
-            duration: 3.6,
-            times: [0, 0.12, 0.88, 1],
-            delay: 1.2 + i * 3.2,
-            repeat: Infinity,
-            repeatDelay: ROTATING.length * 3.2 - 3.6,
-            ease: EASE_OUT,
-          }}
-        >
-          {w}
-        </motion.span>
-      ))}
-    </span>
+    <AnimatePresence mode="wait">
+      <motion.span
+        key={ROTATING[i]}
+        className="inline-block font-semibold text-[var(--color-accent-hover)]"
+        initial={{ opacity: 0, y: 8, filter: "blur(6px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        exit={{ opacity: 0, y: -8, filter: "blur(6px)" }}
+        transition={{ duration: 0.45, ease: EASE_OUT }}
+      >
+        {ROTATING[i]}
+      </motion.span>
+    </AnimatePresence>
   );
 }
 
 export default function Hero() {
   return (
-    <section className="relative w-full overflow-hidden bg-[var(--color-bg-base)] pt-28 sm:pt-32">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 px-6 pb-20 md:px-12 lg:grid-cols-12 lg:gap-10 lg:pb-28">
+    <section className="relative flex min-h-[100svh] w-full items-center overflow-hidden bg-[var(--color-bg-base)] pb-16 pt-36 sm:pt-40">
+      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 px-6 md:px-12 lg:grid-cols-12 lg:gap-10">
         <div className="lg:col-span-6">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
@@ -109,22 +108,24 @@ export default function Hero() {
             initial={{ opacity: 0, y: 40, rotate: 2 }}
             animate={{ opacity: 1, y: 0, rotate: 2 }}
             transition={{ duration: 1.1, delay: 0.3, ease: EASE_OUT }}
-            className="relative ml-auto w-[88%] overflow-hidden rounded-[18px] border border-black/10 bg-white shadow-[0_50px_100px_-40px_rgba(28,26,22,0.45)]"
+            className="relative ml-auto w-[92%] overflow-hidden rounded-[18px] border border-black/10 bg-white shadow-[0_50px_100px_-40px_rgba(28,26,22,0.45)]"
           >
             <div className="flex items-center gap-1.5 border-b border-black/5 px-3 py-2.5">
               <span className="h-2 w-2 rounded-full bg-black/10" />
               <span className="h-2 w-2 rounded-full bg-black/10" />
               <span className="h-2 w-2 rounded-full bg-black/10" />
             </div>
-            <Image
-              src="/home/campus.webp"
-              alt="Campus del instituto"
-              width={4320}
-              height={2699}
-              priority
-              sizes="(min-width: 1024px) 560px, 90vw"
-              className="h-auto w-full"
-            />
+            {/* recorte sobre la parte que se entiende: el menú, el saludo y "Continuar Sprint" */}
+            <div className="relative aspect-[16/11] overflow-hidden">
+              <Image
+                src="/home/campus.webp"
+                alt="Campus del instituto: la ruta del alumno con su sprint en curso"
+                fill
+                priority
+                sizes="(min-width: 1024px) 900px, 140vw"
+                className="origin-top-left scale-[1.6] object-cover object-left-top"
+              />
+            </div>
           </motion.div>
 
           <motion.div
