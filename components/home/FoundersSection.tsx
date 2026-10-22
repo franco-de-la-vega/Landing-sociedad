@@ -8,13 +8,11 @@ const founders = [
     name: "Andrés",
     role: "Director comercial",
     photo: "/team/andres.png",
-    body: "Lidera el acompañamiento de los alumnos y el rendimiento en cada etapa del proceso, desde la primera clase hasta el trabajo.",
   },
   {
     name: "Franco",
     role: "Director general",
     photo: "/team/franco.jpeg",
-    body: "Diseña la infraestructura del programa, los estándares de formación y la metodología de negociación que aplican los alumnos.",
   },
 ];
 
@@ -57,7 +55,6 @@ export default function FoundersSection() {
                     <h3 className="text-2xl font-bold tracking-tight text-[var(--color-text-primary)]">{f.name}</h3>
                     <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--color-accent)]">{f.role}</span>
                   </div>
-                  <p className="mt-3 text-[15px] leading-relaxed text-[var(--color-text-secondary)]">{f.body}</p>
                 </div>
               </div>
             </RevealItem>
