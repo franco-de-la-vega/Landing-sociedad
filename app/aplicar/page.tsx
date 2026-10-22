@@ -6,7 +6,7 @@ import { ArrowRight, CalendarPlus, Check, ChevronLeft, Loader2, Pause, Play, Vol
 import Reveal from "@/components/Reveal";
 import Logo from "@/components/Logo";
 import BookingCalendar, { type BookingSelection } from "@/components/BookingCalendar";
-import { DIA_LABEL, MES_LABEL, PAISES, convertSlot, googleCalendarLink, toDateKey } from "@/lib/booking";
+import { DIA_LABEL, MES_LABEL, PAISES, convertSlot, googleCalendarLink, slotInstant, toDateKey } from "@/lib/booking";
 import { esEmailValido, esWhatsappValido, respuestaCompleta, textoValido, visibles, type Resp } from "@/lib/aplicarFlow";
 import { sanitizeWhatsapp } from "@/lib/booking";
 
@@ -579,7 +579,7 @@ export default function AplicarPage() {
                   {PAISES.find((x) => x.tz === selection.tz)?.label})
                 </div>
                 <p className="text-[14.5px] leading-relaxed text-white/55">
-                  Te vamos a escribir por WhatsApp al número que dejaste, con el link de la videollamada. Si no vas a poder asistir, avisanos para liberar el lugar.
+                  Te enviamos un mail con el link de la videollamada. Si no vas a poder asistir, vas a poder cancelar desde ese mismo mail para liberar el lugar.
                 </p>
                 {slotTaken && <p className="mt-4 text-[14px] font-medium text-red-400">Justo se ocupó ese horario. Volvé atrás y elegí otro.</p>}
                 {submitError && <p className="mt-4 text-[14px] font-medium text-red-400">Hubo un error al confirmar. Probá de nuevo en un momento.</p>}
@@ -611,9 +611,17 @@ export default function AplicarPage() {
                   {DIA_LABEL[selection.date.getDay()]} {selection.date.getDate()} de {MES_LABEL[selection.date.getMonth()]} a las {convertSlot(selection.date, selection.hour, selection.tz).time}hs (
                   {PAISES.find((x) => x.tz === selection.tz)?.label})
                 </p>
-                <p className="relative mt-4 text-[14px] text-[var(--color-text-muted)] sm:text-[14.5px]">
-                  Te vamos a escribir por WhatsApp con el link de la llamada. Ya leímos tus respuestas, así que vamos directo a lo importante.
-                </p>
+                <div className="relative mx-auto mt-5 max-w-sm rounded-xl border border-[var(--color-accent)]/35 bg-[var(--color-accent-muted)] px-4 py-3.5 text-left">
+                  <p className="text-[14.5px] font-semibold text-[var(--color-accent-hover)]">📩 Revisá tu correo</p>
+                  <p className="mt-1 text-[13.5px] leading-relaxed text-white/70">
+                    Te enviamos la confirmación con el link de la videollamada. Si no la ves, buscala en <strong className="text-white/85">spam o promociones</strong>.
+                  </p>
+                  {slotInstant(selection.date, selection.hour).getTime() - Date.now() >= 24 * 3_600_000 && (
+                    <p className="mt-2 text-[13.5px] leading-relaxed text-white/70">
+                      El día anterior te vamos a pedir que <strong className="text-white/85">confirmes tu asistencia</strong>. Si no la confirmás, el horario se libera automáticamente para otra persona.
+                    </p>
+                  )}
+                </div>
                 <a
                   href={googleCalendarLink(selection.date, selection.hour)}
                   target="_blank"
