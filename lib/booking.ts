@@ -19,6 +19,10 @@ export const ARGENTINA_TZ = "America/Argentina/Buenos_Aires";
 // hace falta) antes de la llamada.
 export const MIN_LEAD_HOURS = 12;
 
+// Un horario que SE LIBERÓ (alguien canceló) se puede reservar con menos anticipación que el resto:
+// si no, un lugar que se libera a 6 h de la llamada no serviría de nada.
+export const MIN_LEAD_LIBERADO_HORAS = 2;
+
 // Se agenda de lunes a sábado. MAX_BOOKING_DIAS es solo el TOPE absoluto: el
 // límite real lo calcula el servidor (`fechaLimiteAgendable`) y libera una
 // semana más recién cuando la semana abierta se llenó.

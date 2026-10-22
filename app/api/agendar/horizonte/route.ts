@@ -13,9 +13,9 @@ export async function GET(req: NextRequest) {
   const tope = maxBookingDateKey();
   const h = agendaCrmConfigurado
     ? await horizonteAgenda(vendedor)
-    : { limite: sabadoDeSemanaKey(hoyArgentinaKey()), libres: null };
+    : { limite: sabadoDeSemanaKey(hoyArgentinaKey()), libres: null, liberados: [] };
   return NextResponse.json(
-    { ok: true, limite: h.limite < tope ? h.limite : tope, libres: h.libres },
+    { ok: true, limite: h.limite < tope ? h.limite : tope, libres: h.libres, liberados: h.liberados },
     { headers: { "Cache-Control": "public, s-maxage=10, stale-while-revalidate=30" } }
   );
 }

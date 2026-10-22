@@ -10,7 +10,7 @@
  */
 
 import { alertFailure } from "@/lib/alert";
-import { HORAS, horaHHMM, MAX_BOOKING_DIAS, MIN_LEAD_HOURS, hoyArgentinaKey, sabadoDeSemanaKey, sumarDiasKey, VENDEDORES_LANDING } from "@/lib/booking";
+import { HORAS, horaHHMM, MAX_BOOKING_DIAS, MIN_LEAD_HOURS, MIN_LEAD_LIBERADO_HORAS, hoyArgentinaKey, sabadoDeSemanaKey, sumarDiasKey, VENDEDORES_LANDING } from "@/lib/booking";
 
 const SB_URL = process.env.SUPABASE_URL;
 const SB_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -535,8 +535,15 @@ export async function agendarCrm(body: AgendarBody): Promise<Respuesta> {
   const hh = horaHHMM(hour);
   const iso = `${date}T${hh}:00${TZ_OFFSET}`;
   const inicioMs = new Date(iso).getTime();
-  if (inicioMs < Date.now() + MIN_LEAD_HOURS * 3600 * 1000) {
+  if (inicioMs < Date.now() + MIN_LEAD_LIBERADO_HORAS * 3600 * 1000) {
     return { status: 400, body: { ok: false, error: "too_soon" } };
+  }
+  if (inicioMs < Date.now() + MIN_LEAD_HOURS * 3600 * 1000) {
+    // Menos de 12 h: solo si es un horario que se liberó (alguien canceló) y sigue libre.
+    const h = await horizonteAgenda(vendedor);
+    if (!h.liberados.some((l) => l.dia === date && l.hora === Number(hour))) {
+      return { status: 400, body: { ok: false, error: "too_soon" } };
+    }
   }
 
   try {
@@ -604,10 +611,53 @@ export async function agendarCrm(body: AgendarBody): Promise<Respuesta> {
  * semana siguiente y no se apagan días. Es preferible mostrar un día lleno (la grilla de horas
  * lo marca ocupado y la reserva vuelve a chequear) que dejar a alguien sin ver nada.
  */
-export type Horizonte = { limite: string; libres: string[] | null };
+export type Liberado = { dia: string; hora: number };
+export type Horizonte = { limite: string; libres: string[] | null; liberados: Liberado[] };
 
 const horizonteCache = new Map<string, { en: number; valor: Horizonte }>();
 const HORIZONTE_TTL_MS = 15_000;
+
+const H_MS = 3_600_000;
+
+/** Fecha (YYYY-MM-DD) y hora decimal (15.5 = 15:30) de un instante, en hora de Argentina. */
+function fechaHoraAR(ms: number): { dia: string; hora: number } {
+  const p = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Argentina/Buenos_Aires", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false }).formatToParts(new Date(ms));
+  const v = (t: string) => p.find((x) => x.type === t)?.value ?? "0";
+  return { dia: `${v("year")}-${v("month")}-${v("day")}`, hora: (Number(v("hour")) % 24) + Number(v("minute")) / 60 };
+}
+
+/**
+ * Horarios que SE LIBERARON: reuniones canceladas (por el lead, a mano o por no confirmar) que empiezan en
+ * las próximas 12 h y cuyo lugar sigue libre. Se pueden reservar con poca anticipación (ver MIN_LEAD_LIBERADO_HORAS).
+ */
+async function calcularLiberados(
+  pool: CloserPool[],
+  reuniones: Reunion[],
+  ocupadosG: Record<string, Ocupado[]>
+): Promise<Liberado[]> {
+  const ahora = Date.now();
+  const desde = new Date(ahora + MIN_LEAD_LIBERADO_HORAS * H_MS).toISOString();
+  const hasta = new Date(ahora + MIN_LEAD_HOURS * H_MS).toISOString();
+  const ids = pool.map((c) => c.usuario_id);
+  const canceladas = await getJson<{ inicio: string }[]>(
+    `reuniones?select=inicio&estado=eq.cancelada&inicio=gte.${desde}&inicio=lte.${hasta}&closer_id=in.(${ids.join(",")})`
+  );
+  const vistos = new Set<number>();
+  const salida: { ms: number; l: Liberado }[] = [];
+  for (const c of canceladas) {
+    const ms = new Date(c.inicio).getTime();
+    if (vistos.has(ms)) continue;
+    vistos.add(ms);
+    const { dia, hora } = fechaHoraAR(ms);
+    if (!HORAS.includes(hora)) continue;
+    const delDia = reuniones.filter((r) => fechaHoraAR(new Date(r.inicio).getTime()).dia === dia);
+    const libre = pool.some((cl) =>
+      closerLibre(cl, ms, delDia.filter((r) => r.closer_id === cl.usuario_id), ocupadosG[cl.usuario_id] ?? [])
+    );
+    if (libre) salida.push({ ms, l: { dia, hora } });
+  }
+  return salida.sort((a, b) => a.ms - b.ms).map((x) => x.l);
+}
 
 export async function horizonteAgenda(vendedor: string | string[] | null): Promise<Horizonte> {
   const clave = JSON.stringify(vendedor ?? "default");
@@ -617,7 +667,7 @@ export async function horizonteAgenda(vendedor: string | string[] | null): Promi
   const hoy = hoyArgentinaKey();
   const tope = sumarDiasKey(hoy, MAX_BOOKING_DIAS);
   const sabadoActual = sabadoDeSemanaKey(hoy);
-  const masAmplio = (): Horizonte => ({ limite: sumarDiasKey(sabadoActual, 7) < tope ? sumarDiasKey(sabadoActual, 7) : tope, libres: null });
+  const masAmplio = (): Horizonte => ({ limite: sumarDiasKey(sabadoActual, 7) < tope ? sumarDiasKey(sabadoActual, 7) : tope, libres: null, liberados: [] });
 
   let valor: Horizonte;
   try {
@@ -669,7 +719,18 @@ export async function horizonteAgenda(vendedor: string | string[] | null): Promi
         for (let dia = hoy; dia <= limite; dia = sumarDiasKey(dia, 1)) {
           if (!esDomingo(dia) && hayLibre(dia)) libres.push(dia);
         }
-        valor = { limite, libres };
+        let liberados: Liberado[] = [];
+        try {
+          liberados = await calcularLiberados(pool, reuniones, ocupadosG);
+        } catch {
+          liberados = [];
+        }
+        for (const l of liberados) {
+          if (!libres.includes(l.dia)) libres.push(l.dia);
+          if (l.dia > limite) limite = l.dia;
+        }
+        libres.sort();
+        valor = { limite, libres, liberados };
       }
     }
   } catch {

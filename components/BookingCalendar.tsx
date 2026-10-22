@@ -39,6 +39,8 @@ export default function BookingCalendar({
   const [limite, setLimite] = useState(() => sabadoDeSemanaKey(hoyArgentinaKey()));
   // Días con al menos un horario libre (null = no se pudo saber: no se apaga ninguno).
   const [libres, setLibres] = useState<string[] | null>(null);
+  // Horarios que se liberaron (alguien canceló): se pueden reservar con poca anticipación y se destacan.
+  const [liberados, setLiberados] = useState<{ dia: string; hora: number }[]>([]);
   useEffect(() => {
     const vendedorParam = vendedorFijo ? `?vendedor=${encodeURIComponent(vendedorFijo)}` : "";
     fetch(`/api/agendar/horizonte${vendedorParam}`)
@@ -46,6 +48,7 @@ export default function BookingCalendar({
       .then((data) => {
         if (data.ok && typeof data.limite === "string") setLimite(data.limite);
         if (data.ok && Array.isArray(data.libres)) setLibres(data.libres);
+        if (data.ok && Array.isArray(data.liberados)) setLiberados(data.liberados);
       })
       .catch(() => {});
   }, [vendedorFijo]);
@@ -89,6 +92,8 @@ export default function BookingCalendar({
   // importar qué día sea: se compara el instante real del slot contra
   // "ahora + MIN_LEAD_HOURS", no contra la hora del reloj.
   const minBookableInstant = Date.now() + MIN_LEAD_HOURS * 3600 * 1000;
+  const esLiberado = (d: Date, h: number) => liberados.some((l) => l.dia === toDateKey(d) && l.hora === h);
+  const proximoLiberado = liberados[0] ? { ...liberados[0], fecha: days.find((d) => toDateKey(d) === liberados[0].dia) } : null;
 
   return (
     <div>
@@ -113,6 +118,31 @@ export default function BookingCalendar({
         Por una cuestión operativa, solo mostramos horarios con al menos{" "}
         {MIN_LEAD_HOURS} horas de anticipación desde este momento.
       </p>
+
+      {/* horario que se acaba de liberar: el más próximo, bien visible */}
+      {proximoLiberado?.fecha && (() => {
+        const { time } = convertSlot(proximoLiberado.fecha, proximoLiberado.hora, tz);
+        const hoy = proximoLiberado.dia === todayArgentinaKey;
+        return (
+          <div className="mb-4 rounded-xl border-2 border-[#e5484d] bg-[#e5484d]/10 px-4 py-3.5">
+            <p className="text-[12px] font-extrabold uppercase tracking-[0.12em] text-[#ff6a6f]">🔴 Horario libre más próximo</p>
+            <p className="mt-1 text-[16px] font-bold leading-snug text-white sm:text-[17px]">
+              {hoy ? "Hoy" : "Mañana"} a las {time} hs <span className="font-medium text-white/70">· se acaba de liberar</span>
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedDate(proximoLiberado.fecha!);
+                setSelectedHour(proximoLiberado.hora);
+                requestAnimationFrame(() => confirmBtnRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }));
+              }}
+              className="mt-2.5 rounded-lg bg-[#e5484d] px-4 py-2 text-[14px] font-bold text-white transition-opacity hover:opacity-90"
+            >
+              Reservar este horario
+            </button>
+          </div>
+        );
+      })()}
 
       {/* aviso cuando esta semana ya no tiene lugar */}
       {libres !== null && libres.length > 0 && !libres.some((k) => k <= sabadoDeSemanaKey(hoyArgentinaKey())) && (
@@ -146,7 +176,7 @@ export default function BookingCalendar({
             // es tarde y quedan menos de MIN_LEAD_HOURS hasta medianoche),
             // no tiene sentido dejar seleccionar el día para mostrar una
             // grilla vacía.
-            const hasNoBookableHour = HORAS.every((h) => slotInstant(d, h).getTime() < minBookableInstant);
+            const hasNoBookableHour = HORAS.every((h) => slotInstant(d, h).getTime() < minBookableInstant && !esLiberado(d, h));
             const sinLugar = libres !== null && !libres.includes(toDateKey(d));
             const disabled = isPastDay || hasNoBookableHour || sinLugar;
             return (
@@ -206,7 +236,8 @@ export default function BookingCalendar({
           <div className="grid grid-cols-3 gap-1.5 sm:gap-2.5 sm:grid-cols-4">
             {HORAS.map((h) => {
               const taken = bookedHours.includes(h);
-              const tooSoon = slotInstant(selectedDate, h).getTime() < minBookableInstant;
+              const libreAhora = esLiberado(selectedDate, h);
+              const tooSoon = slotInstant(selectedDate, h).getTime() < minBookableInstant && !libreAhora;
               const disabled = taken || tooSoon;
               const active = selectedHour === h;
               const { time, dayDiff } = convertSlot(selectedDate, h, tz);
@@ -228,12 +259,15 @@ export default function BookingCalendar({
                   className={`flex flex-col items-center rounded-lg border px-2 py-2.5 text-[14.5px] font-semibold transition-colors sm:rounded-xl sm:px-3 sm:py-3 sm:text-[16px] ${
                     disabled
                       ? "cursor-not-allowed border-[var(--color-border)] text-[var(--color-text-muted)] opacity-40 line-through"
-                      : active
+                      : libreAhora && !active
+                        ? "border-2 border-[#e5484d] bg-[#e5484d]/15 text-white"
+                        : active
                         ? "border-[var(--color-accent)] bg-[var(--color-accent)] text-white"
                         : "border-[var(--color-border)] bg-[var(--color-bg-elevated)] text-[var(--color-text-primary)] hover:border-[var(--color-accent)]"
                   }`}
                 >
                   {time}
+                  {libreAhora && <span className="text-[9px] font-extrabold uppercase tracking-wide text-[#ff6a6f]">Libre ahora</span>}
                   {dayDiff !== 0 && (
                     <span className="text-[9px] font-normal opacity-70">
                       {dayDiff > 0 ? "día siguiente" : "día anterior"}
