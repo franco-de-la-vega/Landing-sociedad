@@ -132,7 +132,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 40, rotate: -3 }}
             animate={{ opacity: 1, y: 0, rotate: -3 }}
             transition={{ duration: 1.1, delay: 0.55, ease: EASE_OUT }}
-            className="absolute -bottom-10 left-0 w-[52%] overflow-hidden rounded-[16px] border-4 border-white bg-black shadow-[0_40px_80px_-30px_rgba(28,26,22,0.55)]"
+            className="absolute -bottom-24 -left-6 w-[44%] overflow-hidden rounded-[16px] border-4 border-white bg-black shadow-[0_40px_80px_-30px_rgba(28,26,22,0.55)]"
           >
             <div className="relative aspect-[4/3]">
               <Image
