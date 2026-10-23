@@ -34,7 +34,7 @@ export default function AplicarPage() {
   const [previa, setPrevia] = useState<{ tipo: "agendada" | "pasada"; cuando: string } | null>(null);
 
   const [nombre, setNombre] = useState("");
-  const [whatsapp, setWhatsapp] = useState("");
+  const [whatsapp, setWhatsapp] = useState("+");
   const [email, setEmail] = useState("");
   const [sitioWeb, setSitioWeb] = useState(""); // honeypot
   const [verificando, setVerificando] = useState(false);
@@ -465,7 +465,7 @@ export default function AplicarPage() {
                     {nombre.trim().length < 3
                       ? "Escribí tu nombre y apellido."
                       : !esWhatsappValido(whatsapp)
-                        ? "Revisá tu WhatsApp: tiene que incluir el código de país y el número completo."
+                        ? "Tu WhatsApp tiene que empezar con + y el código de país (ej. +54 9 11 1234 5678 · +598 94 618 106). Sin eso no podemos escribirte."
                         : "Revisá tu email: parece que falta algo."}
                   </p>
                 )}

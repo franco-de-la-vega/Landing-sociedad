@@ -88,7 +88,8 @@ export function sanitizeWhatsapp(value: string) {
 }
 
 export function isValidWhatsapp(value: string) {
-  return value.replace(/[^0-9]/g, "").length >= 8;
+  const d = value.replace(/[^0-9]/g, "").length;
+  return value.trim().startsWith("+") && d >= 10 && d <= 15;
 }
 
 export function detectDefaultTz(): string {

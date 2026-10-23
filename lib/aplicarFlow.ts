@@ -267,7 +267,11 @@ export function resumenRespuestas(r: Resp): string {
     .join("\n");
 }
 
-export const esWhatsappValido = (v: string) => v.replace(/[^0-9]/g, "").length >= 8;
+/** WhatsApp internacional: tiene que empezar con "+" (código de país) y tener entre 10 y 15 dígitos. Sin eso no hay forma de escribirle. */
+export const esWhatsappValido = (v: string) => {
+  const d = v.replace(/[^0-9]/g, "").length;
+  return v.trim().startsWith("+") && d >= 10 && d <= 15;
+};
 export const esEmailValido = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim());
 
 /** Etiquetas cortas para la ficha del CRM. */
