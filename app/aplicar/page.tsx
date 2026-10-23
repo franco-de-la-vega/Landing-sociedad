@@ -8,7 +8,7 @@ import Logo from "@/components/Logo";
 import BookingCalendar, { type BookingSelection } from "@/components/BookingCalendar";
 import { DIA_LABEL, MES_LABEL, PAISES, convertSlot, googleCalendarLink, slotInstant, toDateKey } from "@/lib/booking";
 import { esEmailValido, esWhatsappValido, respuestaCompleta, textoValido, visibles, type Resp } from "@/lib/aplicarFlow";
-import { sanitizeWhatsapp } from "@/lib/booking";
+import { PAISES_TEL, armarTelefono, telefonoLocalValido } from "@/lib/paisesTel";
 
 /**
  * /aplicar: el filtro antes de la llamada (reemplaza al WhatsApp de la bio).
@@ -34,7 +34,13 @@ export default function AplicarPage() {
   const [previa, setPrevia] = useState<{ tipo: "agendada" | "pasada"; cuando: string } | null>(null);
 
   const [nombre, setNombre] = useState("");
-  const [whatsapp, setWhatsapp] = useState("+");
+  // WhatsApp: país (Argentina por defecto) + número local; el número final se arma solo con el código de país.
+  const [paisTel, setPaisTel] = useState("AR");
+  const [telLocal, setTelLocal] = useState("");
+  const [codigoOtro, setCodigoOtro] = useState("");
+  const pais = PAISES_TEL.find((p) => p.id === paisTel) ?? PAISES_TEL[0];
+  const whatsapp = armarTelefono(pais, telLocal, codigoOtro);
+  const telOk = telefonoLocalValido(pais, telLocal) && (pais.id !== "OT" || codigoOtro.replace(/\D/g, "").length >= 1);
   const [email, setEmail] = useState("");
   const [sitioWeb, setSitioWeb] = useState(""); // honeypot
   const [verificando, setVerificando] = useState(false);
@@ -78,7 +84,7 @@ export default function AplicarPage() {
     return () => clearTimeout(t);
   }, [fase, idx]);
 
-  const datosOk = nombre.trim().length >= 3 && esWhatsappValido(whatsapp) && esEmailValido(email);
+  const datosOk = nombre.trim().length >= 3 && telOk && esWhatsappValido(whatsapp) && esEmailValido(email);
 
   async function empezar() {
     if (!datosOk) return;
@@ -442,11 +448,9 @@ export default function AplicarPage() {
                     aria-hidden="true"
                     className="absolute left-[-9999px] top-auto h-px w-px overflow-hidden opacity-0"
                   />
-                  {[
+                  {([
                     { l: "Nombre y apellido", v: nombre, set: setNombre, ph: "", type: "text", ac: "name" },
-                    { l: "WhatsApp (con código de país)", v: whatsapp, set: (x: string) => setWhatsapp(sanitizeWhatsapp(x)), ph: "+54 9 11 1234 5678", type: "tel", ac: "tel" },
-                    { l: "Email", v: email, set: setEmail, ph: "tu@email.com", type: "email", ac: "email" },
-                  ].map((f) => (
+                  ]).map((f) => (
                     <div key={f.l}>
                       <label className="mb-1.5 block text-[13px] font-semibold uppercase tracking-[0.05em] text-[var(--color-text-muted)]">{f.l}</label>
                       <input
@@ -459,13 +463,65 @@ export default function AplicarPage() {
                       />
                     </div>
                   ))}
+
+                  <div>
+                    <label className="mb-1.5 block text-[13px] font-semibold uppercase tracking-[0.05em] text-[var(--color-text-muted)]">Tu WhatsApp</label>
+                    <div className="flex gap-2">
+                      <select
+                        value={paisTel}
+                        onChange={(e) => setPaisTel(e.target.value)}
+                        aria-label="País"
+                        className="w-[54%] shrink-0 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] px-2.5 py-3 text-[14px] text-white outline-none transition-colors focus:border-[var(--color-accent)] sm:w-[44%] sm:text-[15px]"
+                      >
+                        {PAISES_TEL.map((p) => (
+                          <option key={p.id} value={p.id}>
+                            {p.bandera} {p.nombre}{p.codigo ? ` +${p.codigo}` : ""}
+                          </option>
+                        ))}
+                      </select>
+                      {pais.id === "OT" && (
+                        <input
+                          inputMode="numeric"
+                          value={codigoOtro}
+                          onChange={(e) => setCodigoOtro(e.target.value.replace(/[^\d]/g, "").slice(0, 4))}
+                          placeholder="Cód."
+                          aria-label="Código de país"
+                          className="w-[18%] rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] px-3 py-3 text-[15px] text-white outline-none transition-colors placeholder:text-white/30 focus:border-[var(--color-accent)]"
+                        />
+                      )}
+                      <input
+                        type="tel"
+                        inputMode="numeric"
+                        autoComplete="tel-national"
+                        value={telLocal}
+                        onChange={(e) => setTelLocal(e.target.value.replace(/[^\d ]/g, ""))}
+                        placeholder={pais.ejemplo || "Tu número"}
+                        className="min-w-0 flex-1 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] px-4 py-3 text-[15.5px] text-white outline-none transition-colors placeholder:text-white/30 focus:border-[var(--color-accent)]"
+                      />
+                    </div>
+                    <p className="mt-1.5 text-[12.5px] text-white/40">
+                      {pais.id === "AR" ? "Con el código de área, sin el 0 ni el 15. Ej: 2615336300" : pais.id === "OT" ? "Elegí el código de tu país y escribí tu número." : `Solo tu número, sin el código de país${pais.ejemplo ? `. Ej: ${pais.ejemplo}` : ""}`}
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="mb-1.5 block text-[13px] font-semibold uppercase tracking-[0.05em] text-[var(--color-text-muted)]">Email</label>
+                    <input
+                      type="email"
+                      autoComplete="email"
+                      value={email}
+                      placeholder="tu@email.com"
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] px-4 py-3 text-[15.5px] text-white outline-none transition-colors placeholder:text-white/30 focus:border-[var(--color-accent)]"
+                    />
+                  </div>
                 </div>
-                {!datosOk && (nombre || whatsapp || email) && (
+                {!datosOk && (nombre || telLocal || email) && (
                   <p className="mt-4 text-[13px] text-white/45">
                     {nombre.trim().length < 3
                       ? "Escribí tu nombre y apellido."
-                      : !esWhatsappValido(whatsapp)
-                        ? "Tu WhatsApp tiene que empezar con + y el código de país (ej. +54 9 11 1234 5678 · +598 94 618 106). Sin eso no podemos escribirte."
+                      : !telOk
+                        ? `Revisá tu número: para ${pais.nombre} tiene que tener ${pais.min === pais.max ? pais.min : `entre ${pais.min} y ${pais.max}`} dígitos${pais.id === "AR" ? " (código de área + número, sin 0 ni 15)" : " (sin el código de país)"}.`
                         : "Revisá tu email: parece que falta algo."}
                   </p>
                 )}
