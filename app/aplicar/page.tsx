@@ -19,7 +19,7 @@ import { sanitizeWhatsapp } from "@/lib/booking";
  */
 
 type Categoria = "trabajo" | "momento" | "perfil";
-type Fase = "cargando" | "video" | "datos" | "preguntas" | "evaluando" | "no" | "agenda" | "confirmar" | "listo";
+type Fase = "cargando" | "video" | "datos" | "preguntas" | "evaluando" | "no" | "previa" | "agenda" | "confirmar" | "listo";
 
 const INSTAGRAM = "https://www.instagram.com/franco.de.la.vega/";
 
@@ -31,6 +31,7 @@ export default function AplicarPage() {
   const [hasta, setHasta] = useState<number | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [errorEval, setErrorEval] = useState(false);
+  const [previa, setPrevia] = useState<{ tipo: "agendada" | "pasada"; cuando: string } | null>(null);
 
   const [nombre, setNombre] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
@@ -94,6 +95,11 @@ export default function AplicarPage() {
         setFase("no");
         return;
       }
+      if (r.estado === "previa") {
+        setPrevia({ tipo: r.tipo, cuando: r.cuando });
+        setFase("previa");
+        return;
+      }
     } catch {
       /* si falla la consulta, igual evaluamos al final: el servidor vuelve a chequear */
     } finally {
@@ -118,6 +124,9 @@ export default function AplicarPage() {
       if (r.estado === "si") {
         setToken(r.token);
         setFase("agenda");
+      } else if (r.estado === "previa") {
+        setPrevia({ tipo: r.tipo, cuando: r.cuando });
+        setFase("previa");
       } else {
         setCategoria(r.categoria ?? "perfil");
         setHasta(r.hasta ?? null);
@@ -155,6 +164,12 @@ export default function AplicarPage() {
         body: JSON.stringify({ token, date: toDateKey(selection.date), hour: selection.hour }),
       });
       if (res.status === 409) {
+        const j = await res.clone().json().catch(() => ({}));
+        if (j?.error === "llamada_previa") {
+          setPrevia({ tipo: "pasada", cuando: new Date().toISOString() });
+          setFase("previa");
+          return;
+        }
         setSlotTaken(true);
         return;
       }
@@ -532,6 +547,31 @@ export default function AplicarPage() {
             )}
 
             {/* ── no califica / ya aplicó ── */}
+            {fase === "previa" && previa && (
+              <motion.div key="previa" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }} className="relative overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-8 text-center sm:p-10">
+                <span className="relative text-[11.5px] font-semibold uppercase tracking-[0.14em] text-[var(--color-accent-hover)]">
+                  {previa.tipo === "agendada" ? "Ya tenés una llamada agendada" : "Ya registramos una llamada tuya"}
+                </span>
+                {previa.tipo === "agendada" ? (
+                  <>
+                    <h2 className="relative mt-4 text-[1.5rem] font-bold leading-[1.2] text-white sm:text-[1.8rem]">
+                      Tu llamada es el {new Date(previa.cuando).toLocaleDateString("es-AR", { weekday: "long", day: "numeric", month: "long" })} a las {new Date(previa.cuando).toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit", hour12: false })} hs.
+                    </h2>
+                    <p className="relative mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-white/60 sm:text-[16px]">
+                      Revisá tu correo (y spam o promociones): ahí está el link de la videollamada. Si no vas a poder asistir, podés cancelarla desde ese mismo mail y reservar otro horario.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <h2 className="relative mt-4 text-[1.5rem] font-bold leading-[1.2] text-white sm:text-[1.8rem]">Por ahora no podés reservar otra llamada.</h2>
+                    <p className="relative mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-white/60 sm:text-[16px]">
+                      Ya tuviste una llamada agendada con nosotros en los últimos 30 días. Si querés retomar la conversación, escribinos y el equipo lo ve con vos.
+                    </p>
+                  </>
+                )}
+              </motion.div>
+            )}
+
             {fase === "no" && (
               <motion.div key="no" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }} className="relative overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-8 text-center sm:p-10">
                 <div className="pointer-events-none absolute left-1/2 top-0 h-48 w-48 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.12] blur-2xl" style={{ background: "radial-gradient(circle, var(--color-accent) 0%, transparent 70%)" }} aria-hidden />

@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { COOKIE, verificar } from "@/lib/aplicarToken";
 import type { Categoria } from "@/lib/aplicarEvaluar";
-import { buscarBloqueo, registrarInicio } from "@/lib/aplicarStore";
+import { buscarBloqueo, buscarLlamadaPrevia, registrarInicio } from "@/lib/aplicarStore";
+import { notify } from "@/lib/alert";
 import { esEmailValido, esWhatsappValido } from "@/lib/aplicarFlow";
 
 type CookieNo = { v: "no"; c: Categoria };
@@ -21,6 +22,11 @@ export async function POST(req: NextRequest) {
   }
   const b = await buscarBloqueo({ whatsapp, email });
   if (b) return NextResponse.json({ estado: "no", categoria: b.categoria, hasta: b.hasta });
+  const previa = await buscarLlamadaPrevia({ whatsapp, email });
+  if (previa) {
+    await notify("Intentó agendar de nuevo (ya tiene una llamada reciente)", `${typeof nombre === "string" ? nombre : ""}\nWhatsApp: ${whatsapp}\nEmail: ${email}\nLlamada: ${previa.tipo === "agendada" ? "agendada" : "pasada"} · ${previa.cuando}`);
+    return NextResponse.json({ estado: "previa", tipo: previa.tipo, cuando: previa.cuando });
+  }
   // Empezó el formulario: lo guardamos por si lo abandona (para poder escribirle).
   if (typeof nombre === "string" && nombre.trim().length >= 3) await registrarInicio({ nombre: nombre.trim(), whatsapp: String(whatsapp), email: String(email) });
   return NextResponse.json({ estado: "nuevo" });

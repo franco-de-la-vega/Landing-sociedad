@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { isHoneypotFilled } from "@/lib/antiSpam";
 import { COOKIE, DIAS_BLOQUEO, MS_DIA, firmar, verificar } from "@/lib/aplicarToken";
 import { evaluar } from "@/lib/aplicarEvaluar";
-import { borrarInicio, buscarBloqueo, registrarIntento } from "@/lib/aplicarStore";
+import { borrarInicio, buscarBloqueo, buscarLlamadaPrevia, registrarIntento } from "@/lib/aplicarStore";
 import { notify } from "@/lib/alert";
 import { camposCrm, esEmailValido, esWhatsappValido, resumenRespuestas, type Resp } from "@/lib/aplicarFlow";
 
@@ -49,6 +49,13 @@ export async function POST(req: NextRequest) {
     const res = NextResponse.json({ estado: "no", categoria: bloqueo.categoria, hasta: bloqueo.hasta });
     res.cookies.set(COOKIE, firmar({ v: "no", c: bloqueo.categoria }, bloqueo.hasta - Date.now()), cookieOpts(bloqueo.hasta - Date.now()));
     return res;
+  }
+
+  // 2b) ya tiene una llamada agendada o tuvo una en los últimos 30 días (no show, show, etc.)
+  const previa2 = await buscarLlamadaPrevia({ whatsapp, email });
+  if (previa2) {
+    await notify("Intentó agendar de nuevo (ya tiene una llamada reciente)", `${nombre}\nWhatsApp: ${whatsapp}\nEmail: ${email}\nLlamada: ${previa2.tipo === "agendada" ? "agendada" : "pasada"} · ${previa2.cuando}`);
+    return NextResponse.json({ estado: "previa", tipo: previa2.tipo, cuando: previa2.cuando });
   }
 
   // 3) evaluar (si había quedado registrado como "abandono", ya no lo es)

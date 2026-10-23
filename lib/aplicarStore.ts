@@ -164,3 +164,41 @@ export async function borrarInicio(c: Pick<Contacto, "whatsapp">): Promise<void>
     // no es crítico
   }
 }
+
+export type LlamadaPrevia = { tipo: "agendada" | "pasada"; cuando: string };
+
+/**
+ * ¿Esta persona (por WhatsApp o email) ya tiene una llamada agendada, o tuvo una en los últimos 30 días?
+ * Cuenta: agendada, realizada, no show, no contestó, y también CANCELADA después de su hora de inicio (el
+ * equipo cancela a mano a quien nunca apareció: eso es un no show, no una cancelación que libera).
+ * NO cuenta: canceladas antes de su hora (por el lead o automáticamente): esas personas pueden reagendar.
+ * Se calcula con las reuniones del CRM, así que vale también para todo lo que ya existía.
+ */
+export async function buscarLlamadaPrevia(c: Pick<Contacto, "whatsapp" | "email">): Promise<LlamadaPrevia | null> {
+  if (!agendaCrmConfigurado) return null;
+  try {
+    const desde = new Date(Date.now() - DIAS_BLOQUEO * MS_DIA).toISOString();
+    const filas = await getJson<
+      { inicio: string; estado: string; actualizado_en: string; cancelada_auto_en: string | null; lead: { whatsapp: string | null; email: string | null } | null }[]
+    >(
+      `reuniones?select=inicio,estado,actualizado_en,cancelada_auto_en,lead:leads(whatsapp,email)&empresa_id=eq.${EMPRESA_ID}&estado=in.(agendada,realizada,no_show,no_contesto,cancelada)&inicio=gte.${desde}&limit=3000`
+    );
+    const tel = ultimos8(c.whatsapp);
+    const em = mail(c.email);
+    const ahora = Date.now();
+    const propias = filas.filter((f) => {
+      const l = f.lead;
+      if (!l || !((l.whatsapp && ultimos8(l.whatsapp) === tel) || (l.email && mail(l.email) === em))) return false;
+      if (f.estado === "cancelada") return !f.cancelada_auto_en && new Date(f.actualizado_en).getTime() > new Date(f.inicio).getTime();
+      return true;
+    });
+    if (propias.length === 0) return null;
+    const futura = propias.find((f) => f.estado === "agendada" && new Date(f.inicio).getTime() > ahora);
+    if (futura) return { tipo: "agendada", cuando: futura.inicio };
+    const ultima = propias.sort((a, b) => b.inicio.localeCompare(a.inicio))[0];
+    return { tipo: "pasada", cuando: ultima.inicio };
+  } catch (e) {
+    console.warn("[aplicar] no se pudo consultar llamadas previas:", e instanceof Error ? e.message : e);
+    return null;
+  }
+}
