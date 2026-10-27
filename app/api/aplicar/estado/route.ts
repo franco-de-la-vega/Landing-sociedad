@@ -24,8 +24,8 @@ export async function POST(req: NextRequest) {
   if (b) return NextResponse.json({ estado: "no", categoria: b.categoria, hasta: b.hasta });
   const previa = await buscarLlamadaPrevia({ whatsapp, email });
   if (previa) {
-    await notify("Intentó agendar de nuevo (ya tiene una llamada reciente)", `${typeof nombre === "string" ? nombre : ""}\nWhatsApp: ${whatsapp}\nEmail: ${email}\nLlamada: ${previa.tipo === "agendada" ? "agendada" : "pasada"} · ${previa.cuando}`);
-    return NextResponse.json({ estado: "previa", tipo: previa.tipo, cuando: previa.cuando });
+    await notify("Intentó agendar de nuevo (ya tiene una llamada reciente)", `${typeof nombre === "string" ? nombre : ""}\nWhatsApp: ${whatsapp}\nEmail: ${email}\nLlamada: ${previa.tipo === "agendada" ? "agendada" : previa.tipo === "sin_confirmar" ? "no confirmó la anterior" : "pasada"} · ${previa.cuando}`);
+    return NextResponse.json({ estado: "previa", tipo: previa.tipo, cuando: previa.cuando, hasta: previa.hasta });
   }
   // Empezó el formulario: lo guardamos por si lo abandona (para poder escribirle).
   if (typeof nombre === "string" && nombre.trim().length >= 3) await registrarInicio({ nombre: nombre.trim(), whatsapp: String(whatsapp), email: String(email) });

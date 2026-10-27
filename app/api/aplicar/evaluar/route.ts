@@ -54,8 +54,8 @@ export async function POST(req: NextRequest) {
   // 2b) ya tiene una llamada agendada o tuvo una en los últimos 30 días (no show, show, etc.)
   const previa2 = await buscarLlamadaPrevia({ whatsapp, email });
   if (previa2) {
-    await notify("Intentó agendar de nuevo (ya tiene una llamada reciente)", `${nombre}\nWhatsApp: ${whatsapp}\nEmail: ${email}\nLlamada: ${previa2.tipo === "agendada" ? "agendada" : "pasada"} · ${previa2.cuando}`);
-    return NextResponse.json({ estado: "previa", tipo: previa2.tipo, cuando: previa2.cuando });
+    await notify("Intentó agendar de nuevo (ya tiene una llamada reciente)", `${nombre}\nWhatsApp: ${whatsapp}\nEmail: ${email}\nLlamada: ${previa2.tipo === "agendada" ? "agendada" : previa2.tipo === "sin_confirmar" ? "no confirmó la anterior" : "pasada"} · ${previa2.cuando}`);
+    return NextResponse.json({ estado: "previa", tipo: previa2.tipo, cuando: previa2.cuando, hasta: previa2.hasta });
   }
 
   // 3) evaluar (si había quedado registrado como "abandono", ya no lo es)

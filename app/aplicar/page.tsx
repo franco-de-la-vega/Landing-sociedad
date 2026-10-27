@@ -31,7 +31,7 @@ export default function AplicarPage() {
   const [hasta, setHasta] = useState<number | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [errorEval, setErrorEval] = useState(false);
-  const [previa, setPrevia] = useState<{ tipo: "agendada" | "pasada"; cuando: string } | null>(null);
+  const [previa, setPrevia] = useState<{ tipo: "agendada" | "pasada" | "sin_confirmar"; cuando: string; hasta?: string } | null>(null);
 
   const [nombre, setNombre] = useState("");
   // WhatsApp: país (Argentina por defecto) + número local; el número final se arma solo con el código de país.
@@ -102,7 +102,7 @@ export default function AplicarPage() {
         return;
       }
       if (r.estado === "previa") {
-        setPrevia({ tipo: r.tipo, cuando: r.cuando });
+        setPrevia({ tipo: r.tipo, cuando: r.cuando, hasta: r.hasta });
         setFase("previa");
         return;
       }
@@ -131,7 +131,7 @@ export default function AplicarPage() {
         setToken(r.token);
         setFase("agenda");
       } else if (r.estado === "previa") {
-        setPrevia({ tipo: r.tipo, cuando: r.cuando });
+        setPrevia({ tipo: r.tipo, cuando: r.cuando, hasta: r.hasta });
         setFase("previa");
       } else {
         setCategoria(r.categoria ?? "perfil");
@@ -522,7 +522,7 @@ export default function AplicarPage() {
                       ? "Escribí tu nombre y apellido."
                       : !telOk
                         ? `Revisá tu número: para ${pais.nombre} tiene que tener ${pais.min === pais.max ? pais.min : `entre ${pais.min} y ${pais.max}`} dígitos${pais.id === "AR" ? " (código de área + número, sin 0 ni 15)" : " (sin el código de país)"}.`
-                        : "Revisá tu email: parece que falta algo."}
+                        : "Revisá tu email: tiene que ser una dirección real (ej: nombre@gmail.com)."}
                   </p>
                 )}
                 <button
@@ -606,7 +606,7 @@ export default function AplicarPage() {
             {fase === "previa" && previa && (
               <motion.div key="previa" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }} className="relative overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-8 text-center sm:p-10">
                 <span className="relative text-[11.5px] font-semibold uppercase tracking-[0.14em] text-[var(--color-accent-hover)]">
-                  {previa.tipo === "agendada" ? "Ya tenés una llamada agendada" : "Ya registramos una llamada tuya"}
+                  {previa.tipo === "agendada" ? "Ya tenés una llamada agendada" : previa.tipo === "sin_confirmar" ? "Tu llamada anterior no se confirmó" : "Ya registramos una llamada tuya"}
                 </span>
                 {previa.tipo === "agendada" ? (
                   <>
@@ -615,6 +615,15 @@ export default function AplicarPage() {
                     </h2>
                     <p className="relative mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-white/60 sm:text-[16px]">
                       Revisá tu correo (y spam o promociones): ahí está el link de la videollamada. Si no vas a poder asistir, podés cancelarla desde ese mismo mail y reservar otro horario.
+                    </p>
+                  </>
+                ) : previa.tipo === "sin_confirmar" ? (
+                  <>
+                    <h2 className="relative mt-4 text-[1.5rem] font-bold leading-[1.2] text-white sm:text-[1.8rem]">
+                      Podrás reservar otra llamada a partir del {previa.hasta ? new Date(previa.hasta).toLocaleDateString("es-AR", { weekday: "long", day: "numeric", month: "long" }) : "próximo mes"}.
+                    </h2>
+                    <p className="relative mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-white/60 sm:text-[16px]">
+                      Tu llamada anterior se canceló porque no se confirmó la asistencia. Cada lugar es de una persona que sí quiere estar, por eso damos prioridad a quienes confirman.
                     </p>
                   </>
                 ) : (

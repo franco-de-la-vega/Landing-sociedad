@@ -165,7 +165,9 @@ export async function borrarInicio(c: Pick<Contacto, "whatsapp">): Promise<void>
   }
 }
 
-export type LlamadaPrevia = { tipo: "agendada" | "pasada"; cuando: string };
+export type LlamadaPrevia = { tipo: "agendada" | "pasada" | "sin_confirmar"; cuando: string; hasta?: string };
+
+const DIAS_ESPERA_SIN_CONFIRMAR = 7;
 
 /**
  * ¿Esta persona (por WhatsApp o email) ya tiene una llamada agendada, o tuvo una en los últimos 30 días?
@@ -192,9 +194,23 @@ export async function buscarLlamadaPrevia(c: Pick<Contacto, "whatsapp" | "email"
       if (f.estado === "cancelada") return !f.cancelada_auto_en && new Date(f.actualizado_en).getTime() > new Date(f.inicio).getTime();
       return true;
     });
-    if (propias.length === 0) return null;
+    // Canceladas automáticamente por no confirmar: 1ª vez → espera 7 días; 2ª vez en 30 días → bloqueo de 30 días.
+    const sinConfirmar = filas
+      .filter((f) => {
+        const l = f.lead;
+        return f.estado === "cancelada" && f.cancelada_auto_en && l && ((l.whatsapp && ultimos8(l.whatsapp) === tel) || (l.email && mail(l.email) === em));
+      })
+      .sort((a, b) => (b.cancelada_auto_en ?? "").localeCompare(a.cancelada_auto_en ?? ""));
+    let esperaHasta: LlamadaPrevia | null = null;
+    if (sinConfirmar.length > 0) {
+      const dias = sinConfirmar.length >= 2 ? DIAS_BLOQUEO : DIAS_ESPERA_SIN_CONFIRMAR;
+      const fin = new Date(sinConfirmar[0].cancelada_auto_en as string).getTime() + dias * MS_DIA;
+      if (fin > ahora) esperaHasta = { tipo: "sin_confirmar", cuando: sinConfirmar[0].inicio, hasta: new Date(fin).toISOString() };
+    }
+    if (propias.length === 0) return esperaHasta;
     const futura = propias.find((f) => f.estado === "agendada" && new Date(f.inicio).getTime() > ahora);
     if (futura) return { tipo: "agendada", cuando: futura.inicio };
+    if (esperaHasta) return esperaHasta;
     const ultima = propias.sort((a, b) => b.inicio.localeCompare(a.inicio))[0];
     return { tipo: "pasada", cuando: ultima.inicio };
   } catch (e) {

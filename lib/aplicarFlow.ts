@@ -272,7 +272,14 @@ export const esWhatsappValido = (v: string) => {
   const d = v.replace(/[^0-9]/g, "").length;
   return v.trim().startsWith("+") && d >= 10 && d <= 15;
 };
-export const esEmailValido = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim());
+const DOMINIOS_ERRADOS = new Set(["gmial.com", "gmai.com", "gmal.com", "gamil.com", "gmail.co", "gmail.con", "gmail.cm", "gnail.com", "gmil.com", "gmaill.com", "hotmial.com", "hotmal.com", "hotmai.com", "hotmail.con", "hotmail.co", "hotmil.com", "hotamil.com", "outlok.com", "outlook.con", "yaho.com", "yahooo.com", "yahoo.con", "yahoo.co", "iclod.com", "icloud.con"]);
+/** Email real: caracteres válidos, dominio con punto y terminación de letras. Rechaza los errores de tipeo más comunes del dominio (gmial, hotmial…). */
+export const esEmailValido = (v: string) => {
+  const e = v.trim().toLowerCase();
+  if (!/^[a-z0-9._%+-]+@([a-z0-9-]+\.)+[a-z]{2,24}$/.test(e)) return false;
+  if (e.includes("..") || e.startsWith(".") || e.split("@")[0].endsWith(".")) return false;
+  return !DOMINIOS_ERRADOS.has(e.split("@")[1]);
+};
 
 /** Etiquetas cortas para la ficha del CRM. */
 const ETIQUETA: Record<string, string> = {
