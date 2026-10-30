@@ -190,3 +190,33 @@ textarea.form-input {
     animation: none;
   }
 }
+
+/* Guía del bootcamp (/bootcamp): paleta negro, blanco, dorado y café */
+.bootcamp {
+  --bc-black: #0a0a0a;
+  --bc-white: #ffffff;
+  --bc-paper: #f8f6f2;
+  --bc-gold: #b8935a;
+  --bc-gold-soft: #cba873;
+  --bc-brown: #4a3426;
+}
+
+/* Borde dorado que respira, para el recordatorio del bootcamp */
+@keyframes bcShimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+.bc-shimmer {
+  background-image: linear-gradient(90deg, #4a3426, #b8935a, #f0dcb4, #b8935a, #4a3426);
+  background-size: 200% 100%;
+  animation: bcShimmer 5s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .bc-shimmer {
+    animation: none;
+  }
+}
