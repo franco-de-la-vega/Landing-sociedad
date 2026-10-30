@@ -27,7 +27,7 @@ export default function BootcampAccesoPage() {
     });
 
     if (res.ok) {
-      router.push("/bootcamp");
+      router.push("/interno/bootcamp");
       router.refresh();
     } else {
       setError(true);

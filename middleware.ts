@@ -12,7 +12,7 @@ function expectedToken() {
 async function guardBootcamp(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  if (pathname === "/bootcamp/acceso") {
+  if (pathname === "/interno/bootcamp/acceso") {
     return NextResponse.next();
   }
 
@@ -21,13 +21,13 @@ async function guardBootcamp(req: NextRequest) {
     return NextResponse.next();
   }
 
-  return NextResponse.redirect(new URL("/bootcamp/acceso", req.url));
+  return NextResponse.redirect(new URL("/interno/bootcamp/acceso", req.url));
 }
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  if (pathname === "/bootcamp" || pathname.startsWith("/bootcamp/")) {
+  if (pathname === "/interno/bootcamp" || pathname.startsWith("/interno/bootcamp/")) {
     return guardBootcamp(req);
   }
 
@@ -46,5 +46,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/presentacion/:path*", "/presentacion2.1.1", "/bootcamp", "/bootcamp/:path*"],
+  matcher: ["/presentacion/:path*", "/presentacion2.1.1", "/interno/bootcamp", "/interno/bootcamp/:path*"],
 };
