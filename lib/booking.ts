@@ -157,15 +157,16 @@ export function businessDaysByWeek(limiteKey?: string): Date[] {
 
 // Link de "agregar a Google Calendar" sin autenticación: cada persona agrega
 // el evento a SU propio calendario, nosotros no leemos ni tocamos nada.
-export function googleCalendarLink(date: Date, hour: number) {
+export function googleCalendarLink(date: Date, hour: number, meetLink?: string | null) {
   const start = slotInstant(date, hour);
   const end = new Date(start.getTime() + 45 * 60000);
   const fmt = (d: Date) => d.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
   const params = new URLSearchParams({
     action: "TEMPLATE",
-    text: "Llamada con Instituto Latinoamericano de Formación Comercial",
+    text: "Meet con Instituto Latinoamericano de Formación Comercial",
     dates: `${fmt(start)}/${fmt(end)}`,
-    details: "Reunión de 45 minutos. Te recomendamos conectarte desde una computadora.",
+    details: meetLink ? `Entrá al Meet desde acá: ${meetLink}\n\nTe recomendamos conectarte desde una computadora.` : "Reunión de 45 minutos. El link del Meet está en el correo que te enviamos. Te recomendamos conectarte desde una computadora.",
+    ...(meetLink ? { location: meetLink } : {}),
   });
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }

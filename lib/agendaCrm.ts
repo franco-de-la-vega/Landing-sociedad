@@ -32,16 +32,22 @@ const SB_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const CRM_URL = process.env.CRM_URL || "https://campus.formlat.com";
 const LANDING_AGENDA_SECRET = process.env.LANDING_AGENDA_SECRET;
 
-function sincronizarGoogleDelCrm(reunionId: string): void {
-  if (!LANDING_AGENDA_SECRET) return;
-  fetch(`${CRM_URL}/api/agenda/google-publico`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${LANDING_AGENDA_SECRET}` },
-    body: JSON.stringify({ reunionId }),
-  }).catch(() => {
-    // Best-effort — el CRM ya tiene su propio log de errores del lado
-    // servidor (logServidor). Acá no hay nada más que hacer.
-  });
+async function sincronizarGoogleDelCrm(reunionId: string): Promise<string | null> {
+  if (!LANDING_AGENDA_SECRET) return null;
+  try {
+    // Se espera la respuesta (con tope) para poder mostrar el link de Meet en la pantalla final.
+    const res = await fetch(`${CRM_URL}/api/agenda/google-publico`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${LANDING_AGENDA_SECRET}` },
+      body: JSON.stringify({ reunionId }),
+      signal: AbortSignal.timeout(7000),
+    });
+    const j = (await res.json().catch(() => null)) as { meetLink?: string | null } | null;
+    return j?.meetLink ?? null;
+  } catch {
+    // Best-effort — el CRM ya tiene su propio log de errores del lado servidor (logServidor).
+    return null;
+  }
 }
 
 /** Empresa ILFC en el CRM (única por ahora). */
@@ -395,7 +401,7 @@ export async function espejarReservaEnCrm(body: FormBody, asignadoNombre: string
       }),
     });
     const filas = (await res.json()) as { id: string }[];
-    if (filas[0]?.id) sincronizarGoogleDelCrm(filas[0].id);
+    if (filas[0]?.id) void sincronizarGoogleDelCrm(filas[0].id);
   } catch (e) {
     // slot ya espejado -> ok, no es un error real
     if (e instanceof Error && (e.message.includes("23505") || e.message.includes("crm_409"))) return;
@@ -436,8 +442,10 @@ export async function crearReunionFormulario(opts: {
   closer: CloserPool;
   inicioISO: string;
   notas?: string | null;
-}): Promise<void> {
+}): Promise<{ meetLink: string | null }> {
   const inicio = new Date(opts.inicioISO);
+  let meetLink: string | null = null;
+  let sync: Promise<string | null> | null = null;
   const fin = new Date(inicio.getTime() + opts.closer.duracion_min * 60_000);
 
   try {
@@ -456,7 +464,7 @@ export async function crearReunionFormulario(opts: {
       }),
     });
     const filas = (await res.json()) as { id: string }[];
-    if (filas[0]?.id) sincronizarGoogleDelCrm(filas[0].id);
+    if (filas[0]?.id) sync = sincronizarGoogleDelCrm(filas[0].id);
   } catch (e) {
     const msg = e instanceof Error ? e.message : "";
     if (msg.includes("23505") || msg.includes("crm_409")) {
@@ -493,6 +501,9 @@ export async function crearReunionFormulario(opts: {
       })}.`,
     }),
   });
+
+  if (sync) meetLink = await sync;
+  return { meetLink };
 }
 
 // ─────────────── Orquestador: camino nuevo de /api/agendar ───────────────
@@ -577,8 +588,10 @@ export async function agendarCrm(body: AgendarBody): Promise<Respuesta> {
       origen: "Landing formlat.com",
     });
 
+    let meetLinkReserva: string | null = null;
     try {
-      await crearReunionFormulario({ leadId, closer: asignado, inicioISO: iso, notas: mensaje });
+      const { meetLink } = await crearReunionFormulario({ leadId, closer: asignado, inicioISO: iso, notas: mensaje });
+      meetLinkReserva = meetLink;
     } catch (e) {
       if (e instanceof Error && e.name === "SlotTaken") return { status: 409, body: { ok: false, error: "slot_taken" } };
       throw e;
@@ -593,7 +606,7 @@ export async function agendarCrm(body: AgendarBody): Promise<Respuesta> {
       }
     }
 
-    return { status: 200, body: { ok: true, vendedor: asignado.nombre } };
+    return { status: 200, body: { ok: true, vendedor: asignado.nombre, meetLink: meetLinkReserva } };
   } catch (err) {
     await alertFailure(
       "Falló una reserva de agenda (CRM)",

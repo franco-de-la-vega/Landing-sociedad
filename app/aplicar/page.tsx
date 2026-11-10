@@ -49,6 +49,7 @@ export default function AplicarPage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(false);
   const [slotTaken, setSlotTaken] = useState(false);
+  const [meetLink, setMeetLink] = useState<string | null>(null);
 
   const [videoListo, setVideoListo] = useState(false);
   const [videoPlaying, setVideoPlaying] = useState(false);
@@ -180,6 +181,8 @@ export default function AplicarPage() {
         return;
       }
       if (!res.ok) throw new Error("submit_failed");
+      const okJson = (await res.json().catch(() => null)) as { meetLink?: string | null } | null;
+      setMeetLink(okJson?.meetLink ?? null);
       setFase("listo");
     } catch {
       setSubmitError(true);
@@ -744,7 +747,7 @@ export default function AplicarPage() {
                   ))}
                 </ol>
                 <a
-                  href={googleCalendarLink(selection.date, selection.hour)}
+                  href={googleCalendarLink(selection.date, selection.hour, meetLink)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="relative mt-5 inline-flex items-center gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-base)] px-4 py-2.5 text-[14px] font-semibold text-white transition-colors hover:border-[var(--color-accent)]"
