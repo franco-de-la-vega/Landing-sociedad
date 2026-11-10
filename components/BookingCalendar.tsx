@@ -115,6 +115,9 @@ export default function BookingCalendar({
       </div>
 
 
+      <p className="mb-2 text-[12.5px] leading-relaxed text-white/70 sm:text-[13.5px]">
+        El encuentro es por Google Meet: el link te llega a tu correo apenas reserves.
+      </p>
       <p className="mb-3 text-[12.5px] leading-relaxed text-[var(--color-text-muted)] sm:mb-4 sm:text-[13.5px]">
         Por una cuestión operativa, solo mostramos horarios con al menos {MIN_LEAD_HOURS} horas de anticipación desde este momento.
       </p>

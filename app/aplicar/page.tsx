@@ -711,22 +711,38 @@ export default function AplicarPage() {
                 >
                   <Check size={22} className="text-[var(--color-accent)]" />
                 </motion.span>
-                <h2 className="relative mt-6 text-[20px] font-bold sm:text-[22px]">¡Listo, tu llamada quedó agendada!</h2>
+                <h2 className="relative mt-6 text-[20px] font-bold sm:text-[22px]">¡Listo, tu Meet quedó agendado!</h2>
                 <p className="relative mt-2 text-[15px] text-[var(--color-text-secondary)] sm:text-[16px]">
                   {DIA_LABEL[selection.date.getDay()]} {selection.date.getDate()} de {MES_LABEL[selection.date.getMonth()]} a las {convertSlot(selection.date, selection.hour, selection.tz).time}hs (
                   {PAISES.find((x) => x.tz === selection.tz)?.label})
                 </p>
-                <div className="relative mx-auto mt-5 max-w-sm rounded-xl border border-[var(--color-accent)]/35 bg-[var(--color-accent-muted)] px-4 py-3.5 text-left">
-                  <p className="text-[14.5px] font-semibold text-[var(--color-accent-hover)]">📩 Revisá tu correo</p>
-                  <p className="mt-1 text-[13.5px] leading-relaxed text-white/70">
-                    Te enviamos la confirmación con el link de la videollamada. Si no la ves, buscala en <strong className="text-white/85">spam o promociones</strong>.
-                  </p>
-                  {slotInstant(selection.date, selection.hour).getTime() - Date.now() >= 24 * 3_600_000 && (
-                    <p className="mt-2 text-[13.5px] leading-relaxed text-white/70">
-                      El día anterior te vamos a pedir que <strong className="text-white/85">confirmes tu asistencia</strong>. Si no la confirmás, el horario se libera automáticamente para otra persona.
-                    </p>
-                  )}
-                </div>
+                <ol className="relative mx-auto mt-6 max-w-sm space-y-4 text-left">
+                  {[
+                    {
+                      t: "Te llega el link del Meet",
+                      d: "Ya está en tu correo, con todos los datos. Si no lo ves, buscalo en spam o promociones.",
+                    },
+                    {
+                      t: "Te lo recordamos antes",
+                      d:
+                        slotInstant(selection.date, selection.hour).getTime() - Date.now() >= 24 * 3_600_000
+                          ? "El día anterior te pedimos confirmar tu asistencia y una hora antes te llega otro aviso con el link."
+                          : "Una hora antes te llega un aviso con el link, para que lo tengas a mano.",
+                    },
+                    {
+                      t: "Entrás a la videollamada desde el link, a tu hora",
+                      d: "Se abre desde el celular o la computadora, sin instalar nada.",
+                    },
+                  ].map((x, i) => (
+                    <li key={x.t} className="flex gap-3.5">
+                      <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-[var(--color-accent)]/60 text-[12px] font-bold text-[var(--color-accent-hover)]">{i + 1}</span>
+                      <span>
+                        <span className="block text-[14.5px] font-semibold text-white">{x.t}</span>
+                        <span className="mt-0.5 block text-[13.5px] leading-relaxed text-white/60">{x.d}</span>
+                      </span>
+                    </li>
+                  ))}
+                </ol>
                 <a
                   href={googleCalendarLink(selection.date, selection.hour)}
                   target="_blank"
