@@ -1,6 +1,5 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
-import SkillsMarquee from "@/components/home/SkillsMarquee";
 import ProblemSection from "@/components/home/ProblemSection";
 import StandardSection from "@/components/home/StandardSection";
 import CampusSection from "@/components/home/CampusSection";
@@ -20,7 +19,6 @@ export default function Home() {
       <main className="relative">
         <AmbientGlow />
         <Hero />
-        <SkillsMarquee />
         <ProblemSection />
         <StandardSection />
         <CampusSection />

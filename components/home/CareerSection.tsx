@@ -83,7 +83,7 @@ export default function CareerSection() {
             <Reveal delay={0.08}>
               <h2 className="mt-6 text-4xl font-bold leading-[1.05] tracking-[-0.03em] text-[var(--color-text-primary)] sm:text-[3.4rem]">
                 Tu trabajo no tiene por qué{" "}
-                <span className="font-serif-display font-normal italic text-[var(--color-accent-hover)]">depender de dónde vivís.</span>
+                <span>depender de dónde vivís.</span>
               </h2>
             </Reveal>
             <Reveal delay={0.14}>

@@ -120,7 +120,7 @@ export default function StandardSection() {
             <Reveal delay={0.08}>
               <h2 className="mt-6 text-4xl font-bold leading-[1.02] tracking-[-0.04em] text-[var(--color-text-primary)] sm:text-6xl">
                 Un instituto que promueve el{" "}
-                <span className="font-serif-display font-normal italic text-[var(--color-accent-hover)]">trabajo remoto.</span>
+                <span>trabajo remoto.</span>
               </h2>
             </Reveal>
           </div>

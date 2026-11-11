@@ -30,7 +30,7 @@ export default function Footer() {
             <Logo className="h-10 w-10 text-[var(--color-accent)]" />
             <p className="mt-6 max-w-sm text-2xl font-semibold leading-snug tracking-tight">
               Formamos profesionales comerciales para trabajar{" "}
-              <span className="font-serif-display font-normal italic text-[var(--color-accent)]">sin fronteras.</span>
+              <span>sin fronteras.</span>
             </p>
             <a
               href="/aplicar"

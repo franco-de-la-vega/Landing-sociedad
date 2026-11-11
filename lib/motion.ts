@@ -30,4 +30,4 @@ export const staggerContainer = (stagger = 0.12, delayChildren = 0): Variants =>
   },
 });
 
-export const revealViewport = { once: true, amount: 0.2 as const };
+export const revealViewport = { once: true, amount: 0 as const, margin: "0px 0px 15% 0px" };

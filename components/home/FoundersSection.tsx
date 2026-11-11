@@ -27,7 +27,7 @@ export default function FoundersSection() {
           <Reveal delay={0.08}>
             <h2 className="mt-6 text-4xl font-bold leading-[1.05] tracking-[-0.03em] text-[var(--color-text-primary)] sm:text-5xl">
               Detrás del método,{" "}
-              <span className="font-serif-display font-normal italic text-[var(--color-accent-hover)]">personas reales.</span>
+              <span>personas reales.</span>
             </h2>
           </Reveal>
           <Reveal delay={0.14}>

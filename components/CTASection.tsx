@@ -44,7 +44,7 @@ export default function CTASection() {
             href="/aplicar"
             className="mx-auto inline-flex items-center justify-center rounded-full bg-[var(--color-text-primary)] px-8 py-4 text-[16px] font-semibold text-[var(--color-bg-base)] transition-colors hover:bg-[var(--color-accent-hover)]"
           >
-            Quiero saber más
+            Quiero empezar
           </a>
         </Reveal>
       </div>

@@ -50,7 +50,7 @@ export default function PracticeSection() {
           <Reveal delay={0.08}>
             <h2 className="mt-6 text-4xl font-bold leading-[1.05] tracking-[-0.03em] text-[var(--color-text-primary)] sm:text-[3.2rem]">
               Todo, en un{" "}
-              <span className="font-serif-display font-normal italic text-[var(--color-accent-hover)]">bootcamp.</span>
+              <span>bootcamp.</span>
             </h2>
           </Reveal>
           <Reveal delay={0.12}>

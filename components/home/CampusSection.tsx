@@ -37,7 +37,7 @@ export default function CampusSection() {
             <h2 className="mt-6 text-4xl font-bold tracking-[-0.03em] text-white sm:text-[3.4rem] sm:leading-[1.05]">
               No es Skool. No es Udemy.
               <br />
-              <span className="font-serif-display font-normal italic text-[var(--color-accent-hover)]">Es tu campus.</span>
+              <span>Es tu campus.</span>
             </h2>
           </Reveal>
           <Reveal delay={0.14}>

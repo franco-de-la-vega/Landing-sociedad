@@ -8,21 +8,6 @@ import { EASE_OUT } from "@/lib/motion";
 
 const ROTATING = ["negociar", "persuadir", "cerrar acuerdos"];
 
-function Line({ children, delay }: { children: React.ReactNode; delay: number }) {
-  return (
-    <span className="block overflow-hidden pb-[0.08em]">
-      <motion.span
-        className="block"
-        initial={{ y: "105%" }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.9, delay, ease: EASE_OUT }}
-      >
-        {children}
-      </motion.span>
-    </span>
-  );
-}
-
 // Sin overflow ni alturas fijas: así la palabra queda sobre la misma línea base que el resto del texto
 function Rotator() {
   const [i, setI] = useState(0);
@@ -62,11 +47,9 @@ export default function Hero() {
           </motion.div>
 
           <h1 className="mt-8 text-[2.9rem] font-bold leading-[1.02] tracking-[-0.045em] text-[var(--color-text-primary)] sm:text-7xl lg:text-[5.2rem]">
-            <Line delay={0.1}>Aprendé la</Line>
-            <Line delay={0.2}>habilidad que</Line>
-            <Line delay={0.3}>
-              <span className="font-serif-display font-normal italic tracking-[-0.02em]">mueve el mundo.</span>
-            </Line>
+            <span className="block">Aprendé la</span>
+            <span className="block">habilidad que</span>
+            <span className="block font-serif-display font-normal italic tracking-[-0.02em]">mueve el mundo.</span>
           </h1>
 
           <motion.p
