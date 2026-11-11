@@ -266,7 +266,7 @@ export default function AplicarPage() {
           </Reveal>
           <Reveal delay={0.16} className="mt-5">
             <p className="mx-auto max-w-md text-[15.5px] leading-relaxed text-white/60 sm:text-[17px]">
-              En un minuto te contamos qué es, para quién es y cómo funciona. Después respondés unas preguntas con calma y, si el programa es para vos,
+              En menos de un minuto y medio te contamos qué es, para quién es y cómo funciona. Después respondés unas preguntas con calma y, si el programa es para vos,
               elegís el horario de tu llamada.
             </p>
           </Reveal>
@@ -327,7 +327,7 @@ export default function AplicarPage() {
                   </span>
                   <span className="absolute bottom-7 left-1/2 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap text-[13px] font-semibold text-white/85">
                     <span className="h-1 w-1 rounded-full bg-[var(--color-accent-hover)]" />
-                    Con sonido · 1 minuto
+                    Con sonido · 1:25 min
                   </span>
                 </button>
               ) : (
@@ -416,7 +416,7 @@ export default function AplicarPage() {
             {/* ── presentación del filtro ── */}
             {fase === "video" && (
               <motion.div key="intro" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.3 }} className="relative text-center">
-                <span className="text-[11.5px] font-semibold uppercase tracking-[0.14em] text-[var(--color-accent-hover)] sm:text-[12.5px]">Paso 2 de 3</span>
+                <span className="text-[11.5px] font-semibold uppercase tracking-[0.14em] text-[var(--color-accent-hover)] sm:text-[12.5px]">Cuando termines el video</span>
                 <h2 className="mt-3 text-[1.7rem] font-bold leading-[1.15] tracking-tight text-white sm:text-[2.2rem]">Ahora, contanos sobre vos</h2>
                 <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed text-white/55 sm:text-[16.5px]">
                   Son unas pocas preguntas y te lleva menos de un minuto. Respondé con sinceridad: lo leemos antes de tu llamada.
@@ -427,7 +427,7 @@ export default function AplicarPage() {
                 <button
                   type="button"
                   onClick={() => setFase("datos")}
-                  className="mx-auto mt-8 flex items-center justify-center gap-2 rounded-xl bg-[var(--color-accent)] px-7 py-3.5 text-[16px] font-semibold text-white transition-colors hover:bg-[var(--color-accent-hover)]"
+                  className="mx-auto mt-8 flex items-center justify-center gap-2 rounded-xl bg-[var(--color-accent)] px-7 py-3.5 text-[16px] font-semibold text-black transition-colors hover:bg-[var(--color-accent-hover)]"
                 >
                   Ya vi el video, empezar <ArrowRight size={17} />
                 </button>
@@ -532,7 +532,7 @@ export default function AplicarPage() {
                   type="button"
                   disabled={!datosOk || verificando}
                   onClick={empezar}
-                  className="mt-7 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--color-accent)] px-6 py-3.5 text-[16px] font-semibold text-white transition-colors hover:bg-[var(--color-accent-hover)] disabled:cursor-not-allowed disabled:opacity-35"
+                  className="mt-7 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--color-accent)] px-6 py-3.5 text-[16px] font-semibold text-black transition-colors hover:bg-[var(--color-accent-hover)] disabled:cursor-not-allowed disabled:opacity-35"
                 >
                   {verificando ? <Loader2 size={16} className="animate-spin" /> : null}
                   Continuar <ArrowRight size={17} />
@@ -646,7 +646,7 @@ export default function AplicarPage() {
                 <span className="relative text-[11.5px] font-semibold uppercase tracking-[0.14em] text-[var(--color-accent-hover)]">Gracias por contarnos tu historia</span>
                 <h2 className="relative mt-4 text-[1.5rem] font-bold leading-[1.2] text-white sm:text-[1.8rem]">Recibimos tus respuestas.</h2>
                 <p className="relative mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-white/60 sm:text-[16px]">
-                  Alguien del equipo va a revisar tu perfil con atención y estamos en contacto. Valoramos mucho el tiempo que te tomaste para responder.
+                  Por lo que nos contaste, hoy no es el momento para empezar la formación. Valoramos mucho el tiempo que te tomaste para responder.
                 </p>
                 <p className="relative mx-auto mt-5 max-w-md text-[13.5px] leading-relaxed text-white/40">
                   Por ahora no vas a poder agendar una llamada desde acá. Si tu situación cambia, vas a poder volver a aplicar{fechaHasta ? ` a partir del ${fechaHasta}` : " dentro de 30 días"}.
@@ -695,7 +695,7 @@ export default function AplicarPage() {
                   type="button"
                   disabled={submitting}
                   onClick={confirmar}
-                  className="mt-8 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--color-accent)] px-6 py-3.5 text-[16px] font-semibold text-white transition-colors hover:bg-[var(--color-accent-hover)] disabled:cursor-not-allowed disabled:opacity-40"
+                  className="mt-8 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--color-accent)] px-6 py-3.5 text-[16px] font-semibold text-black transition-colors hover:bg-[var(--color-accent-hover)] disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   {submitting && <Loader2 size={16} className="animate-spin" />}
                   Confirmar mi llamada
@@ -792,7 +792,7 @@ function TextoLibre({
         <button
           type="button"
           onClick={onNext}
-          className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--color-accent)] px-6 py-3.5 text-[16px] font-semibold text-white transition-colors hover:bg-[var(--color-accent-hover)]"
+          className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--color-accent)] px-6 py-3.5 text-[16px] font-semibold text-black transition-colors hover:bg-[var(--color-accent-hover)]"
         >
           {valor.trim() ? (esUltima ? "Enviar mis respuestas" : "Siguiente") : "Seguir sin escribir"} <ArrowRight size={17} />
         </button>
@@ -849,7 +849,7 @@ function TextoLibre({
         type="button"
         disabled={!ok}
         onClick={onNext}
-        className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--color-accent)] px-6 py-3.5 text-[16px] font-semibold text-white transition-colors hover:bg-[var(--color-accent-hover)] disabled:cursor-not-allowed disabled:opacity-35"
+        className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--color-accent)] px-6 py-3.5 text-[16px] font-semibold text-black transition-colors hover:bg-[var(--color-accent-hover)] disabled:cursor-not-allowed disabled:opacity-35"
       >
         {esUltima ? "Enviar mis respuestas" : "Siguiente"} <ArrowRight size={17} />
       </button>

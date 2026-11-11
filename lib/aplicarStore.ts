@@ -218,3 +218,11 @@ export async function buscarLlamadaPrevia(c: Pick<Contacto, "whatsapp" | "email"
     return null;
   }
 }
+
+/** Quienes cargaron sus datos y no terminaron el formulario, entre dos momentos (el registro provisorio sigue existiendo solo si abandonaron). */
+export async function listarAbandonos(desde: Date, hasta: Date): Promise<(Contacto & { creado_en: string })[]> {
+  if (!agendaCrmConfigurado) return [];
+  return getJson<(Contacto & { creado_en: string })[]>(
+    `aplicaciones_filtro?select=nombre,whatsapp,email,creado_en&empresa_id=eq.${EMPRESA_ID}&categoria=eq.abandono&creado_en=gte.${desde.toISOString()}&creado_en=lt.${hasta.toISOString()}&order=creado_en.asc`
+  );
+}
