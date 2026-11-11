@@ -53,6 +53,7 @@ export default function AplicarPage() {
 
   const [videoListo, setVideoListo] = useState(false);
   const [videoPlaying, setVideoPlaying] = useState(false);
+  const [videoTermino, setVideoTermino] = useState(false);
   const [videoMuted, setVideoMuted] = useState(false);
   const [videoProgress, setVideoProgress] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -342,7 +343,11 @@ export default function AplicarPage() {
                     onContextMenu={(e) => e.preventDefault()}
                     onDragStart={(e) => e.preventDefault()}
                     onClick={togglePlay}
-                    onPlay={() => setVideoPlaying(true)}
+                    onPlay={() => {
+                      setVideoPlaying(true);
+                      setVideoTermino(false);
+                    }}
+                    onEnded={() => setVideoTermino(true)}
                     onPause={() => setVideoPlaying(false)}
                     onTimeUpdate={(e) => {
                       const el = e.currentTarget;
@@ -354,7 +359,17 @@ export default function AplicarPage() {
                     <source src="/videos/vsl-v2.mp4" type="video/mp4" />
                   </video>
 
-                  {!videoPlaying && (
+                  {!videoPlaying && videoTermino && (
+                    <button
+                      type="button"
+                      onClick={togglePlay}
+                      aria-label="Ver de nuevo"
+                      className="absolute bottom-16 left-1/2 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-full bg-white/15 px-4 py-2 text-[13px] font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/25"
+                    >
+                      <Play size={13} className="fill-white" /> Ver de nuevo
+                    </button>
+                  )}
+                  {!videoPlaying && !videoTermino && (
                     <button type="button" onClick={togglePlay} aria-label="Reproducir" className="absolute inset-0 flex items-center justify-center bg-black/25">
                       <span className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-accent)]/90">
                         <Play size={24} className="ml-1 fill-black text-black" />
