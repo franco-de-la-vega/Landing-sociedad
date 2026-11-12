@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const USER = process.env.PRESENTACION_USER || "ilfc_2026";
-const PASS = process.env.PRESENTACION_PASS || "zI3g9Sbtp7Awg2";
+// Usuario y clave solo desde la configuración (Vercel / .env.local), nunca escritos en el código.
+const USER = process.env.PRESENTACION_USER;
+const PASS = process.env.PRESENTACION_PASS;
 const COOKIE_NAME = "ilfc_pres_auth";
 
 export async function POST(req: NextRequest) {
   const { user, pass } = await req.json();
 
-  if (user !== USER || pass !== PASS) {
+  if (!USER || !PASS || user !== USER || pass !== PASS) {
     return NextResponse.json({ ok: false }, { status: 401 });
   }
 

@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { BOOTCAMP_COOKIE, bootcampToken } from "@/lib/bootcampAuth";
 
-const USER = process.env.PRESENTACION_USER || "ilfc_2026";
-const PASS = process.env.PRESENTACION_PASS || "zI3g9Sbtp7Awg2";
+// Usuario y clave solo desde la configuración (Vercel / .env.local), nunca escritos en el código.
+// Si faltan, la presentación queda cerrada.
+const USER = process.env.PRESENTACION_USER;
+const PASS = process.env.PRESENTACION_PASS;
 const COOKIE_NAME = "ilfc_pres_auth";
 
 function expectedToken() {
@@ -36,7 +38,7 @@ export async function middleware(req: NextRequest) {
   }
 
   const cookie = req.cookies.get(COOKIE_NAME)?.value;
-  if (cookie === expectedToken()) {
+  if (USER && PASS && cookie === expectedToken()) {
     return NextResponse.next();
   }
 
