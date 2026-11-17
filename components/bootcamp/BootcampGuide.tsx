@@ -53,7 +53,7 @@ const ICONOS = {
 
 const RECORRIDO_ICONOS = [Radio, Drama, LayoutDashboard, MessagesSquare, Target, BadgeCheck];
 
-const eyebrow = "inline-flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--bc-gold-ink)] before:h-px before:w-7 before:bg-current";
+const eyebrow = "text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--bc-gold-ink)]";
 const serif = "font-serif-display font-normal italic text-[var(--bc-gold-ink)]";
 
 function Reminder({ className = "" }: { className?: string }) {

@@ -6,7 +6,7 @@ import RevealGroup from "@/components/RevealGroup";
 import RevealItem from "@/components/RevealItem";
 import { PLANES, type Plan } from "@/lib/bootcamp";
 
-const eyebrow = "inline-flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--bc-gold-ink)] before:h-px before:w-7 before:bg-current";
+const eyebrow = "text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--bc-gold-ink)]";
 const serif = "font-serif-display font-normal italic text-[var(--bc-gold-ink)]";
 
 function Tarjeta({ p }: { p: Plan }) {
