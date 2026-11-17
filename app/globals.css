@@ -199,6 +199,28 @@ textarea.form-input {
   --bc-gold: #b8935a;
   --bc-gold-soft: #cba873;
   --bc-brown: #4a3426;
+  /* tema claro (crema), igual a la presentación de ventas */
+  --bc-bg: #f5f1e8;
+  --bc-ink: #1a1a1a;
+  --bc-card: #ffffff;
+  --bc-gold-ink: #8a6a35;
+  background: var(--bc-bg);
+  color: var(--bc-ink);
+}
+/* bloques oscuros dentro de la guía */
+.bootcamp .bc-dark {
+  --bc-bg: #1c1712;
+  --bc-ink: #ffffff;
+  --bc-card: #14110e;
+  --bc-gold-ink: #cba873;
+  color: var(--bc-ink);
+}
+
+/* Foco visible al navegar con teclado */
+.bootcamp a:focus-visible,
+.bootcamp button:focus-visible {
+  outline: 2px solid var(--bc-gold-soft);
+  outline-offset: 3px;
 }
 
 /* Borde dorado que respira, para el recordatorio del bootcamp */

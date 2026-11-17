@@ -125,3 +125,51 @@ export const DIAGNOSTICOS = [
     componentes: ["crm", "clases"],
   },
 ];
+
+export type Plan = {
+  id: string;
+  etapa: string;
+  nombre: string;
+  frase: string;
+  duracion: string;
+  precio: number;
+  clases: number;
+  destacado?: boolean;
+  incluye: string[];
+};
+
+export const PLANES: Plan[] = [
+  {
+    id: "junior",
+    etapa: "Ingreso a la profesión",
+    nombre: "Comercial Junior",
+    frase: "El nivel inicial en lo comercial remoto.",
+    duracion: "2 meses",
+    precio: 397,
+    clases: 16,
+    incluye: [
+      "Campus propio con acceso ilimitado: prácticas, dinámicas y ejercicios",
+      "Aprendés a entrenar y desarrollar tus habilidades con inteligencia artificial: roleplays y ejercicios con IA entrenada por ILFC",
+      "Certificado de finalización",
+      "Conexión con empresas, sujeta a aprobar el examen final",
+    ],
+  },
+  {
+    id: "high-ticket",
+    etapa: "Especialización",
+    nombre: "Comercial High Ticket",
+    frase: "Más complejidad. Convertirse en especialista.",
+    duracion: "3 meses",
+    precio: 547,
+    clases: 24,
+    destacado: true,
+    incluye: [
+      "Todo lo de Comercial Junior",
+      "9 sprints de formación en 3 meses",
+      "Especialización en venta de alto ticket",
+      "Evaluación final de especialización comercial",
+      "Certificación oficial con historial de desempeño",
+      "Conexión con empresas, sujeta a aprobar el examen final",
+    ],
+  },
+];
