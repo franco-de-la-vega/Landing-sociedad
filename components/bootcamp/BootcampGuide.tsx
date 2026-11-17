@@ -418,7 +418,7 @@ export default function BootcampGuide() {
               style={{ backgroundImage: "radial-gradient(circle, #1a1a1a 1px, transparent 1px)", backgroundSize: "34px 34px" }}
             />
 
-            <div className="relative mx-auto max-w-6xl">
+            <div className="relative mx-auto max-w-5xl">
               <Reveal>
                 <span className="inline-flex items-center gap-2 rounded-full border border-[var(--bc-gold)]/40 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--bc-gold-ink)]">
                   <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[var(--bc-gold)]" />
@@ -426,7 +426,7 @@ export default function BootcampGuide() {
                 </span>
               </Reveal>
               <Reveal delay={0.08}>
-                <h1 className="mt-8 max-w-5xl text-[2.7rem] font-bold leading-[0.98] tracking-[-0.04em] sm:text-[5.5rem]">
+                <h1 className="mt-8 max-w-4xl text-[2.4rem] font-bold leading-[1.02] tracking-[-0.035em] sm:text-6xl">
                   Formación comercial remota, con <span className={serif}>práctica real.</span>
                 </h1>
               </Reveal>
@@ -439,7 +439,7 @@ export default function BootcampGuide() {
                   <RevealItem key={k}>
                     <div className="border-t border-[var(--bc-gold)]/40 pt-5">
                       <span className={eyebrow}>{k}</span>
-                      <p className="mt-3 text-[16px] leading-relaxed text-[var(--bc-ink)]/80 sm:text-xl">{v}</p>
+                      <p className="mt-3 text-[16px] leading-relaxed text-[var(--bc-ink)]/80 sm:text-lg">{v}</p>
                     </div>
                   </RevealItem>
                 ))}
@@ -475,17 +475,17 @@ export default function BootcampGuide() {
 
           {/* 2. Componentes */}
           <section id="componentes" className="relative scroll-mt-6 px-5 py-20 sm:px-8 sm:py-32">
-            <div className="mx-auto max-w-6xl">
+            <div className="mx-auto max-w-5xl">
               <Reveal>
                 <span className={eyebrow}>Características y beneficios</span>
               </Reveal>
               <Reveal delay={0.08}>
-                <h2 className="mt-4 text-4xl font-bold tracking-[-0.03em] sm:text-6xl">
+                <h2 className="mt-4 text-4xl font-bold tracking-[-0.03em] sm:text-5xl">
                   Elegí 2 o 3 y <span className={serif}>mostralos.</span>
                 </h2>
               </Reveal>
               <Reveal delay={0.12}>
-                <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-[var(--bc-ink)]/70 sm:text-lg">
+                <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-[var(--bc-ink)]/70 sm:text-base">
                   Tocá un componente de la lista para ir directo a su tarjeta, o abrí cualquiera para verla en grande. Con la estrella marcás los que vas a presentar.
                 </p>
               </Reveal>
@@ -630,12 +630,12 @@ export default function BootcampGuide() {
 
           {/* 3. Recorrido */}
           <section id="recorrido" className="bc-dark relative scroll-mt-6 overflow-hidden bg-[var(--bc-bg)] px-5 py-20 sm:px-8 sm:py-32">
-            <div className="mx-auto max-w-6xl">
+            <div className="mx-auto max-w-5xl">
               <Reveal>
                 <span className={eyebrow}>Cómo se vive la formación</span>
               </Reveal>
               <Reveal delay={0.08}>
-                <h2 className="mt-4 text-4xl font-bold tracking-[-0.03em] sm:text-6xl">
+                <h2 className="mt-4 text-4xl font-bold tracking-[-0.03em] sm:text-5xl">
                   El recorrido, <span className={serif}>paso a paso.</span>
                 </h2>
               </Reveal>
@@ -681,12 +681,12 @@ export default function BootcampGuide() {
                 <span className={eyebrow}>Guía para presentar valor</span>
               </Reveal>
               <Reveal delay={0.08}>
-                <h2 className="mx-auto mt-4 max-w-4xl text-4xl font-bold tracking-[-0.03em] sm:text-6xl">
+                <h2 className="mx-auto mt-4 max-w-4xl text-4xl font-bold tracking-[-0.03em] sm:text-5xl">
                   Cuatro pasos para <span className={serif}>presentar valor.</span>
                 </h2>
               </Reveal>
               <Reveal delay={0.12}>
-                <p className="mx-auto mt-4 max-w-xl text-[15px] leading-relaxed text-[var(--bc-ink)]/70 sm:text-lg">
+                <p className="mx-auto mt-4 max-w-xl text-[15px] leading-relaxed text-[var(--bc-ink)]/70 sm:text-base">
                   Recorré la secuencia con un ejemplo real. Tocá cada paso o avanzá con la flecha.
                 </p>
               </Reveal>

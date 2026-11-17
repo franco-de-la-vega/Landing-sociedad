@@ -204,8 +204,6 @@ textarea.form-input {
   --bc-ink: #1a1a1a;
   --bc-card: #ffffff;
   --bc-gold-ink: #8a6a35;
-  background: var(--bc-bg);
-  color: var(--bc-ink);
 }
 /* bloques oscuros dentro de la guía */
 .bootcamp .bc-dark {
