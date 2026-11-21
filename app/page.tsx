@@ -7,6 +7,7 @@ import PracticeSection from "@/components/home/PracticeSection";
 import CareerSection from "@/components/home/CareerSection";
 import FoundersSection from "@/components/home/FoundersSection";
 import FaqSection from "@/components/home/FaqSection";
+import ResenasSeccion from "@/components/ResenasSeccion";
 import WhatsAppButton from "@/components/home/WhatsAppButton";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
@@ -25,6 +26,7 @@ export default function Home() {
         <PracticeSection />
         <CareerSection />
         <FoundersSection />
+        <ResenasSeccion />
         <FaqSection />
         <CTASection />
       </main>

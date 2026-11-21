@@ -6,6 +6,7 @@ import { ArrowRight, CalendarPlus, Check, ChevronLeft, Loader2, Pause, Play, Vol
 import Reveal from "@/components/Reveal";
 import Logo from "@/components/Logo";
 import BookingCalendar, { type BookingSelection } from "@/components/BookingCalendar";
+import ResenasSeccion from "@/components/ResenasSeccion";
 import { DIA_LABEL, MES_LABEL, PAISES, convertSlot, googleCalendarLink, slotInstant, toDateKey } from "@/lib/booking";
 import { esEmailValido, esWhatsappValido, respuestaCompleta, textoValido, visibles, type Resp } from "@/lib/aplicarFlow";
 import { PAISES_TEL, armarTelefono, telefonoLocalValido } from "@/lib/paisesTel";
@@ -760,6 +761,8 @@ export default function AplicarPage() {
           </AnimatePresence>
         </div>
       </section>
+
+      <ResenasSeccion max={3} />
     </div>
   );
 }
